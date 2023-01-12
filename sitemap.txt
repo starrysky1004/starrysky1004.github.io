@@ -1,4 +1,4 @@
-http://example.com/2023/01/12/hgame-week1-choose-the-seat/
+http://example.com/2023/01/12/hgame-week1/
 http://example.com/2023/01/05/hello-world/
 http://example.com/
 http://example.com/tags/pwn/
