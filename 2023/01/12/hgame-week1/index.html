@@ -43,7 +43,6 @@ r.interactive()
 </code></pre>
 <h2 id="choose-the-seat"><a href="#choose-the-seat" class="headerlink" title="choose_the_seat"></a>choose_the_seat</h2><p><strong>分析：</strong></p>
 <p>读入v0作为数组下标，对小于0时未做限制，因此可以利用数组向上覆盖任意地址内容或定位到任意地址来泄露地址</p>
-<p><img src="/hgame-week1%5C12.png" alt="12"></p>
 <p>vuln函数最后exit（0）结束程序导致不能二次利用，所以第一步先将exit_got覆盖成vuln_addr使程序可以被二次利用</p>
 <p>由于使用的下标是16*v0，则计算v0：（所求地址-seats地址）&#x2F;16</p>
 <pre><code class="python">#将exit覆盖成vuln
