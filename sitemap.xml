@@ -2,9 +2,54 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>http://example.com/2023/01/13/2023hgame-week1/2023hgame-week1/</loc>
+    <loc>https://starrysky1004.github.io/2023/01/13/2023hgame-week1/2023hgame-week1/</loc>
     
-    <lastmod>2023-01-14</lastmod>
+    <lastmod>2023-01-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/about/index.html</loc>
+    
+    <lastmod>2023-01-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/categories/index.html</loc>
+    
+    <lastmod>2023-01-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/tags/index.html</loc>
+    
+    <lastmod>2023-01-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/friends/index.html</loc>
+    
+    <lastmod>2023-01-22</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/404/index.html</loc>
+    
+    <lastmod>2023-01-22</lastmod>
     
     <changefreq>monthly</changefreq>
     <priority>0.6</priority>
@@ -12,13 +57,34 @@
   
 
   <url>
-    <loc>http://example.com/</loc>
+    <loc>https://starrysky1004.github.io/</loc>
     <lastmod>2023-01-22</lastmod>
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
 
   
+  <url>
+    <loc>https://starrysky1004.github.io/tags/pwn/</loc>
+    <lastmod>2023-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/tags/hgame/</loc>
+    <lastmod>2023-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
+  
+  <url>
+    <loc>https://starrysky1004.github.io/categories/pwn/</loc>
+    <lastmod>2023-01-22</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
   
 </urlset>
