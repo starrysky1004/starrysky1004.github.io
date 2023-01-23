@@ -6,5 +6,4 @@ https://starrysky1004.github.io/friends/index.html
 https://starrysky1004.github.io/404/index.html
 https://starrysky1004.github.io/
 https://starrysky1004.github.io/tags/pwn/
-https://starrysky1004.github.io/tags/hgame/
 https://starrysky1004.github.io/categories/pwn/
