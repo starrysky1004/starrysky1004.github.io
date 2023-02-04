@@ -375,8 +375,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                YukkuriSay漏洞分析1.read不会设置缓冲区最后一个字节为’\0’ ，程序中将读取到的字符串回车改写为0，因此在输出字符串时若其中有残留地址则可泄露地址
-2.gift中存在格式化字符串，但读取内容存在bss段，是非栈上的格式化字符
+                                2023hgame-week2 pwn 解析
                             
                         </div>
                         <div class="publish-info">
@@ -426,19 +425,7 @@
                     <div class="card-content article-content">
                         <div class="summary block-with-text">
                             
-                                IDA分析程序
-
-
-
-
-
-
-
-
-
-漏洞分析delete函数中free((void *)heap_ptr[v1]);释放堆之后未将heap_ptr[v1]清零，导致了UAF漏洞
-解题思路
-利用unsorted bin和main arean 连
+                                UAF
                             
                         </div>
                         <div class="publish-info">

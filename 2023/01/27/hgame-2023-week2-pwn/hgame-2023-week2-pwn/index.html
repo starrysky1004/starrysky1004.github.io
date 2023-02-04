@@ -463,7 +463,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="YukkuriSay"><a href="#YukkuriSay" class="headerlink" title="YukkuriSay"></a>YukkuriSay</h1><h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>1.read不会设置缓冲区最后一个字节为’\0’ ，程序中将读取到的字符串回车改写为0，因此在输出字符串时若其中有残留地址则可泄露地址</p>
+                <h2 id="YukkuriSay"><a href="#YukkuriSay" class="headerlink" title="YukkuriSay"></a>YukkuriSay</h2><h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>1.read不会设置缓冲区最后一个字节为’\0’ ，程序中将读取到的字符串回车改写为0，因此在输出字符串时若其中有残留地址则可泄露地址</p>
 <p>2.gift中存在格式化字符串，但读取内容存在bss段，是非栈上的格式化字符串</p>
 <h3 id="利用思路"><a href="#利用思路" class="headerlink" title="利用思路"></a>利用思路</h3><p>1.利用循环中read泄露栈和libc地址</p>
 <p>  （1）调试中下断点得到setbuf和栈到字符串的偏移</p>
@@ -538,7 +538,7 @@ r<span class="token punctuation">.</span>sendline<span class="token punctuation"
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="editable-note"><a href="#editable-note" class="headerlink" title="editable_note"></a>editable_note</h1><h3 id="漏洞分析-1"><a href="#漏洞分析-1" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>free之后未清零造成UAF漏洞</p>
+<h2 id="editable-note"><a href="#editable-note" class="headerlink" title="editable_note"></a>editable_note</h2><h3 id="漏洞分析-1"><a href="#漏洞分析-1" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>free之后未清零造成UAF漏洞</p>
 <h3 id="利用思路-1"><a href="#利用思路-1" class="headerlink" title="利用思路"></a>利用思路</h3><p>1.填充tcache，利用unsorted bin泄露libc，计算出free_hook和system</p>
 <p>2.利用UAF漏洞实现任意地址写，把free_hook改成system</p>
 <p>3.创建一个内容为&#x2F;bin&#x2F;sh的堆并将其释放</p>
@@ -621,7 +621,7 @@ delete<span class="token punctuation">(</span><span class="token number">13</spa
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span>
 <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="fast-note"><a href="#fast-note" class="headerlink" title="fast_note"></a>fast_note</h1><h3 id="漏洞分析-2"><a href="#漏洞分析-2" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>free之后未清零造成UAF漏洞</p>
+<h2 id="fast-note"><a href="#fast-note" class="headerlink" title="fast_note"></a>fast_note</h2><h3 id="漏洞分析-2"><a href="#漏洞分析-2" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>free之后未清零造成UAF漏洞</p>
 <h3 id="利用思路-2"><a href="#利用思路-2" class="headerlink" title="利用思路"></a>利用思路</h3><p>本题和上题的区别在于创建堆之后不能再修改，因此可以利用double free实现任意地址写</p>
 <p>1.利用unsorted bin泄露libc，计算出ogg</p>
 <p>2.创建两个堆并去释放形成double free</p>
@@ -694,7 +694,7 @@ delete<span class="token punctuation">(</span><span class="token number">5</span
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="new-fast-note"><a href="#new-fast-note" class="headerlink" title="new_fast_note"></a>new_fast_note</h1><h3 id="漏洞分析-3"><a href="#漏洞分析-3" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>delete中free之后未清零造成uaf漏洞</p>
+<h2 id="new-fast-note"><a href="#new-fast-note" class="headerlink" title="new_fast_note"></a>new_fast_note</h2><h3 id="漏洞分析-3"><a href="#漏洞分析-3" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>delete中free之后未清零造成uaf漏洞</p>
 <h3 id="利用思路-3"><a href="#利用思路-3" class="headerlink" title="利用思路"></a>利用思路</h3><p>1.填充tcache，再add一个进入unsorted bin，利用uaf漏洞showunsorted bin中的chunk，泄露libc地址并计算free_hook和system</p>
 <p>2.填充tcache大小小于0x90，再add相同大小的chunk，double free之后进入fast bin</p>
 <p>3.申请tcache和fast bin前两个chunk为free_hook，再申请掉fast bin中最后一个chunk，此时该chunk在free_hook地址，将其内容设置为system即可完成任意地址写</p>
@@ -853,7 +853,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            UAF
                         
                     </div>
                     <div class="publish-info">
