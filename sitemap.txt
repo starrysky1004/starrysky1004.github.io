@@ -1,8 +1,8 @@
+https://starrysky1004.github.io/2023/04/15/mao-gai/
 https://starrysky1004.github.io/2023/03/13/pwnhub-sh-v1-1/pwnhub-sh-v1-1/
 https://starrysky1004.github.io/2023/01/27/hgame-2023-week2-pwn/hgame-2023-week2-pwn/
 https://starrysky1004.github.io/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/
 https://starrysky1004.github.io/2023/01/27/uaf-li-ti-fen-xi/uaf-li-ti-fen-xi/
-https://starrysky1004.github.io/2023/01/13/2023hgame-week1/2023hgame-week1/
 https://starrysky1004.github.io/about/index.html
 https://starrysky1004.github.io/categories/index.html
 https://starrysky1004.github.io/tags/index.html
@@ -11,6 +11,5 @@ https://starrysky1004.github.io/404/index.html
 https://starrysky1004.github.io/
 https://starrysky1004.github.io/tags/pwn/
 https://starrysky1004.github.io/tags/UAF/
-https://starrysky1004.github.io/tags/stack-overflow/
 https://starrysky1004.github.io/tags/heap/
 https://starrysky1004.github.io/categories/pwn/
