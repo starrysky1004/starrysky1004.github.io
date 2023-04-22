@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2023/04/22/glibc-yuan-ma-fen-xi-malloc-free/glibc-yuan-ma-fen-xi-malloc-free/
 https://starrysky1004.github.io/2023/04/15/mao-gai/
 https://starrysky1004.github.io/2023/03/13/pwnhub-sh-v1-1/pwnhub-sh-v1-1/
 https://starrysky1004.github.io/2023/01/27/hgame-2023-week2-pwn/hgame-2023-week2-pwn/
@@ -12,4 +13,5 @@ https://starrysky1004.github.io/
 https://starrysky1004.github.io/tags/pwn/
 https://starrysky1004.github.io/tags/UAF/
 https://starrysky1004.github.io/tags/heap/
+https://starrysky1004.github.io/tags/ptmalloc2/
 https://starrysky1004.github.io/categories/pwn/
