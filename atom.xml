@@ -6,7 +6,7 @@
   <link href="https://starrysky1004.github.io/atom.xml" rel="self"/>
   
   <link href="https://starrysky1004.github.io/"/>
-  <updated>2023-04-22T12:43:19.800Z</updated>
+  <updated>2023-05-04T13:45:46.236Z</updated>
   <id>https://starrysky1004.github.io/</id>
   
   <author>
@@ -15,6 +15,31 @@
   </author>
   
   <generator uri="https://hexo.io/">Hexo</generator>
+  
+  <entry>
+    <title>《CS:APP》阅读笔记（持续更新）</title>
+    <link href="https://starrysky1004.github.io/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/"/>
+    <id>https://starrysky1004.github.io/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/</id>
+    <published>2023-05-04T12:10:45.000Z</published>
+    <updated>2023-05-04T13:45:46.236Z</updated>
+    
+    <content type="html"><![CDATA[<p>[TOC]</p><h1 id="第一章-计算机系统漫游"><a href="#第一章-计算机系统漫游" class="headerlink" title="第一章 计算机系统漫游"></a>第一章 计算机系统漫游</h1><h2 id="1-1-信息就是位-上下文"><a href="#1-1-信息就是位-上下文" class="headerlink" title="1.1 信息就是位+上下文"></a>1.1 信息就是位+上下文</h2><p><strong>源程序</strong>：由值为<strong>0和1</strong>组成的<strong>位（比特）序列</strong></p><p><strong>.c文件</strong>：以<code>ASCII</code>字符组成的文本文件，以<strong>字节序列</strong>的方式储存在文件中，每个文本行以<code>\n</code>结尾，对应数字<code>10</code></p><p><strong>字节</strong>：<strong>八个位</strong>被组成的一组称为字节</p><p><strong>二进制文件</strong>：除了只由<code>ASCII</code>码组成的<strong>文本文件</strong>，其他都是二进制文件，系统中的所有<strong>信息</strong>都是由一串<strong>比特</strong>表示</p><p><strong>区分不同数据对象的唯一方法</strong>：数据对象的<strong>上下文</strong></p><p>**相关组织： ** <code>ANSI</code>  美国国家标准学会      <code>ISO</code>  国际标准化组织</p><h2 id="1-2程序被其他程序翻译成不同的格式"><a href="#1-2程序被其他程序翻译成不同的格式" class="headerlink" title="1.2程序被其他程序翻译成不同的格式"></a>1.2程序被其他程序翻译成不同的格式</h2><p><strong>二进制磁盘文件</strong>：<strong>机器语言指令</strong>按照<strong>可执行目标程序</strong>的格式打包好之后以<strong>二进制磁盘文件</strong>的形式存放</p><p><strong>目标程序</strong>：也称为<strong>可执行目标文件</strong>，或<strong>可执行文件</strong>，可以被加载到<strong>内存</strong>中，由<strong>系统</strong>执行</p><p><strong>编译器驱动程序</strong>：用于将<strong>源文件</strong>转化为<strong>目标文件</strong></p><p><strong>编译系统</strong>：预处理器 + 编译器 + 汇编器 + 链接器</p><p><strong>将源程序转化为目标文件的四个阶段</strong></p><table><thead><tr><th>阶段</th><th>工具</th><th>结果</th><th>扩展名</th><th>文件性质</th></tr></thead><tbody><tr><td>预处理阶段</td><td>预处理器 <code>cpp</code></td><td>根据以<code>#</code>开头的命令进行<strong>预处理</strong>，读取系统头文件中的内容并且<strong>直接插入</strong>到程序文本中</td><td><code>.i</code></td><td>文本文件</td></tr><tr><td>编译阶段</td><td>编译器     <code>ccl</code></td><td>将<code>.i</code>文件翻译成<strong>汇编语言程序</strong></td><td><code>.s</code></td><td>文本文件</td></tr><tr><td>汇编阶段</td><td>汇编器     <code>as</code></td><td>将<code>.s</code>文件翻译成<strong>机器语言指令</strong>，打包成<strong>可重定位目标程序</strong>格式</td><td><code>.o</code></td><td>二进制文件</td></tr><tr><td>链接阶段</td><td>连接器     <code>ld</code></td><td>将程序中调用的函数的单独编译好的<code>.o</code>目标文件和汇编得到的<code>.o</code>文件合并成<strong>可执行文件</strong>，存在<strong>磁盘</strong></td><td><code>\</code></td><td>二进制文件</td></tr></tbody></table><p><strong>GNU项目</strong>：完整的类<code>Unix</code>系统，源代码能不受限制的被修改和传播，其环境包括**<code>EMACS</code>编辑器，<code>GCC</code>编译器，<code>GDB</code>调试器，汇编器，链接器，处理二进制文件的工具**等</p><h2 id="1-3了解编译系统是如何工作的是大有益处的"><a href="#1-3了解编译系统是如何工作的是大有益处的" class="headerlink" title="1.3了解编译系统是如何工作的是大有益处的"></a>1.3了解编译系统是如何工作的是大有益处的</h2><ul><li>优化程序性能</li><li>理解链接时出现的错误</li><li>避免安全漏洞，比如限制从不受信任的源接收数据的数量和格式</li></ul><h2 id="1-4处理器读并解释储存在内存中的指令"><a href="#1-4处理器读并解释储存在内存中的指令" class="headerlink" title="1.4处理器读并解释储存在内存中的指令"></a>1.4处理器读并解释储存在内存中的指令</h2><p>**<code>shell</code>**：命令行解释器</p><h3 id="1-4-1系统的硬件组成"><a href="#1-4-1系统的硬件组成" class="headerlink" title="1.4.1系统的硬件组成"></a>1.4.1系统的硬件组成</h3><h4 id="总线"><a href="#总线" class="headerlink" title="总线"></a>总线</h4><p><strong>作用</strong>：<strong>携带、传递定长的字节块</strong></p><p><strong>补充</strong>：字节块 &#x3D; 字， <strong>属性</strong>： 字节数 &#x3D; 字长， <strong>机器字长</strong>： 32位中字长为4字节，64位中字长为8字节</p><h4 id="I-x2F-O设备"><a href="#I-x2F-O设备" class="headerlink" title="I&#x2F;O设备"></a>I&#x2F;O设备</h4><p><strong>功能</strong>：通过<strong>控制器</strong>或<strong>适配器</strong>与**<code>I/O</code>总线<strong>相连，在<code>I/O</code>主总线和<code>I/O</code>设备之间</strong>传递信息**</p><p><strong>封装方式的区别</strong>：<strong>控制器</strong>是I&#x2F;O设备本身或系统主印制电路板（即<strong>主板</strong>）上的<strong>芯片组</strong>，<strong>适配器</strong>是插在<strong>主板插槽上的卡</strong></p><h4 id="主存"><a href="#主存" class="headerlink" title="主存"></a>主存</h4><p><strong>作用</strong>：用来存放<strong>程序和程序处理的数据</strong>的<strong>临时存储设备</strong>、、</p><p><strong>组成</strong>：由一组<strong>动态随机存取存储器（DRAM）芯片</strong>组成的线性的<strong>字节数组</strong></p><h4 id="处理器"><a href="#处理器" class="headerlink" title="处理器"></a>处理器</h4><p><strong>别称</strong>：中央处理单元、<code>CPU</code>、中央处理器</p><p><strong>功能</strong>：解释或执行存储在主存中的指令的引擎，不断执行<code>PC</code>指向的指令，解释指令中的位，执行该指令指示的简单操作，然后更新<code>PC</code>指向下一条指令（<strong>不一定相邻</strong>）</p><p><strong>简单指令</strong>：围绕着主存、寄存器文件、算术&#x2F;逻辑单元<code>ALU</code>进行，例如：加载、存储、操作、跳转</p><p><strong>寄存器文件</strong>：是一个小的<strong>存储设备</strong>，由一些<strong>单个字长的寄存器</strong>组成</p><p><strong><code>PC</code><strong>：区别于个人计算机，在计算机硬件中指</strong>程序计数器</strong>，大小为<strong>一个字</strong>的存储设备或寄存器，是处理器的<strong>核心</strong>，指向<strong>主存</strong>中的某条<strong>机器语言指令</strong></p><p><strong><code>ALU</code></strong>:在计算机硬件中指<strong>算术&#x2F;逻辑单元</strong>，用于<strong>计算</strong>新的<strong>数据和地址</strong>值</p><p><strong>指令集架构</strong>：描述每条机器代码指令的<strong>效果</strong></p><p><strong>微体系结构</strong>：描述处理器实际上是如何<strong>实现</strong></p><img src="/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/1.jpg" class title="这是一张图片"><h3 id="1-4-2运行程序"><a href="#1-4-2运行程序" class="headerlink" title="1.4.2运行程序"></a>1.4.2运行程序</h3><p><strong>从磁盘加载可执行文件到主存</strong>：shell执行指令加载可执行文件，将目标文件中的代码和数据从磁盘复制到主存</p><p><strong>直接存储器存取<code>DMA</code>技术</strong>:可以不通过处理器直接从磁盘到主存</p><p><strong>从磁盘读取<code>hello</code>命令</strong></p><img src="/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/2.jpg" class title="这是一张图片"><p><strong>从磁盘加载可执行文件到主存</strong></p><img src="/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/3.jpg" class title="这是一张图片"><p><strong>将输出字符串从存储器写到显示器</strong></p><img src="/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/4.jpg" class title="这是一张图片"><h2 id="1-5高速缓存至关重要"><a href="#1-5高速缓存至关重要" class="headerlink" title="1.5高速缓存至关重要"></a>1.5高速缓存至关重要</h2>]]></content>
+    
+    
+      
+      
+    <summary type="html">&lt;p&gt;[TOC]&lt;/p&gt;
+&lt;h1 id=&quot;第一章-计算机系统漫游&quot;&gt;&lt;a href=&quot;#第一章-计算机系统漫游&quot; class=&quot;headerlink&quot; title=&quot;第一章 计算机系统漫游&quot;&gt;&lt;/a&gt;第一章 计算机系统漫游&lt;/h1&gt;&lt;h2 id=&quot;1-1-信息就是位-上下文&quot;&gt;&lt;</summary>
+      
+    
+    
+    
+    <category term="计算机系统" scheme="https://starrysky1004.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/"/>
+    
+    
+    <category term="计算机系统" scheme="https://starrysky1004.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/"/>
+    
+  </entry>
   
   <entry>
     <title>glibc源码分析-malloc-free</title>
