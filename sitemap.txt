@@ -1,4 +1,5 @@
 https://starrysky1004.github.io/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/
+https://starrysky1004.github.io/2023/05/22/how2heap/how2heap-chi-xu-geng-xin-ing/
 https://starrysky1004.github.io/2023/04/22/glibc-yuan-ma-fen-xi-malloc-free/glibc-yuan-ma-fen-xi-malloc-free/
 https://starrysky1004.github.io/2023/03/13/pwnhub-sh-v1-1/pwnhub-sh-v1-1/
 https://starrysky1004.github.io/2023/01/27/hgame-2023-week2-pwn/hgame-2023-week2-pwn/
@@ -17,3 +18,4 @@ https://starrysky1004.github.io/tags/ptmalloc2/
 https://starrysky1004.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/
+https://starrysky1004.github.io/categories/heap/
