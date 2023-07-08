@@ -2,7 +2,7 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://starrysky1004.github.io/2023/07/08/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/</loc>
+    <loc>https://starrysky1004.github.io/2023/07/08/leetcode-shua-ti-chi-xu-geng-xin/leetcode-shua-ti-chi-xu-geng-xin/</loc>
     
     <lastmod>2023-07-08</lastmod>
     
@@ -11,7 +11,7 @@
   </url>
   
   <url>
-    <loc>https://starrysky1004.github.io/2023/07/08/leetcode-shua-ti-chi-xu-geng-xin/leetcode-shua-ti-chi-xu-geng-xin/</loc>
+    <loc>https://starrysky1004.github.io/2023/07/08/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/</loc>
     
     <lastmod>2023-07-08</lastmod>
     
@@ -182,6 +182,13 @@
   
   <url>
     <loc>https://starrysky1004.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/</loc>
+    <lastmod>2023-07-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/tags/%E7%AE%97%E6%B3%95/</loc>
     <lastmod>2023-07-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
