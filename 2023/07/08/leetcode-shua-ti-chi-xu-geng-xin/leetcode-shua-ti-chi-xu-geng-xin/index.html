@@ -451,7 +451,7 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>算法算是从高三暑假就开始学了吧，但是后来学<code>pwn</code>之后也没时间学算法，学的一点也就应付一下数据结构与算法的期末考试有点用了…</p>
-<p>为了提高编程和算法能力（混30分综测）准备开始刷题…目标是刷完<code>100</code>题！比起<code>Acwing</code>感觉<code>leetcode</code>难的多TAT</p>
+<p>为了提高编程和算法能力（混30分综测）准备开始刷题…目标是刷完<code>100</code>题！比起<code>Acwing</code>感觉<code>leetcode</code>难的多</p>
 <p>上学期还说，用<code>C</code>打算法比赛的不是纯纯怨种吗，于是我来当怨种了（狗头）</p>
 <h2 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/two-sum/">两数之和</a></h2><p><strong>题目描述：</strong>给定一个整数数组 <code>nums</code> 和一个整数目标值 <code>target</code>，请你在该数组中找出 <strong>和为目标值</strong> <em><code>target</code></em> 的那 <strong>两个</strong> 整数，并返回它们的数组下标。</p>
 <p><strong>思路1：</strong>双重循环暴力解</p>
@@ -515,6 +515,28 @@
 
     return ret;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="无重复字符的最长子串"><a href="#无重复字符的最长子串" class="headerlink" title="无重复字符的最长子串"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/">无重复字符的最长子串</a></h2><p><strong>题目描述：</strong>给定一个字符串 <code>s</code> ，请你找出其中不含有重复字符的 <strong>最长子串</strong> 的长度。</p>
+<p><strong>思路：</strong>滑动窗口，遍历每一位计算最长无重复字符的子串并记录最大长度</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">int lengthOfLongestSubstring(char * s)&#123;
+    int len &#x3D; strlen(s); 
+    int res &#x3D; 0; 		&#x2F;&#x2F;记录最大长度
+
+    for (int i &#x3D; 0; i &lt; len; i++) &#123;
+        int visited[128] &#x3D; &#123;0&#125;; 	&#x2F;&#x2F;用于判断是否有重复
+        int max &#x3D; 0; 
+
+        for (int j &#x3D; i; j &lt; len &amp;&amp; !visited[s[j]]; j++) &#123;
+            visited[s[j]] &#x3D; 1;
+            max++;
+        &#125;
+
+        if (max &gt; res) 
+            res &#x3D; max;
+    &#125;
+
+    return res;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
                 
