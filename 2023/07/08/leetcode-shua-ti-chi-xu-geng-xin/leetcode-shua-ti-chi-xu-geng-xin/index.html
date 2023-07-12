@@ -538,6 +538,130 @@
     return res;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="寻找两个正序数组的中位数"><a href="#寻找两个正序数组的中位数" class="headerlink" title="寻找两个正序数组的中位数"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/median-of-two-sorted-arrays/description/">寻找两个正序数组的中位数</a></h2><p><strong>题目描述：</strong>给定两个大小分别为 <code>m</code> 和 <code>n</code> 的正序（从小到大）数组 <code>nums1</code> 和 <code>nums2</code>。请你找出并返回这两个正序数组的 <strong>中位数</strong> 。</p>
+<p><strong>思路1：</strong>直接合并两个数组去中位数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size)&#123;
+    int size &#x3D; nums1Size + nums2Size;
+    int q[size + 1], i &#x3D; 0, j &#x3D; 0, tmp &#x3D; 1;
+
+    while(i &lt; nums1Size &amp;&amp; j &lt; nums2Size)&#123;
+        if(nums1[i] &lt; nums2[j])
+            q[tmp++] &#x3D; nums1[i++];
+        else 
+            q[tmp++] &#x3D; nums2[j++];
+    &#125;
+
+    while(i &lt; nums1Size)
+        q[tmp++] &#x3D; nums1[i++];
+
+    while(j &lt; nums2Size)
+        q[tmp++] &#x3D; nums2[j++];
+
+    if(size % 2)&#123;
+        return q[size &#x2F; 2 + 1];
+    &#125;else&#123;
+        return (q[size &#x2F; 2] + q[size &#x2F; 2 + 1]) &#x2F; 2.0;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>思路2：</strong>已知两数组长度，求中位数只要知道中间位置的数不一定要将数组合并</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) &#123;
+    int size &#x3D; nums1Size + nums2Size;
+    int i &#x3D; 0, j &#x3D; 0, count &#x3D; 0;
+    int res1 &#x3D; 0, res2 &#x3D; 0;
+
+    while (i &lt; nums1Size || j &lt; nums2Size) &#123;
+        if (j &#x3D;&#x3D; nums2Size || (i &lt; nums1Size &amp;&amp; nums1[i] &lt; nums2[j])) &#123;
+            count++;
+            if (count &#x3D;&#x3D; size &#x2F; 2) &#123;
+                res1 &#x3D; nums1[i];
+            &#125;
+            if (count &#x3D;&#x3D; size &#x2F; 2 + 1) &#123;
+                res2 &#x3D; nums1[i];
+                break;
+            &#125;
+            i++;
+        &#125; else &#123;
+            count++;
+            if (count &#x3D;&#x3D; size &#x2F; 2) &#123;
+                res1 &#x3D; nums2[j];
+            &#125;
+            if (count &#x3D;&#x3D; size &#x2F; 2 + 1) &#123;
+                res2 &#x3D; nums2[j];
+                break;
+            &#125;
+            j++;
+        &#125;
+    &#125;
+
+    if (size % 2 &#x3D;&#x3D; 1) &#123;
+        return res2;
+    &#125; else &#123;
+        return (res1 + res2) &#x2F; 2.0;
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>思路3：</strong>中位数查找算法</p>
+<ol>
+<li>使用二分搜索找到一个划分点将两个数组分成左右两部分，使得左边部分的所有元素都小于右边部分的元素。</li>
+<li>根据划分后两个部分的长度，判断是否找到了中位数。如果总长度为奇数，则中位数就是划分点左边部分的最大元素；如果总长度为偶数，则中位数是划分点左右两边部分的最大元素和最小元素的平均值。</li>
+<li>如果划分点左边部分的最大元素大于右边部分的最小元素，则需要调整划分点，继续进行二分搜索。</li>
+</ol>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size)&#123;
+    if(nums1Size &gt; nums2Size) 
+    &#123; 
+        return findMedianSortedArrays(nums2, nums2Size, nums1, nums1Size);
+    &#125; &#x2F;&#x2F;首先要满足第一个数组小于第二个数组
+    int total &#x3D; nums1Size + nums2Size; &#x2F;&#x2F;总计的数字，用于计算
+    int left &#x3D; 0, right &#x3D; nums1Size; 
+    while(left &lt;&#x3D; right) 
+    &#123; 
+        int i &#x3D; (left+right)&#x2F;2; &#x2F;&#x2F;i为第一个数组线左边的数量
+        int j &#x3D; (total + 1) &#x2F; 2 - i;  &#x2F;&#x2F;j为第二个数组线左边的数量，使用total计算，如果total为奇数，线就偏向右边，如果偶数，分割线左右两边相等
+        if(i &lt; nums1Size &amp;&amp; nums2[j-1] &gt; nums1[i]) &#x2F;&#x2F;nums2[j-1] &gt; nums1[i]表示线要右移，如果i&#x3D;&#x3D;nums1Size那么就不用右移了
+        &#123; 
+            left &#x3D; i + 1; 
+        &#125; 
+        else if(i &gt; 0 &amp;&amp; nums1[i-1] &gt; nums2[j]) &#x2F;&#x2F;nums1[i-1] &gt; nums2[j]表示线要左移，如果i&#x3D;&#x3D;0，就不用左移了
+        &#123; 
+            right &#x3D; i - 1; 
+        &#125; 
+        else 
+        &#123; 
+            int max_left &#x3D; 0; &#x2F;&#x2F;以下对分割线左右四个元素操作
+            if(i &#x3D;&#x3D; 0) &#x2F;&#x2F;如果数组一分割线左边为0个，左边最大就是数组二分割线左边第一个
+            &#123; 
+                max_left &#x3D; nums2[j-1]; 
+            &#125; else if(j &#x3D;&#x3D; 0) &#x2F;&#x2F;如果数组二分割线左边为0个，左边最大就是数组一分割线左边第一个
+            &#123; 
+                max_left &#x3D; nums1[i-1]; 
+            &#125; else   &#x2F;&#x2F;否则就判断分割线左边两个的最大值
+            &#123; 
+                max_left &#x3D; fmax(nums1[i-1], nums2[j-1]); 
+            &#125; 
+            if(total % 2 &#x3D;&#x3D; 1) &#x2F;&#x2F;如果是奇数，就返回左边最大值，因为线是偏右边的
+            &#123; 
+                return max_left; 
+            &#125; 
+            int min_right &#x3D; 0; 
+            if(i &#x3D;&#x3D; nums1Size) &#x2F;&#x2F;找右边最大值，偶数取左右两边最大值的平均数
+            &#123; 
+                min_right &#x3D; nums2[j];
+            &#125; 
+            else if(j &#x3D;&#x3D; nums2Size) 
+            &#123;
+                min_right &#x3D; nums1[i]; 
+            &#125; 
+            else 
+            &#123; 
+                min_right &#x3D; fmin(nums1[i], nums2[j]); 
+            &#125; 
+            return (max_left + min_right) &#x2F; 2.0; 
+        &#125; 
+    &#125; 
+    return 0; 
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
