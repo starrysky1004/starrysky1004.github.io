@@ -1,7 +1,7 @@
+https://starrysky1004.github.io/2023/08/12/2023-googlectf-ubf/2023-googlectf-ubf/
 https://starrysky1004.github.io/2023/08/03/2023-ciscn-pwn-fu-xian/2023-ciscn-pwn-fu-xian/
 https://starrysky1004.github.io/2023/08/10/2023-syctf-pwn-fu-xian/2023syctf-computer-fu-xian/
 https://starrysky1004.github.io/2023/08/12/io-file/io-file/
-https://starrysky1004.github.io/2023/08/12/2023-googlectf-ubf/2023-googlectf-ubf/
 https://starrysky1004.github.io/2023/04/22/glibc-yuan-ma-fen-xi-malloc-free/glibc-yuan-ma-fen-xi-malloc-free/
 https://starrysky1004.github.io/2023/07/20/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/
 https://starrysky1004.github.io/2023/05/22/how2heap/how2heap-chi-xu-geng-xin-ing/
@@ -11,7 +11,6 @@ https://starrysky1004.github.io/2023/06/20/ge-shi-hua-zi-fu-chuan/ge-shi-hua-zi-
 https://starrysky1004.github.io/2023/03/13/pwnhub-sh-v1-1/pwnhub-sh-v1-1/
 https://starrysky1004.github.io/2023/01/27/hgame-2023-week2-pwn/hgame-2023-week2-pwn/
 https://starrysky1004.github.io/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/
-https://starrysky1004.github.io/2023/01/27/uaf-li-ti-fen-xi/uaf-li-ti-fen-xi/
 https://starrysky1004.github.io/about/index.html
 https://starrysky1004.github.io/categories/index.html
 https://starrysky1004.github.io/tags/index.html
