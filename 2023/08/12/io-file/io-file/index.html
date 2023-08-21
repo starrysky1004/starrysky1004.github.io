@@ -440,14 +440,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.6k
+                    7.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    30 分
+                    40 分
                 </div>
                 
 
@@ -1499,7 +1499,29 @@ _IO_new_file_xsputn (_IO_FILE *f, const void *data, _IO_size_t n)
 <pre class="line-numbers language-C" data-language="C"><code class="language-C">#define _IO_setg(fp, eb, g, eg)  ((fp)-&gt;_IO_read_base &#x3D; (eb),\
   (fp)-&gt;_IO_read_ptr &#x3D; (g), (fp)-&gt;_IO_read_end &#x3D; (eg))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>接着将<code>f-&gt;_IO_write_base</code>、<code>f-&gt;_IO_write_ptr</code>设置成<code>f-&gt;_IO_read_ptr</code>指针；将<code>f-&gt;_IO_write_end</code>赋值为<code>f-&gt;_IO_buf_end</code>指针执行完看一下<code>_IO_list_all</code></p>
+<p>接着将<code>f-&gt;_IO_write_base</code>、<code>f-&gt;_IO_write_ptr</code>设置成<code>f-&gt;_IO_read_ptr</code>指针；将<code>f-&gt;_IO_write_end</code>赋值为<code>f-&gt;_IO_buf_end</code></p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">   if (__glibc_unlikely (_IO_in_backup (f)))
+&#123;
+  size_t nbackup &#x3D; f-&gt;_IO_read_end - f-&gt;_IO_read_ptr;
+  _IO_free_backup_area (f);
+  f-&gt;_IO_read_base -&#x3D; MIN (nbackup,
+			   f-&gt;_IO_read_base - f-&gt;_IO_buf_base);
+  f-&gt;_IO_read_ptr &#x3D; f-&gt;_IO_read_base;
+&#125;
+
+     if (f-&gt;_IO_read_ptr &#x3D;&#x3D; f-&gt;_IO_buf_end)
+f-&gt;_IO_read_end &#x3D; f-&gt;_IO_read_ptr &#x3D; f-&gt;_IO_buf_base;
+     f-&gt;_IO_write_ptr &#x3D; f-&gt;_IO_read_ptr;
+     f-&gt;_IO_write_base &#x3D; f-&gt;_IO_write_ptr;
+     f-&gt;_IO_write_end &#x3D; f-&gt;_IO_buf_end;
+     f-&gt;_IO_read_base &#x3D; f-&gt;_IO_read_ptr &#x3D; f-&gt;_IO_read_end;
+
+     f-&gt;_flags |&#x3D; _IO_CURRENTLY_PUTTING;
+     if (f-&gt;_mode &lt;&#x3D; 0 &amp;&amp; f-&gt;_flags &amp; (_IO_LINE_BUF | _IO_UNBUFFERED))
+f-&gt;_IO_write_end &#x3D; f-&gt;_IO_write_ptr;
+   &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>指针执行完看一下<code>_IO_list_all</code>，<code>_IO_buf_base</code>和<code>_IO_buf_end</code>被赋值，且输入缓冲区相关指针被赋值为<code>_IO_buf_base</code></p>
 <pre class="line-numbers language-C" data-language="C"><code class="language-C">pwndbg&gt; p *_IO_list_all
 $3 &#x3D; &#123;
   file &#x3D; &#123;
@@ -1536,6 +1558,360 @@ $3 &#x3D; &#123;
   vtable &#x3D; 0x7ffff7dd06e0 &lt;_IO_file_jumps&gt;
 &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<p>接下来调用<code>_IO_new_do_write</code>函数来执行<code>write</code>将<code>write_ptr</code>到<code>write_end</code>之间的输入读入缓冲区</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">if (ch &#x3D;&#x3D; EOF)
+    return _IO_do_write (f, f-&gt;_IO_write_base,
+			 f-&gt;_IO_write_ptr - f-&gt;_IO_write_base);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">int
+_IO_new_do_write (_IO_FILE *fp, const char *data, _IO_size_t to_do)
+&#123;
+  return (to_do &#x3D;&#x3D; 0
+	  || (_IO_size_t) new_do_write (fp, data, to_do) &#x3D;&#x3D; to_do) ? 0 : EOF;
+&#125;
+libc_hidden_ver (_IO_new_do_write, _IO_do_write)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>函数中又调用了<code>_IO_new_do_write</code>函数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">static
+_IO_size_t
+new_do_write (_IO_FILE *fp, const char *data, _IO_size_t to_do)
+&#123;
+  _IO_size_t count;
+  ...
+  count &#x3D; _IO_SYSWRITE (fp, data, to_do);
+  if (fp-&gt;_cur_column &amp;&amp; count)
+    fp-&gt;_cur_column &#x3D; _IO_adjust_column (fp-&gt;_cur_column - 1, data, count) + 1;
+  _IO_setg (fp, fp-&gt;_IO_buf_base, fp-&gt;_IO_buf_base, fp-&gt;_IO_buf_base);
+  fp-&gt;_IO_write_base &#x3D; fp-&gt;_IO_write_ptr &#x3D; fp-&gt;_IO_buf_base;
+  fp-&gt;_IO_write_end &#x3D; (fp-&gt;_mode &lt;&#x3D; 0
+		       &amp;&amp; (fp-&gt;_flags &amp; (_IO_LINE_BUF | _IO_UNBUFFERED))
+		       ? fp-&gt;_IO_buf_base : fp-&gt;_IO_buf_end);
+  return count;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>此时来到了最终实现<code>write</code>的地方，即<code>_IO_SYSWRITE</code>函数（<code>vtable</code>中的&#96;&#96;__write<code>函数），实际调用的是</code>_IO_new_file_write<code>函数，按照指定长度调用</code>write&#96;函数写入内容</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">In file: &#x2F;home&#x2F;starrysky&#x2F;IO&#x2F;glibc-2.23&#x2F;libio&#x2F;fileops.c
+   1253 
+   1254 _IO_ssize_t
+   1255 _IO_new_file_write (_IO_FILE *f, const void *data, _IO_ssize_t n)
+   1256 &#123;
+   1257   _IO_ssize_t to_do &#x3D; n;
+ ► 1258   while (to_do &gt; 0)
+   1259     &#123;
+   1260       _IO_ssize_t count &#x3D; (__builtin_expect (f-&gt;_flags2
+   1261                                              &amp; _IO_FLAGS2_NOTCANCEL, 0)
+   1262                            ? write_not_cancel (f-&gt;_fileno, data, to_do)
+   1263                            : write (f-&gt;_fileno, data, to_do));<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">_IO_ssize_t
+_IO_new_file_write (_IO_FILE *f, const void *data, _IO_ssize_t n)
+&#123;
+  _IO_ssize_t to_do &#x3D; n;
+  while (to_do &gt; 0)
+    &#123;
+      _IO_ssize_t count &#x3D; (__builtin_expect (f-&gt;_flags2
+					     &amp; _IO_FLAGS2_NOTCANCEL, 0)
+			   ? write_not_cancel (f-&gt;_fileno, data, to_do)
+			   : write (f-&gt;_fileno, data, to_do));
+      if (count &lt; 0)
+	&#123;
+	  f-&gt;_flags |&#x3D; _IO_ERR_SEEN;
+	  break;
+	&#125;
+      to_do -&#x3D; count;
+      data &#x3D; (void *) ((char *) data + count);
+    &#125;
+  n -&#x3D; to_do;
+  if (f-&gt;_offset &gt;&#x3D; 0)
+    f-&gt;_offset +&#x3D; n;
+  return n;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">  0x7ffff7a86ac8 &lt;_IO_file_write+40&gt;     test   byte ptr [r14 + 0x74], 2
+  0x7ffff7a86acd &lt;_IO_file_write+45&gt;     je     _IO_file_write+128                &lt;_IO_file_write+128&gt;
+   ↓
+  0x7ffff7a86b20 &lt;_IO_file_write+128&gt;    mov    edi, dword ptr [r14 + 0x70]
+  0x7ffff7a86b24 &lt;_IO_file_write+132&gt;    mov    rdx, rbx
+  0x7ffff7a86b27 &lt;_IO_file_write+135&gt;    mov    rsi, rbp
+► 0x7ffff7a86b2a &lt;_IO_file_write+138&gt;    call   write                &lt;write&gt;
+       fd: 0x3 (&#x2F;home&#x2F;starrysky&#x2F;IO&#x2F;test)
+       buf: 0x406250 ◂— 0x0
+       n: 0x30
+
+  0x7ffff7a86b2f &lt;_IO_file_write+143&gt;    test   rax, rax
+  0x7ffff7a86b32 &lt;_IO_file_write+146&gt;    js     _IO_file_write+82                &lt;_IO_file_write+82&gt;
+
+  0x7ffff7a86b34 &lt;_IO_file_write+148&gt;    sub    rbx, rax
+  0x7ffff7a86b37 &lt;_IO_file_write+151&gt;    add    rbp, rax
+  0x7ffff7a86b3a &lt;_IO_file_write+154&gt;    test   rbx, rbx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>调用结束后回到<code>_new_do_write</code>函数，设置各种指针刷新输出缓冲区</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">if (fp-&gt;_cur_column &amp;&amp; count)
+   fp-&gt;_cur_column &#x3D; _IO_adjust_column (fp-&gt;_cur_column - 1, data, count) + 1;
+ _IO_setg (fp, fp-&gt;_IO_buf_base, fp-&gt;_IO_buf_base, fp-&gt;_IO_buf_base);
+ fp-&gt;_IO_write_base &#x3D; fp-&gt;_IO_write_ptr &#x3D; fp-&gt;_IO_buf_base;
+ fp-&gt;_IO_write_end &#x3D; (fp-&gt;_mode &lt;&#x3D; 0
+	       &amp;&amp; (fp-&gt;_flags &amp; (_IO_LINE_BUF | _IO_UNBUFFERED))
+	       ? fp-&gt;_IO_buf_base : fp-&gt;_IO_buf_end);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>查看一下<code>_IO_list_all</code>结构体，此时输出缓冲区中没有内容</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">pwndbg&gt; p *_IO_list_all
+$5 &#x3D; &#123;
+  file &#x3D; &#123;
+    _flags &#x3D; -72536956,
+    _IO_read_ptr &#x3D; 0x406250 &quot;&quot;,
+    _IO_read_end &#x3D; 0x406250 &quot;&quot;,
+    _IO_read_base &#x3D; 0x406250 &quot;&quot;,
+    _IO_write_base &#x3D; 0x406250 &quot;&quot;,
+    _IO_write_ptr &#x3D; 0x406250 &quot;&quot;,
+    _IO_write_end &#x3D; 0x407250 &quot;&quot;,
+    _IO_buf_base &#x3D; 0x406250 &quot;&quot;,
+    _IO_buf_end &#x3D; 0x407250 &quot;&quot;,
+    _IO_save_base &#x3D; 0x0,
+    _IO_backup_base &#x3D; 0x0,
+    _IO_save_end &#x3D; 0x0,
+    _markers &#x3D; 0x0,
+    _chain &#x3D; 0x7ffff7dd2540 &lt;_IO_2_1_stderr_&gt;,
+    _fileno &#x3D; 3,
+    _flags2 &#x3D; 0,
+    _old_offset &#x3D; 0,
+    _cur_column &#x3D; 0,
+    _vtable_offset &#x3D; 0 &#39;\000&#39;,
+    _shortbuf &#x3D; &quot;&quot;,
+    _lock &#x3D; 0x406100,
+    _offset &#x3D; -1,
+    _codecvt &#x3D; 0x0,
+    _wide_data &#x3D; 0x406110,
+    _freeres_list &#x3D; 0x0,
+    _freeres_buf &#x3D; 0x0,
+    __pad5 &#x3D; 0,
+    _mode &#x3D; -1,
+    _unused2 &#x3D; &#39;\000&#39; &lt;repeats 19 times&gt;
+  &#125;,
+  vtable &#x3D; 0x7ffff7dd06e0 &lt;_IO_file_jumps&gt;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来回到<code>_IO_file_xsputn</code>函数，判断剩余输出数据是否大于输入缓冲区<code>buf</code>大小，若大于则不使用输出缓冲区直接调用<code>new_do_write</code>输出并刷新指针</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">     block_size &#x3D; f-&gt;_IO_buf_end - f-&gt;_IO_buf_base;
+     do_write &#x3D; to_do - (block_size &gt;&#x3D; 128 ? to_do % block_size : 0);
+
+     if (do_write)
+&#123;
+  count &#x3D; new_do_write (f, s, do_write);
+  to_do -&#x3D; count;
+  if (count &lt; do_write)
+    return n - to_do;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>输出完大块的内容剩余的小块的内容继续调用<code>_IO_default_xsputn</code>函数输出到输出缓冲区，在长度不同的时候使用了不同的输出方式，即大于20使用<code>memcpy</code>，小于20使用for循环</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">to_do -&#x3D; _IO_default_xsputn (f, s+do_write, to_do);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">_IO_size_t
+_IO_default_xsputn (_IO_FILE *f, const void *data, _IO_size_t n)
+&#123;
+  const char *s &#x3D; (char *) data;
+  _IO_size_t more &#x3D; n;
+  if (more &lt;&#x3D; 0)
+    return 0;
+  for (;;)
+    &#123;
+      &#x2F;* Space available. *&#x2F;
+      if (f-&gt;_IO_write_ptr &lt; f-&gt;_IO_write_end)
+	&#123;
+	  _IO_size_t count &#x3D; f-&gt;_IO_write_end - f-&gt;_IO_write_ptr;
+	  if (count &gt; more)
+	    count &#x3D; more;
+	  if (count &gt; 20)
+	    &#123;
+#ifdef _LIBC
+	      f-&gt;_IO_write_ptr &#x3D; __mempcpy (f-&gt;_IO_write_ptr, s, count);
+#else
+	      memcpy (f-&gt;_IO_write_ptr, s, count);
+	      f-&gt;_IO_write_ptr +&#x3D; count;
+#endif
+	      s +&#x3D; count;
+	    &#125;
+	  else if (count)
+	    &#123;
+	      char *p &#x3D; f-&gt;_IO_write_ptr;
+	      _IO_ssize_t i;
+	      for (i &#x3D; count; --i &gt;&#x3D; 0; )
+		*p++ &#x3D; *s++;
+	      f-&gt;_IO_write_ptr &#x3D; p;
+	    &#125;
+	  more -&#x3D; count;
+	&#125;
+      if (more &#x3D;&#x3D; 0 || _IO_OVERFLOW (f, (unsigned char) *s++) &#x3D;&#x3D; EOF)
+	break;
+      more--;
+    &#125;
+  return n - more;
+&#125;
+libc_hidden_def (_IO_default_xsputn)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最后结构体如下，输出缓冲区的大小刚好为<code>0x30</code></p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">pwndbg&gt; p *_IO_list_all
+$6 &#x3D; &#123;
+  file &#x3D; &#123;
+    _flags &#x3D; -72536956,
+    _IO_read_ptr &#x3D; 0x406250 &quot;&quot;,
+    _IO_read_end &#x3D; 0x406250 &quot;&quot;,
+    _IO_read_base &#x3D; 0x406250 &quot;&quot;,
+    _IO_write_base &#x3D; 0x406250 &quot;&quot;,
+    _IO_write_ptr &#x3D; 0x406280 &quot;&quot;,
+    _IO_write_end &#x3D; 0x407250 &quot;&quot;,
+    _IO_buf_base &#x3D; 0x406250 &quot;&quot;,
+    _IO_buf_end &#x3D; 0x407250 &quot;&quot;,
+    _IO_save_base &#x3D; 0x0,
+    _IO_backup_base &#x3D; 0x0,
+    _IO_save_end &#x3D; 0x0,
+    _markers &#x3D; 0x0,
+    _chain &#x3D; 0x7ffff7dd2540 &lt;_IO_2_1_stderr_&gt;,
+    _fileno &#x3D; 3,
+    _flags2 &#x3D; 0,
+    _old_offset &#x3D; 0,
+    _cur_column &#x3D; 0,
+    _vtable_offset &#x3D; 0 &#39;\000&#39;,
+    _shortbuf &#x3D; &quot;&quot;,
+    _lock &#x3D; 0x406100,
+    _offset &#x3D; -1,
+    _codecvt &#x3D; 0x0,
+    _wide_data &#x3D; 0x406110,
+    _freeres_list &#x3D; 0x0,
+    _freeres_buf &#x3D; 0x0,
+    __pad5 &#x3D; 0,
+    _mode &#x3D; -1,
+    _unused2 &#x3D; &#39;\000&#39; &lt;repeats 19 times&gt;
+  &#125;,
+  vtable &#x3D; 0x7ffff7dd06e0 &lt;_IO_file_jumps&gt;
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其他输出函数最终实现部分调用的也是<code>_IO_new_file_overflow</code>函数，所以利用输出函数就是利用<code>_IO_new_file_overflow</code>函数，需要注意函数对标志位的判断</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">if (f-&gt;_flags &amp; _IO_NO_WRITES) &#x2F;* SET ERROR *&#x2F;
+  &#123;
+    f-&gt;_flags |&#x3D; _IO_ERR_SEEN;
+    __set_errno (EBADF);
+    return EOF;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>调用<code>vtable</code>中的函数:</p>
+<ul>
+<li><code>_IO_fwrite</code>函数调用了vtable的<code>_IO_new_file_xsputn</code>。</li>
+<li><code>_IO_new_file_xsputn</code>函数调用了vtable中的<code>_IO_new_file_overflow</code>实现缓冲区的建立以及刷新缓冲区。</li>
+<li>vtable中的<code>_IO_new_file_overflow</code>函数调用了vtable的<code>_IO_file_doallocate</code>以初始化输入缓冲区。</li>
+<li>vtable中的<code>_IO_file_doallocate</code>调用了vtable中的<code>__GI__IO_file_stat</code>以获取文件信息。</li>
+<li><code>new_do_write</code>中的<code>_IO_SYSWRITE</code>调用了vtable<code>_IO_new_file_write</code>最终去执行系统调用write。</li>
+</ul>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li><p><strong><code>fopen</code></strong></p>
+<ul>
+<li><p><code>_IO_new_fopen</code></p>
+<ul>
+<li><p><code>__fopen_internal</code></p>
+<ul>
+<li><p><code>_IO_no_init</code>：初始化<code>fp</code>结构体</p>
+</li>
+<li><p><code>_IO_file_init	-&gt;	_IO_new_file_init</code>：将<code>fp</code>结构体连接到<code>_IO_list_all</code>结构体中</p>
+<ul>
+<li><code>_IO_link_in</code>：将文件指针链接到全局文件链表中</li>
+</ul>
+</li>
+<li><p><code>_IO_file_fopen	-&gt;	_IO_new_file_fopen</code>：判断文件是否已打开以及一些标志位</p>
+<ul>
+<li><code>_IO_file_open</code>：调用<code>open</code>之后设置<code>fileno</code>标志位<ul>
+<li><code>open</code></li>
+<li><code>_IO_link_in</code>：使结构体进入<code>_IO_list_all</code></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>fread</code></strong></p>
+<ul>
+<li><p><code>_IO_fread</code></p>
+<ul>
+<li><p><code>_IO_sgetn</code></p>
+<ul>
+<li><p><code>_IO_XSGETN	-&gt;	_IO_file_xsgetn</code> ：从文件流中读取指定数量的字节存储到目标缓冲区</p>
+<ul>
+<li><code>_IO_doallocbuf </code> ：分配新的缓冲区并设置<code>_IO_buf_base</code>和<code>_IO_buf_end</code><ul>
+<li><code>_IO_DOALLOCATE	-&gt;	_IO_file_doallocate</code>：分配缓冲区<ul>
+<li><code>_IO_SYSSTAT</code> ：获取文件状态，即<code>st</code>结构体</li>
+</ul>
+</li>
+<li><code>_IO_setb</code>：设置<code>_IO_list_all</code>中的<code>_IO_buf_base</code>和<code>_IO_buf_end</code></li>
+</ul>
+</li>
+<li>将<code>_IO_read_ptr</code>到<code>_IO_read_end</code>之间输入缓冲区原有的数据输入目标缓冲区</li>
+<li><code>__underflow</code><ul>
+<li><code>**_IO_UNDERFLOW	-&gt;	_IO_new_file_underflow**</code>：首先检查是否有读权限<ul>
+<li><code>_IO_doallocbuf</code>：目标缓冲区未初始化时调用来初始化各指针为<code>_IO_buf_base</code></li>
+<li><code>_IO_SYSREAD	-&gt;	_IO_file_read</code><ul>
+<li><code>read</code>:向输入缓冲区读取大小为<code>fp-&gt;_IO_buf_end - fp-&gt;_IO_buf_base</code>的内容</li>
+</ul>
+</li>
+<li>设置输入缓冲区结束地址</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>再次循环将输入缓冲区复制到目标缓冲区</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p><strong><code>fwrite</code></strong></p>
+<ul>
+<li><p><code>_IO_fwrite</code></p>
+<ul>
+<li><p><code>_IO_sputn	-&gt;	_IO_new_file_xsputn</code></p>
+<ul>
+<li><p>计算输出缓冲区剩余空间，将需要输出数据复制到输出缓冲区</p>
+</li>
+<li><p><code>**_IO_OVERFLOW	-&gt;	_IO_new_file_overflow**</code>：缓冲区未建立或已满时建立或刷新输出缓冲区，会判断标志位，即是否有可写权限</p>
+</li>
+<li><p><code>_IO_doallocbuf</code>：若输出缓冲区未创建则调用该函数创建并给<code>_IO_buf_base</code>和<code>_IO_buf_end</code>指针赋值</p>
+</li>
+<li><p><code>_IO_setg</code>：将输入相关的缓冲区指针赋值为<code>_IO_buf_base</code></p>
+<ul>
+<li><pre><code class="C">#define _IO_setg(fp, eb, g, eg)  ((fp)-&gt;_IO_read_base = (eb),\
+  (fp)-&gt;_IO_read_ptr = (g), (fp)-&gt;_IO_read_end = (eg))
+</code></pre>
+</li>
+<li><p>将<code>f-&gt;_IO_write_base</code>、<code>f-&gt;_IO_write_ptr</code>设置成<code>f-&gt;_IO_read_ptr</code>指针；将<code>f-&gt;_IO_write_end</code>赋值为<code>f-&gt;_IO_buf_end</code></p>
+</li>
+</ul>
+</li>
+<li><p><code>_IO_do_write	-&gt;	_IO_new_do_write</code></p>
+<ul>
+<li><code>new_do_write</code><ul>
+<li><code>_IO_SYSWRITE	-&gt;	_IO_new_file_write</code><ul>
+<li><code>write</code></li>
+</ul>
+</li>
+<li>设置各种指针刷新输出缓冲区</li>
+</ul>
+</li>
+</ul>
+</li>
+<li><p>根据剩余输出数据大小选择<code>memcpy</code>或<code>for</code>循环输出并刷新指针</p>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
 
                 
             </div>
@@ -1871,7 +2247,7 @@ $3 &#x3D; &#123;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">48.1k</span>&nbsp;字
+                class="white-color">50k</span>&nbsp;字
             
             
             
