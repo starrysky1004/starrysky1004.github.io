@@ -433,21 +433,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-08-21
+                    2023-08-29
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    7.5k
+                    7.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    40 分
+                    41 分
                 </div>
                 
 
@@ -1453,7 +1453,7 @@ _IO_new_file_xsputn (_IO_FILE *f, const void *data, _IO_size_t n)
       to_do -&#x3D; count;
     &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>如果没能完全复制过去，那么说明输出缓冲区未建立或已满，调用<code>_IO_OVERFLOW</code>函数来建立或刷新输出缓冲区</p>
+<p>如果没能完全复制过去，那么说明输出缓冲区未建立或已满，调用<code>_IO_OVERFLOW</code>函数来建立或刷新输出缓冲区，刷新<code>_IO_list_all</code></p>
 <pre class="line-numbers language-C" data-language="C"><code class="language-C">In file: &#x2F;home&#x2F;starrysky&#x2F;IO&#x2F;glibc-2.23&#x2F;libio&#x2F;fileops.c
    1326     &#125;
    1327   if (to_do + must_flush &gt; 0)
@@ -1883,35 +1883,39 @@ $6 &#x3D; &#123;
 </li>
 <li><p><code>_IO_setg</code>：将输入相关的缓冲区指针赋值为<code>_IO_buf_base</code></p>
 <ul>
-<li><pre><code class="C">#define _IO_setg(fp, eb, g, eg)  ((fp)-&gt;_IO_read_base = (eb),\
-  (fp)-&gt;_IO_read_ptr = (g), (fp)-&gt;_IO_read_end = (eg))
-</code></pre>
-</li>
-<li><p>将<code>f-&gt;_IO_write_base</code>、<code>f-&gt;_IO_write_ptr</code>设置成<code>f-&gt;_IO_read_ptr</code>指针；将<code>f-&gt;_IO_write_end</code>赋值为<code>f-&gt;_IO_buf_end</code></p>
-</li>
-</ul>
-</li>
-<li><p><code>_IO_do_write	-&gt;	_IO_new_do_write</code></p>
-<ul>
-<li><code>new_do_write</code><ul>
-<li><code>_IO_SYSWRITE	-&gt;	_IO_new_file_write</code><ul>
-<li><code>write</code></li>
-</ul>
-</li>
-<li>设置各种指针刷新输出缓冲区</li>
-</ul>
-</li>
-</ul>
-</li>
-<li><p>根据剩余输出数据大小选择<code>memcpy</code>或<code>for</code>循环输出并刷新指针</p>
-</li>
-</ul>
-</li>
-</ul>
-</li>
+<li>&#96;&#96;&#96;C<br>#define _IO_setg(fp, eb, g, eg)  ((fp)-&gt;_IO_read_base &#x3D; (eb),<br>  (fp)-&gt;_IO_read_ptr &#x3D; (g), (fp)-&gt;_IO_read_end &#x3D; (eg))<pre class="line-numbers language-none"><code class="language-none">
+        - 将&#96;f-&gt;_IO_write_base&#96;、&#96;f-&gt;_IO_write_ptr&#96;设置成&#96;f-&gt;_IO_read_ptr&#96;指针；将&#96;f-&gt;_IO_write_end&#96;赋值为&#96;f-&gt;_IO_buf_end&#96;
+
+      - &#96;_IO_do_write	-&gt;	_IO_new_do_write&#96;
+
+        - &#96;new_do_write&#96;
+          - &#96;_IO_SYSWRITE	-&gt;	_IO_new_file_write&#96;
+            - &#96;write&#96;
+          - 设置各种指针刷新输出缓冲区
+
+      - 根据剩余输出数据大小选择&#96;memcpy&#96;或&#96;for&#96;循环输出并刷新指针
+
+## 劫持vtable原理
+
+&#96;_IO_FILE_plus&#96;结构体
+
+&#96;&#96;&#96;C
+struct _IO_FILE_plus
+&#123;
+  _IO_FILE file;
+  const struct _IO_jump_t *vtable;
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ul>
 </li>
 </ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<p>其中<code>vtable</code>结构体中存着系统调用最终调用的函数，因此劫持<code>vtable</code>函数之后就可以劫持程序流，需要注意的是在<code>2.23</code>版本以上就会检查<code>vtable</code></p>
+<h2 id="reference"><a href="#reference" class="headerlink" title="reference"></a>reference</h2><p><a target="_blank" rel="noopener" href="https://www.z1r0.top/2021/10/09/IO-FILE">https://www.z1r0.top/2021/10/09/IO-FILE</a></p>
 
                 
             </div>
@@ -1971,44 +1975,50 @@ $6 &#x3D; &#123;
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="far fa-dot-circle"></i>&nbsp;本篇
-            </div>
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/08/12/io-file/io-file/">
+                <a href="/2023/09/24/how2heap/how2heap-chi-xu-geng-xin-ing/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/17.jpg" class="responsive-img" alt="IO_FILE">
+                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="how2heap">
                         
-                        <span class="card-title">IO_FILE</span>
+                        <span class="card-title">how2heap</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            IO学习
+                            基于堆的漏洞利用
                         
                     </div>
                     <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-08-12
-                            </span>
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-09-24
+                        </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            StarrySky
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/heap/" class="post-category">
+                                    heap
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
-
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/IO/">
-                        <span class="chip bg-color">IO</span>
+                    <a href="/tags/pwn/">
+                        <span class="chip bg-color">pwn</span>
+                    </a>
+                    
+                    <a href="/tags/heap/">
+                        <span class="chip bg-color">heap</span>
                     </a>
                     
                 </div>
@@ -2247,7 +2257,7 @@ $6 &#x3D; &#123;
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">50k</span>&nbsp;字
+                class="white-color">51.2k</span>&nbsp;字
             
             
             
