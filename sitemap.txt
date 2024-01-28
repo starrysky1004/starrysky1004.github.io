@@ -1,5 +1,6 @@
-https://starrysky1004.github.io/2024/01/24/2024mapnactf-pwn/2024mapnactf-pwn/
+https://starrysky1004.github.io/2024/01/29/yinbao/
 https://starrysky1004.github.io/2024/01/24/2024-chun-qiu-bei-dong-ji-sai-pwn-bu-fen-wp/2024-chun-qiu-bei-dong-ji-sai-pwn-bu-fen-writeup/
+https://starrysky1004.github.io/2024/01/24/2024mapnactf-pwn/2024mapnactf-pwn/
 https://starrysky1004.github.io/2023/12/27/nian-zhong-zong-jie/
 https://starrysky1004.github.io/2023/12/16/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/
 https://starrysky1004.github.io/2023/09/24/how2heap/how2heap-chi-xu-geng-xin-ing/
@@ -35,6 +36,7 @@ https://starrysky1004.github.io/tags/ptmalloc2/
 https://starrysky1004.github.io/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/
 https://starrysky1004.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/
 https://starrysky1004.github.io/tags/%E6%A0%88/
+https://starrysky1004.github.io/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/%E7%AE%97%E6%B3%95/
 https://starrysky1004.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/
