@@ -373,7 +373,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    228
+                    237
                 </div>
                 
 
@@ -420,18 +420,19 @@
 <p>​                 <code>sudo mkdir -p /yinbao/mysql/data</code></p>
 <p>改配置:<code>ifconfig</code></p>
 <p>​           <code>vim ./yinbao/settings.py</code>	<code>line:28 line:93</code></p>
-<pre><code>         `sudo vim ./nginx.conf` `line:12 line:19`
-</code></pre>
+<p>​       	<code>sudo vim ./nginx.conf</code> <code>line:12 line:19</code></p>
 <p>运行容器:<code>cd yinbao</code></p>
 <p>​       		<code>docker compose up -d</code></p>
 <p>​              <code>docker exec ybbackend python manage.py makemigrations </code></p>
-<pre><code>            `docker exec ybbackend python manage.py migrate `
-</code></pre>
+<p>​         	 <code>docker exec ybbackend python manage.py migrate </code></p>
 <p>测试:<code>curl --location &#39;http://43.138.33.82:5500/auth/login/&#39; --header &#39;Content-Type: application/json&#39;</code></p>
 <p><code>cp ./yinbao/nginx.conf /etc/nginx/sites-available</code></p>
 <p><code>cd /etc/nginx/sites-available</code></p>
 <p><code>rm default</code></p>
 <p><code>mv nginx.conf default</code></p>
+<p><code> nginx -s reload</code></p>
+<p><code>nginx -t</code></p>
+<p><code>sudo cp dist /yinbao</code></p>
 
                 
             </div>
