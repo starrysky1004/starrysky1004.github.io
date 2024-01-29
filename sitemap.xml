@@ -2,7 +2,16 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
-    <loc>https://starrysky1004.github.io/2024/01/29/yinbao/</loc>
+    <loc>https://starrysky1004.github.io/2024/01/29/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/</loc>
+    
+    <lastmod>2024-01-29</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/2024/01/29/yinbao/yinbao/</loc>
     
     <lastmod>2024-01-29</lastmod>
     
@@ -320,6 +329,20 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://starrysky1004.github.io/tags/web%E5%89%8D%E7%AB%AF/</loc>
+    <lastmod>2024-01-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/tags/docker/</loc>
+    <lastmod>2024-01-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -345,6 +368,13 @@
   
   <url>
     <loc>https://starrysky1004.github.io/categories/heap/</loc>
+    <lastmod>2024-01-29</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/categories/web%E5%89%8D%E7%AB%AF/</loc>
     <lastmod>2024-01-29</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

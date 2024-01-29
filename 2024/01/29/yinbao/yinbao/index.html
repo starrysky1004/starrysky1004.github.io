@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="leetcode刷题（持续更新), StarrySky">
+    <meta name="keywords" content="yinbao, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>leetcode刷题（持续更新) | StarrySky</title>
+    <title>yinbao | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -231,7 +231,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">leetcode刷题（持续更新)</h1>
+                    <h1 class="description center-align post-title">yinbao</h1>
                 </div>
             </div>
         </div>
@@ -345,25 +345,12 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/%E7%AE%97%E6%B3%95/">
-                                <span class="chip bg-color">算法</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                算法
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -372,28 +359,28 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-07-12
+                    2024-01-29
                 </div>
                 
 
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-07-20
+                    2024-01-29
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.8k
+                    237
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    1 分
                 </div>
                 
 
@@ -411,218 +398,41 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>算法算是从高三暑假就开始学了吧，但是后来学<code>pwn</code>之后也没时间学算法，学的一点也就应付一下数据结构与算法的期末考试有点用了…</p>
-<p>为了提高编程和算法能力（混30分综测）准备开始刷题…目标是刷完<code>100</code>题！比起<code>Acwing</code>感觉<code>leetcode</code>难的多</p>
-<p>上学期还说，用<code>C</code>打算法比赛的不是纯纯怨种吗，于是我来当怨种了（狗头）</p>
-<h2 id="两数之和"><a href="#两数之和" class="headerlink" title="两数之和"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/two-sum/">两数之和</a></h2><p><strong>题目描述：</strong>给定一个整数数组 <code>nums</code> 和一个整数目标值 <code>target</code>，请你在该数组中找出 <strong>和为目标值</strong> <em><code>target</code></em> 的那 <strong>两个</strong> 整数，并返回它们的数组下标。</p>
-<p><strong>思路1：</strong>双重循环暴力解</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">int* twoSum(int* nums, int numsSize, int target, int* returnSize)&#123;
-
-    for(int i &#x3D; 0; i &lt; numsSize; i++)&#123;
-        for(int j &#x3D; i + 1; j &lt; numsSize; j++)&#123;
-            if(nums[i] + nums[j] &#x3D;&#x3D; target)&#123;
-                int* ret &#x3D; malloc(sizeof(int) * 2);
-                ret[0] &#x3D; i;
-                ret[1] &#x3D; j;
-                *returnSize &#x3D; 2;
-                return ret; 
-            &#125;
-        &#125;
-    &#125;
-
-    *returnSize &#x3D; 0;
-    return NULL;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>思路2：</strong>利用哈希表判断循环到的数之前的数中有没有与该数相加等于目标数的，没有就将该数加入哈希表，时间复杂度降为<code>O(1)</code></p>
-<p>但是<code>C</code>语言的哈希函数所需头文件要自己导入，比赛的时候也没有，所以我就没写，就学习了一下思路</p>
-<h2 id="两数相加"><a href="#两数相加" class="headerlink" title="两数相加"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/add-two-numbers/">两数相加</a></h2><p><strong>题目描述：</strong>给你两个 <strong>非空</strong> 的链表，表示两个非负的整数。它们每位数字都是按照 <strong>逆序</strong> 的方式存储的，并且每个节点只能存储 <strong>一位</strong> 数字。请你将两个数相加，并以相同形式返回一个表示和的链表。</p>
-<p>考点大概就是链表操作吧…需要考虑进位和两个链表长度不同的情况</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">struct ListNode* addTwoNumbers(struct ListNode* l1, struct ListNode* l2)&#123;
-    struct ListNode *ret &#x3D; NULL,  *curr &#x3D; NULL;
-    int cnt &#x3D; 0;
-
-    while(l1 || l2)&#123;
-        int val1 &#x3D; l1 ? l1-&gt;val : 0;
-        int val2 &#x3D; l2 ? l2-&gt;val : 0;	&#x2F;&#x2F;其中一个链表空了就取值为0
-        int sum &#x3D; val1 + val2 + cnt;
-        
-        if(ret &#x3D;&#x3D; NULL)&#123;
-            ret &#x3D; curr &#x3D; malloc(sizeof(struct ListNode));
-            curr-&gt;val &#x3D; sum % 10;
-            curr-&gt;next &#x3D; NULL;
-        &#125;		&#x2F;&#x2F;为头结点赋值
-        else&#123;
-            curr-&gt;next &#x3D; malloc(sizeof(struct ListNode));
-            curr-&gt;next-&gt;val &#x3D; sum % 10;
-            curr &#x3D; curr-&gt;next;
-            curr-&gt;next &#x3D; NULL;
-        &#125;
-        
-        cnt &#x3D; sum &#x2F; 10;		&#x2F;&#x2F;计算进位
-
-        if(l1)  
-            l1 &#x3D; l1-&gt;next;
-
-        if(l2)
-            l2 &#x3D; l2-&gt;next;
-    &#125;
-
-    if(cnt &gt; 0)&#123;
-        curr-&gt;next &#x3D; malloc(sizeof(struct ListNode));
-        curr-&gt;next-&gt;val &#x3D; cnt;
-        curr-&gt;next-&gt;next &#x3D; NULL;
-    &#125;		&#x2F;&#x2F;两个链表均为空之后多出的进位
-
-    return ret;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="无重复字符的最长子串"><a href="#无重复字符的最长子串" class="headerlink" title="无重复字符的最长子串"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/longest-substring-without-repeating-characters/">无重复字符的最长子串</a></h2><p><strong>题目描述：</strong>给定一个字符串 <code>s</code> ，请你找出其中不含有重复字符的 <strong>最长子串</strong> 的长度。</p>
-<p><strong>思路：</strong>滑动窗口，遍历每一位计算最长无重复字符的子串并记录最大长度</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">int lengthOfLongestSubstring(char * s)&#123;
-    int len &#x3D; strlen(s); 
-    int res &#x3D; 0; 		&#x2F;&#x2F;记录最大长度
-
-    for (int i &#x3D; 0; i &lt; len; i++) &#123;
-        int visited[128] &#x3D; &#123;0&#125;; 	&#x2F;&#x2F;用于判断是否有重复
-        int max &#x3D; 0; 
-
-        for (int j &#x3D; i; j &lt; len &amp;&amp; !visited[s[j]]; j++) &#123;
-            visited[s[j]] &#x3D; 1;
-            max++;
-        &#125;
-
-        if (max &gt; res) 
-            res &#x3D; max;
-    &#125;
-
-    return res;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="寻找两个正序数组的中位数"><a href="#寻找两个正序数组的中位数" class="headerlink" title="寻找两个正序数组的中位数"></a><a target="_blank" rel="noopener" href="https://leetcode.cn/problems/median-of-two-sorted-arrays/description/">寻找两个正序数组的中位数</a></h2><p><strong>题目描述：</strong>给定两个大小分别为 <code>m</code> 和 <code>n</code> 的正序（从小到大）数组 <code>nums1</code> 和 <code>nums2</code>。请你找出并返回这两个正序数组的 <strong>中位数</strong> 。</p>
-<p><strong>思路1：</strong>直接合并两个数组去中位数</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size)&#123;
-    int size &#x3D; nums1Size + nums2Size;
-    int q[size + 1], i &#x3D; 0, j &#x3D; 0, tmp &#x3D; 1;
-
-    while(i &lt; nums1Size &amp;&amp; j &lt; nums2Size)&#123;
-        if(nums1[i] &lt; nums2[j])
-            q[tmp++] &#x3D; nums1[i++];
-        else 
-            q[tmp++] &#x3D; nums2[j++];
-    &#125;
-
-    while(i &lt; nums1Size)
-        q[tmp++] &#x3D; nums1[i++];
-
-    while(j &lt; nums2Size)
-        q[tmp++] &#x3D; nums2[j++];
-
-    if(size % 2)&#123;
-        return q[size &#x2F; 2 + 1];
-    &#125;else&#123;
-        return (q[size &#x2F; 2] + q[size &#x2F; 2 + 1]) &#x2F; 2.0;
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>思路2：</strong>已知两数组长度，求中位数只要知道中间位置的数不一定要将数组合并</p>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size) &#123;
-    int size &#x3D; nums1Size + nums2Size;
-    int i &#x3D; 0, j &#x3D; 0, count &#x3D; 0;
-    int res1 &#x3D; 0, res2 &#x3D; 0;
-
-    while (i &lt; nums1Size || j &lt; nums2Size) &#123;
-        if (j &#x3D;&#x3D; nums2Size || (i &lt; nums1Size &amp;&amp; nums1[i] &lt; nums2[j])) &#123;
-            count++;
-            if (count &#x3D;&#x3D; size &#x2F; 2) &#123;
-                res1 &#x3D; nums1[i];
-            &#125;
-            if (count &#x3D;&#x3D; size &#x2F; 2 + 1) &#123;
-                res2 &#x3D; nums1[i];
-                break;
-            &#125;
-            i++;
-        &#125; else &#123;
-            count++;
-            if (count &#x3D;&#x3D; size &#x2F; 2) &#123;
-                res1 &#x3D; nums2[j];
-            &#125;
-            if (count &#x3D;&#x3D; size &#x2F; 2 + 1) &#123;
-                res2 &#x3D; nums2[j];
-                break;
-            &#125;
-            j++;
-        &#125;
-    &#125;
-
-    if (size % 2 &#x3D;&#x3D; 1) &#123;
-        return res2;
-    &#125; else &#123;
-        return (res1 + res2) &#x2F; 2.0;
-    &#125;
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p><strong>思路3：</strong>中位数查找算法</p>
-<ol>
-<li>使用二分搜索找到一个划分点将两个数组分成左右两部分，使得左边部分的所有元素都小于右边部分的元素。</li>
-<li>根据划分后两个部分的长度，判断是否找到了中位数。如果总长度为奇数，则中位数就是划分点左边部分的最大元素；如果总长度为偶数，则中位数是划分点左右两边部分的最大元素和最小元素的平均值。</li>
-<li>如果划分点左边部分的最大元素大于右边部分的最小元素，则需要调整划分点，继续进行二分搜索。</li>
-</ol>
-<pre class="line-numbers language-C" data-language="C"><code class="language-C">double findMedianSortedArrays(int* nums1, int nums1Size, int* nums2, int nums2Size)&#123;
-    if(nums1Size &gt; nums2Size) 
-    &#123; 
-        return findMedianSortedArrays(nums2, nums2Size, nums1, nums1Size);
-    &#125; &#x2F;&#x2F;首先要满足第一个数组小于第二个数组
-    int total &#x3D; nums1Size + nums2Size; &#x2F;&#x2F;总计的数字，用于计算
-    int left &#x3D; 0, right &#x3D; nums1Size; 
-    while(left &lt;&#x3D; right) 
-    &#123; 
-        int i &#x3D; (left+right)&#x2F;2; &#x2F;&#x2F;i为第一个数组线左边的数量
-        int j &#x3D; (total + 1) &#x2F; 2 - i;  &#x2F;&#x2F;j为第二个数组线左边的数量，使用total计算，如果total为奇数，线就偏向右边，如果偶数，分割线左右两边相等
-        if(i &lt; nums1Size &amp;&amp; nums2[j-1] &gt; nums1[i]) &#x2F;&#x2F;nums2[j-1] &gt; nums1[i]表示线要右移，如果i&#x3D;&#x3D;nums1Size那么就不用右移了
-        &#123; 
-            left &#x3D; i + 1; 
-        &#125; 
-        else if(i &gt; 0 &amp;&amp; nums1[i-1] &gt; nums2[j]) &#x2F;&#x2F;nums1[i-1] &gt; nums2[j]表示线要左移，如果i&#x3D;&#x3D;0，就不用左移了
-        &#123; 
-            right &#x3D; i - 1; 
-        &#125; 
-        else 
-        &#123; 
-            int max_left &#x3D; 0; &#x2F;&#x2F;以下对分割线左右四个元素操作
-            if(i &#x3D;&#x3D; 0) &#x2F;&#x2F;如果数组一分割线左边为0个，左边最大就是数组二分割线左边第一个
-            &#123; 
-                max_left &#x3D; nums2[j-1]; 
-            &#125; else if(j &#x3D;&#x3D; 0) &#x2F;&#x2F;如果数组二分割线左边为0个，左边最大就是数组一分割线左边第一个
-            &#123; 
-                max_left &#x3D; nums1[i-1]; 
-            &#125; else   &#x2F;&#x2F;否则就判断分割线左边两个的最大值
-            &#123; 
-                max_left &#x3D; fmax(nums1[i-1], nums2[j-1]); 
-            &#125; 
-            if(total % 2 &#x3D;&#x3D; 1) &#x2F;&#x2F;如果是奇数，就返回左边最大值，因为线是偏右边的
-            &#123; 
-                return max_left; 
-            &#125; 
-            int min_right &#x3D; 0; 
-            if(i &#x3D;&#x3D; nums1Size) &#x2F;&#x2F;找右边最大值，偶数取左右两边最大值的平均数
-            &#123; 
-                min_right &#x3D; nums2[j];
-            &#125; 
-            else if(j &#x3D;&#x3D; nums2Size) 
-            &#123;
-                min_right &#x3D; nums1[i]; 
-            &#125; 
-            else 
-            &#123; 
-                min_right &#x3D; fmin(nums1[i], nums2[j]); 
-            &#125; 
-            return (max_left + min_right) &#x2F; 2.0; 
-        &#125; 
-    &#125; 
-    return 0; 
-&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+                <h1 id="yinbao部署"><a href="#yinbao部署" class="headerlink" title="yinbao部署"></a>yinbao部署</h1><p><code>sudo su</code></p>
+<p>更新:<code>sudo apt update</code></p>
+<p>安装<code>vim</code>:<code>sudo apt install vim</code></p>
+<p>安装<code>curl</code>:<code>sudo apt install curl</code></p>
+<p>安装<code>git</code>:<code>sudo apt install git</code></p>
+<p>安装<code>docker</code>:<code>sudo curl -fsSL get.docker.com -o get-docker.sh</code></p>
+<p>​                    <code>sudo sh get-docker.sh</code>                                                                  </p>
+<p>​                    <code>rm get-docker.sh</code></p>
+<p>安装<code>pip</code>:<code>sudo apt install pip</code></p>
+<p>升级<code>requests</code>:<code>sudo pip install --upgrade requests</code></p>
+<p>安装<code>docker-compose</code>:<code>sudo pip install docker-compose</code></p>
+<p>安装<code>nginx</code>:<code>sudo apt install nginx</code></p>
+<p>安装<code>net-tools</code>:<code>sudo apt install net-tools</code></p>
+<p>下载项目:<code>git clone http://43.138.33.82:9980/yinbao/yinbao.git Yinbao</code></p>
+<p>​               <code>cp -r ./Yinbao/dist/ ./</code></p>
+<p>​               <code>cp -r ./Yinbao/yinbao/ ./</code></p>
+<p>​	   		  <code>sudo rm -r Yinbao</code></p>
+<p>创建文件夹:<code>sudo mkdir -p /yinbao/mysql/conf.d</code></p>
+<p>​                 <code>sudo mkdir -p /yinbao/mysql/log</code> </p>
+<p>​                 <code>sudo mkdir -p /yinbao/mysql/data</code></p>
+<p>改配置:<code>ifconfig</code></p>
+<p>​           <code>vim ./yinbao/settings.py</code>	<code>line:28 line:93</code></p>
+<p>​       	<code>sudo vim ./nginx.conf</code> <code>line:12 line:19</code></p>
+<p>运行容器:<code>cd yinbao</code></p>
+<p>​       		<code>docker compose up -d</code></p>
+<p>​              <code>docker exec ybbackend python manage.py makemigrations </code></p>
+<p>​         	 <code>docker exec ybbackend python manage.py migrate </code></p>
+<p>测试:<code>curl --location &#39;http://43.138.33.82:5500/auth/login/&#39; --header &#39;Content-Type: application/json&#39;</code></p>
+<p><code>cp ./yinbao/nginx.conf /etc/nginx/sites-available</code></p>
+<p><code>cd /etc/nginx/sites-available</code></p>
+<p><code>rm default</code></p>
+<p><code>mv nginx.conf default</code></p>
+<p><code> nginx -s reload</code></p>
+<p><code>nginx -t</code></p>
+<p><code>sudo cp dist /yinbao</code></p>
 
                 
             </div>
@@ -636,11 +446,7 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/%E7%AE%97%E6%B3%95/">
-                                    <span class="chip bg-color">算法</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -683,31 +489,31 @@
             <div class="article-badge left-badge text-color">
                 <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
             <div class="card">
-                <a href="/2023/08/03/2023-ciscn-pwn-fu-xian/2023-ciscn-pwn-fu-xian/">
+                <a href="/2024/01/29/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="2023-ciscn-pwn复现">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="基于已有项目部署网站">
                         
-                        <span class="card-title">2023-ciscn-pwn复现</span>
+                        <span class="card-title">基于已有项目部署网站</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            2023ciscnb区域半决赛pwn部分复现
+                            基于已有项目在新Ubuntu系统中部署网站
                         
                     </div>
                     <div class="publish-info">
                         <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-08-03
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-01-29
                         </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/pwn/" class="post-category">
-                                    pwn
+                            <a href="/categories/web%E5%89%8D%E7%AB%AF/" class="post-category">
+                                    web前端
                                 </a>
                             
                             
@@ -717,20 +523,12 @@
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/oob/">
-                        <span class="chip bg-color">oob</span>
+                    <a href="/tags/web%E5%89%8D%E7%AB%AF/">
+                        <span class="chip bg-color">web前端</span>
                     </a>
                     
-                    <a href="/tags/envp/">
-                        <span class="chip bg-color">envp</span>
-                    </a>
-                    
-                    <a href="/tags/tls/">
-                        <span class="chip bg-color">tls</span>
-                    </a>
-                    
-                    <a href="/tags/heap/">
-                        <span class="chip bg-color">heap</span>
+                    <a href="/tags/docker/">
+                        <span class="chip bg-color">docker</span>
                     </a>
                     
                 </div>
@@ -744,24 +542,24 @@
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/06/20/ge-shi-hua-zi-fu-chuan/ge-shi-hua-zi-fu-chuan/">
+                <a href="/2024/01/24/2024mapnactf-pwn/2024mapnactf-pwn/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="《格式化字符串》">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="2024MapnaCTF-pwn">
                         
-                        <span class="card-title">《格式化字符串》</span>
+                        <span class="card-title">2024MapnaCTF-pwn</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            栈和非栈的格式化字符串
+                            2024MapnaCTF-pwn writeup
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-06-20
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-01-24
                             </span>
                         <span class="publish-author">
                             
@@ -782,8 +580,8 @@
                         <span class="chip bg-color">pwn</span>
                     </a>
                     
-                    <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                        <span class="chip bg-color">格式化字符串</span>
+                    <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6/">
+                        <span class="chip bg-color">格式化字符</span>
                     </a>
                     
                 </div>

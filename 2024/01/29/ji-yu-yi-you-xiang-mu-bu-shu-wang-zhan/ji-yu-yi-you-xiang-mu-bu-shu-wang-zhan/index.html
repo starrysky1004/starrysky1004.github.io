@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="yinbao, StarrySky">
+    <meta name="keywords" content="基于已有项目部署网站, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>yinbao | StarrySky</title>
+    <title>基于已有项目部署网站 | StarrySky</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -231,7 +231,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">yinbao</h1>
+                    <h1 class="description center-align post-title">基于已有项目部署网站</h1>
                 </div>
             </div>
         </div>
@@ -345,12 +345,29 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/web%E5%89%8D%E7%AB%AF/">
+                                <span class="chip bg-color">web前端</span>
+                            </a>
+                        
+                            <a href="/tags/docker/">
+                                <span class="chip bg-color">docker</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/web%E5%89%8D%E7%AB%AF/" class="post-category">
+                                web前端
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -373,14 +390,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    237
+                    1.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    1 分
+                    5 分
                 </div>
                 
 
@@ -398,41 +415,126 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="yinbao部署"><a href="#yinbao部署" class="headerlink" title="yinbao部署"></a>yinbao部署</h1><p><code>sudo su</code></p>
-<p>更新:<code>sudo apt update</code></p>
-<p>安装<code>vim</code>:<code>sudo apt install vim</code></p>
-<p>安装<code>curl</code>:<code>sudo apt install curl</code></p>
-<p>安装<code>git</code>:<code>sudo apt install git</code></p>
-<p>安装<code>docker</code>:<code>sudo curl -fsSL get.docker.com -o get-docker.sh</code></p>
-<p>​                    <code>sudo sh get-docker.sh</code>                                                                  </p>
-<p>​                    <code>rm get-docker.sh</code></p>
-<p>安装<code>pip</code>:<code>sudo apt install pip</code></p>
-<p>升级<code>requests</code>:<code>sudo pip install --upgrade requests</code></p>
-<p>安装<code>docker-compose</code>:<code>sudo pip install docker-compose</code></p>
-<p>安装<code>nginx</code>:<code>sudo apt install nginx</code></p>
-<p>安装<code>net-tools</code>:<code>sudo apt install net-tools</code></p>
-<p>下载项目:<code>git clone http://43.138.33.82:9980/yinbao/yinbao.git Yinbao</code></p>
-<p>​               <code>cp -r ./Yinbao/dist/ ./</code></p>
-<p>​               <code>cp -r ./Yinbao/yinbao/ ./</code></p>
-<p>​	   		  <code>sudo rm -r Yinbao</code></p>
-<p>创建文件夹:<code>sudo mkdir -p /yinbao/mysql/conf.d</code></p>
-<p>​                 <code>sudo mkdir -p /yinbao/mysql/log</code> </p>
-<p>​                 <code>sudo mkdir -p /yinbao/mysql/data</code></p>
-<p>改配置:<code>ifconfig</code></p>
-<p>​           <code>vim ./yinbao/settings.py</code>	<code>line:28 line:93</code></p>
-<p>​       	<code>sudo vim ./nginx.conf</code> <code>line:12 line:19</code></p>
-<p>运行容器:<code>cd yinbao</code></p>
-<p>​       		<code>docker compose up -d</code></p>
-<p>​              <code>docker exec ybbackend python manage.py makemigrations </code></p>
-<p>​         	 <code>docker exec ybbackend python manage.py migrate </code></p>
-<p>测试:<code>curl --location &#39;http://43.138.33.82:5500/auth/login/&#39; --header &#39;Content-Type: application/json&#39;</code></p>
-<p><code>cp ./yinbao/nginx.conf /etc/nginx/sites-available</code></p>
-<p><code>cd /etc/nginx/sites-available</code></p>
-<p><code>rm default</code></p>
-<p><code>mv nginx.conf default</code></p>
-<p><code> nginx -s reload</code></p>
-<p><code>nginx -t</code></p>
-<p><code>sudo cp dist /yinbao</code></p>
+                <p>被拉过去帮忙给项目部署网站，之前从来没有接触过这些，现学了一些知识，记录一下过程和过程中遇到的一些问题</p>
+<h1 id="前置环境要求"><a href="#前置环境要求" class="headerlink" title="前置环境要求"></a>前置环境要求</h1><ul>
+<li>安装<code>vim</code>、<code>curl</code>、<code>git</code>、<code>pip</code>、<code>nginx</code>、<code>net-tools</code></li>
+</ul>
+<p><code>curl</code>是为了安装<code>docker</code>，但也可以通过<code>pip</code>安装，就不需要安装<code>curl</code>了</p>
+<p><code>net-tools</code>用来使用<code>ifconfig</code>查<code>ip</code>地址</p>
+<p>安装指令也很简单，就是<code>sudo apt install xxx</code>，安装之前可以先更新一下<code>sudo apt update</code></p>
+<p>个人不习惯进<code>su</code>（因为我的<code>zsh</code>主题好看！），但是经常需要输入密码，嫌麻烦可以<code>sudo su</code></p>
+<ul>
+<li><p>安装<code>docker</code>和<code>docker-compose</code></p>
+<ul>
+<li><p><code>docker</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">curl</span> <span class="token parameter variable">-fsSL</span> get.docker.com <span class="token parameter variable">-o</span> get-docker.sh
+<span class="token function">sudo</span> <span class="token function">sh</span> get-docker.sh
+<span class="token function">rm</span> get-docker.sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p><code>docker</code>安装方法网上还有很多，比如<code>sudo pip install docker</code>，但我看这个顺眼（</p>
+</li>
+<li><p><code>docker-compose</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> pip <span class="token function">install</span> <span class="token function">docker-compose</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>直接安装会遇到报错：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">ERROR: <span class="token function">docker</span> <span class="token number">7.0</span>.0 has requirement requests<span class="token operator">>=</span><span class="token number">2.26</span>.0, but you<span class="token string">'ll have requests 2.22.0 which is incompatible.
+Installing collected packages: docopt, dockerpty, distro, attrs, pyrsistent, jsonschema, python-dotenv, websocket-client, urllib3, packaging, bcrypt, pycparser, cffi, pynacl, cryptography, paramiko, docker, texttable, docker-compose
+Attempting uninstall: distro
+Found existing installation: distro 1.4.0
+Not uninstalling distro at /usr/lib/python3/dist-packages, outside environment /usr
+Can'</span>t uninstall <span class="token string">'distro'</span><span class="token builtin class-name">.</span> No files were found to uninstall.
+Attempting uninstall: urllib3
+Found existing installation: urllib3 <span class="token number">1.25</span>.8
+Not uninstalling urllib3 at /usr/lib/python3/dist-packages, outside environment /usr
+Can<span class="token string">'t uninstall '</span>urllib3<span class="token string">'. No files were found to uninstall.
+Attempting uninstall: pynacl
+Found existing installation: PyNaCl 1.3.0
+Not uninstalling pynacl at /usr/lib/python3/dist-packages, outside environment /usr
+Can'</span>t uninstall <span class="token string">'PyNaCl'</span><span class="token builtin class-name">.</span> No files were found to uninstall.
+Attempting uninstall: cryptography
+Found existing installation: cryptography <span class="token number">2.8</span>
+Not uninstalling cryptography at /usr/lib/python3/dist-packages, outside environment /usr
+Can<span class="token string">'t uninstall '</span>cryptography'. No files were found to uninstall.
+Successfully installed attrs-23.2.0 bcrypt-4.1.2 cffi-1.16.0 cryptography-42.0.1 distro-1.9.0 docker-7.0.0 docker-compose-1.29.2 dockerpty-0.4.1 docopt-0.6.2 jsons<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>嗯其实看第一句就好了：<code>has requirement requests&gt;=2.26.0</code>所以要先升级<code>requests</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pip <span class="token function">install</span> <span class="token parameter variable">--upgrade</span> requests<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+</li>
+</ul>
+<h1 id="部署网站"><a href="#部署网站" class="headerlink" title="部署网站"></a>部署网站</h1><ul>
+<li><p>先把项目<code>git clone</code>到本地，根据<code>dockerfile</code>中的内容在根目录指定路径创建数据库文件夹</p>
+</li>
+<li><p><code>ifconfig</code>查本地<code>ip</code>之后把项目文件中<code>settings</code>和<code>nginx.conf</code>中用到<code>ip</code>的地方改成本地<code>ip</code></p>
+</li>
+<li><p>接下来在有<code>dockerfile</code>的文件夹下生成容器</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker-compose</span> up <span class="token parameter variable">-d</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>有可能遇到报错</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Traceback <span class="token punctuation">(</span>most recent call last<span class="token punctuation">)</span>:
+File <span class="token string">"/usr/local/bin/docker-compose"</span>, line <span class="token number">8</span>, <span class="token keyword">in</span> <span class="token operator">&lt;</span>module<span class="token operator">></span>
+sys.exit<span class="token punctuation">(</span>main<span class="token punctuation">(</span><span class="token punctuation">))</span>
+File <span class="token string">"/usr/local/lib/python3.8/dist-packages/compose/cli/main.py"</span>, line <span class="token number">81</span>, <span class="token keyword">in</span> main
+command_func<span class="token punctuation">(</span><span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.8/dist-packages/compose/cli/main.py"</span>, line <span class="token number">200</span>, <span class="token keyword">in</span> perform_command
+project <span class="token operator">=</span> project_from_options<span class="token punctuation">(</span><span class="token string">'.'</span>, options<span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.8/dist-packages/compose/cli/command.py"</span>, line <span class="token number">60</span>, <span class="token keyword">in</span> project_from_options
+<span class="token builtin class-name">return</span> get_project<span class="token punctuation">(</span>
+File <span class="token string">"/usr/local/lib/python3.8/dist-packages/compose/cli/command.py"</span>, line <span class="token number">152</span>, <span class="token keyword">in</span> get_project
+client <span class="token operator">=</span> get_client<span class="token punctuation">(</span>
+File <span class="token string">"/usr/local/lib/python3.8/dist-packages/compose/cli/docker_client.py"</span>, line <span class="token number">41</span>, <span class="token keyword">in</span> get_client
+client <span class="token operator">=</span> docker_client<span class="token punctuation">(</span>
+File <span class="token string">"/usr/local/lib/python3.8/dist-packages/compose/cli/docker_client.py"</span>, line <span class="token number">124</span>, <span class="token keyword">in</span> docker_client
+kwargs <span class="token operator">=</span> kwargs_from_env<span class="token punctuation">(</span>environment<span class="token operator">=</span>environment, <span class="token assign-left variable">ssl_version</span><span class="token operator">=</span>tls_version<span class="token punctuation">)</span>
+TypeError: kwargs_from_env<span class="token punctuation">(</span><span class="token punctuation">)</span> got an unexpected keyword argument <span class="token string">'ssl_version'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>把<code>-</code>去掉就好了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> compose up <span class="token parameter variable">-d</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>容器里运行<code>makemigrations</code>和<code>migrate</code>来生成相应文件夹</p>
+<ul>
+<li><p><code>docker ps</code>查容器名，然后执行指令</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> <span class="token builtin class-name">exec</span> name python manage.py makemigrations<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> <span class="token builtin class-name">exec</span> name python manage.py migrate<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>如果<code>settings</code>里的<code>ip</code>改错了就可能遇到报错</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">Traceback <span class="token punctuation">(</span>most recent call last<span class="token punctuation">)</span>:
+File <span class="token string">"/usr/local/lib/python3.9/site-packages/django/db/backends/base/base.py"</span>, line <span class="token number">289</span>, <span class="token keyword">in</span> ensure_connection
+self.connect<span class="token punctuation">(</span><span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.9/site-packages/django/utils/asyncio.py"</span>, line <span class="token number">26</span>, <span class="token keyword">in</span> inner
+<span class="token builtin class-name">return</span> func<span class="token punctuation">(</span>*args, **kwargs<span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.9/site-packages/django/db/backends/base/base.py"</span>, line <span class="token number">270</span>, <span class="token keyword">in</span> connect
+self.connection <span class="token operator">=</span> self.get_new_connection<span class="token punctuation">(</span>conn_params<span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.9/site-packages/django/utils/asyncio.py"</span>, line <span class="token number">26</span>, <span class="token keyword">in</span> inner
+<span class="token builtin class-name">return</span> func<span class="token punctuation">(</span>*args, **kwargs<span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.9/site-packages/django/db/backends/mysql/base.py"</span>, line <span class="token number">247</span>, <span class="token keyword">in</span> get_new_connection
+connection <span class="token operator">=</span> Database.connect<span class="token punctuation">(</span>**conn_params<span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.9/site-packages/MySQLdb/init.py"</span>, line <span class="token number">121</span>, <span class="token keyword">in</span> Connect
+<span class="token builtin class-name">return</span> Connection<span class="token punctuation">(</span>*args, **kwargs<span class="token punctuation">)</span>
+File <span class="token string">"/usr/local/lib/python3.9/site-packages/MySQLdb/connections.py"</span>, line <span class="token number">193</span>, <span class="token keyword">in</span> init
+super<span class="token punctuation">(</span><span class="token punctuation">)</span>.init<span class="token punctuation">(</span>*args, **kwargs2<span class="token punctuation">)</span>
+MySQLdb.OperationalError: <span class="token punctuation">(</span><span class="token number">2002</span>, <span class="token string">"Can't connect to server on 'wrong ip' (115)"</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>此时需要删除容器和镜像，将<code>ip</code>修改正确之后再次运行</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> rmi <span class="token operator">&lt;</span>your-image-id<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> <span class="token function">rm</span> <span class="token operator">&lt;</span>your-docker-id<span class="token operator">></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>其中<code>id</code>可以通过<code>docker ps</code>查看</p>
+</li>
+</ul>
+</li>
+<li><p>将项目中的<code>nginx.conf</code>替换<code>/etc/nginx/sites-available</code>中的<code>default</code>(要把名字也改成<code>default</code>)，再加载<code>nginx</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nginx <span class="token parameter variable">-s</span> reload<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">nginx <span class="token parameter variable">-t</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>最后将项目文件中的<code>dist</code>文件复制到根目录创建的文件夹下</p>
+</li>
+</ul>
+<hr>
+<p>以上只针对这次项目的部署，很多环境在给的<code>dockerfile</code>中配好了，我也没怎么去研究，仅记录一下中间遇到的一些问题，虽然是一些小问题但是耗了我两三个小时…嗯仅供参考吧</p>
 
                 
             </div>
@@ -446,7 +548,15 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/web%E5%89%8D%E7%AB%AF/">
+                                    <span class="chip bg-color">web前端</span>
+                                </a>
+                            
+                                <a href="/tags/docker/">
+                                    <span class="chip bg-color">docker</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -490,7 +600,61 @@
                 <i class="far fa-dot-circle"></i>&nbsp;本篇
             </div>
             <div class="card">
-                <a href="/2024/01/29/yinbao/">
+                <a href="/2024/01/29/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="基于已有项目部署网站">
+                        
+                        <span class="card-title">基于已有项目部署网站</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            基于已有项目在新Ubuntu系统中部署网站
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-01-29
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/web%E5%89%8D%E7%AB%AF/" class="post-category">
+                                    web前端
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/web%E5%89%8D%E7%AB%AF/">
+                        <span class="chip bg-color">web前端</span>
+                    </a>
+                    
+                    <a href="/tags/docker/">
+                        <span class="chip bg-color">docker</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/01/29/yinbao/yinbao/">
                     <div class="card-image">
                         
                         
@@ -516,60 +680,6 @@
                             
                         </span>
                     </div>
-                </div>
-
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2024/01/24/2024mapnactf-pwn/2024mapnactf-pwn/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="2024MapnaCTF-pwn">
-                        
-                        <span class="card-title">2024MapnaCTF-pwn</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            2024MapnaCTF-pwn writeup
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2024-01-24
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/pwn/" class="post-category">
-                                    pwn
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/pwn/">
-                        <span class="chip bg-color">pwn</span>
-                    </a>
-                    
-                    <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6/">
-                        <span class="chip bg-color">格式化字符</span>
-                    </a>
-                    
                 </div>
                 
             </div>
@@ -753,7 +863,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">65.4k</span>&nbsp;字
+                class="white-color">66.5k</span>&nbsp;字
             
             
             
