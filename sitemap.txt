@@ -1,7 +1,8 @@
+https://starrysky1004.github.io/2024/02/09/2024beginctf-pwn/2024beginctf-pwn/
 https://starrysky1004.github.io/2024/02/08/hgame-2024-week1-pwn/hgame-2024-week1-pwn/
 https://starrysky1004.github.io/2024/01/24/2024mapnactf-pwn/2024mapnactf-pwn/
 https://starrysky1004.github.io/2024/01/29/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/ji-yu-yi-you-xiang-mu-bu-shu-wang-zhan/
-https://starrysky1004.github.io/2024/01/29/yinbao/yinbao/
+https://starrysky1004.github.io/draft/yinbao/yinbao.html
 https://starrysky1004.github.io/2024/01/24/2024-chun-qiu-bei-dong-ji-sai-pwn-bu-fen-wp/2024-chun-qiu-bei-dong-ji-sai-pwn-bu-fen-writeup/
 https://starrysky1004.github.io/2023/12/27/nian-zhong-zong-jie/
 https://starrysky1004.github.io/2023/12/16/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/
@@ -42,6 +43,8 @@ https://starrysky1004.github.io/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%
 https://starrysky1004.github.io/tags/web%E5%89%8D%E7%AB%AF/
 https://starrysky1004.github.io/tags/docker/
 https://starrysky1004.github.io/tags/shellcode/
+https://starrysky1004.github.io/tags/%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA/
+https://starrysky1004.github.io/tags/%E5%A0%86/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/%E7%AE%97%E6%B3%95/
 https://starrysky1004.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/

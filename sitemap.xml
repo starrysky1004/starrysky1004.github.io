@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://starrysky1004.github.io/2024/02/09/2024beginctf-pwn/2024beginctf-pwn/</loc>
+    
+    <lastmod>2024-02-08</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://starrysky1004.github.io/2024/02/08/hgame-2024-week1-pwn/hgame-2024-week1-pwn/</loc>
     
     <lastmod>2024-02-08</lastmod>
@@ -29,7 +38,7 @@
   </url>
   
   <url>
-    <loc>https://starrysky1004.github.io/2024/01/29/yinbao/yinbao/</loc>
+    <loc>https://starrysky1004.github.io/draft/yinbao/yinbao.html</loc>
     
     <lastmod>2024-01-29</lastmod>
     
@@ -354,6 +363,20 @@
   
   <url>
     <loc>https://starrysky1004.github.io/tags/shellcode/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/tags/%E6%95%B0%E7%BB%84%E6%BA%A2%E5%87%BA/</loc>
+    <lastmod>2024-02-08</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/tags/%E5%A0%86/</loc>
     <lastmod>2024-02-08</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>
