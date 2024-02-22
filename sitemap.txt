@@ -1,4 +1,4 @@
-https://starrysky1004.github.io/2024/02/22/2023-xiang-shan-bei-jue-sai-pwn/2023-xiang-shan-bei-jue-sai-pwn/
+https://starrysky1004.github.io/2024/02/22/2023-xiang-shan-bei-jue-sai-pwn/
 https://starrysky1004.github.io/2024/02/09/2024beginctf-pwn/2024beginctf-pwn/
 https://starrysky1004.github.io/2024/02/08/hgame-2024-week1-pwn/hgame-2024-week1-pwn/
 https://starrysky1004.github.io/2024/01/24/2024mapnactf-pwn/2024mapnactf-pwn/
