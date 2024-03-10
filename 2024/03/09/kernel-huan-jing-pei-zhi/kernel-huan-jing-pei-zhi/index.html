@@ -1,0 +1,1171 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="kernel环境配置, StarrySky">
+    <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>kernel环境配置 | StarrySky</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="StarrySky" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">StarrySky</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>文章</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>个人简介</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">StarrySky</div>
+        <div class="logo-desc">
+            
+            Love rises from the east and descends to the west,romance makes no changes until death.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			文章
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			个人简介
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/Steel%20Gray.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">kernel环境配置</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/kernel/">
+                                <span class="chip bg-color">kernel</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/kernel/" class="post-category">
+                                kernel
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-03-09
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2024-03-10
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    1.8k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    8 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id><a href="#" class="headerlink" title></a></h2><p>记录一下配置kernel环境过程中遇到的一些问题</p>
+<h2 id="内核"><a href="#内核" class="headerlink" title="内核"></a>内核</h2><h3 id="内核下载"><a href="#内核下载" class="headerlink" title="内核下载"></a>内核下载</h3><p>网上一些文章用的清华源，但是现在好像…</p>
+<pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span> <span class="token attr-name">lang</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>zh-cn<span class="token punctuation">"</span></span><span class="token punctuation">></span></span>我们检测到您所在的子网和/或所使用的客户端存在大量下载某些较大二进制文件的行为，为保证用户的正常使用，我们阻断了此类请求。<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>所以网上找到了其他下载<a target="_blank" rel="noopener" href="https://cdn.kernel.org/pub/linux/kernel/v5.x/#/%EF%BC%8C%E4%B8%8D%E8%BF%87%E5%9B%A0%E4%B8%BA%E6%84%9F%E8%A7%89%E4%B8%8B%E8%BD%BD%E7%9A%84%E5%A5%BD%E6%85%A2%EF%BC%8C%E7%9B%B4%E6%8E%A5%E5%9C%A8%60windows%60%E4%B8%8A%E4%B8%8B%E8%BD%BD%E4%BA%86%E6%8B%96%E8%BF%9B%E8%99%9A%E6%8B%9F%E6%9C%BA%E4%BA%86">https://cdn.kernel.org/pub/linux/kernel/v5.x/#/，不过因为感觉下载的好慢，直接在`windows`上下载了拖进虚拟机了</a></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">curl</span> <span class="token parameter variable">-O</span> <span class="token parameter variable">-L</span> https://cdn.kernel.org/pub/linux/kernel/v5.x/linux-5.4.98.tar.xz
+unxz linux-5.4.98.tar.xz
+<span class="token function">tar</span> <span class="token parameter variable">-xf</span> linux-5.4.98.tar<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>这样就得到了内核源码，因为长期版稳定便于学习所以选择了<code>5.4.98</code>版本的内核</p>
+<h3 id="内核编译"><a href="#内核编译" class="headerlink" title="内核编译"></a>内核编译</h3><p>直接<code>make</code>报错了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">☁  linux-5.4.98  <span class="token function">sudo</span> <span class="token function">make</span> menuconfig                                                     
+<span class="token punctuation">[</span>sudo<span class="token punctuation">]</span> starrysky 的密码： 
+  LEX     scripts/kconfig/lexer.lex.c
+/bin/sh: <span class="token number">1</span>: flex: not found
+make<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span>: *** <span class="token punctuation">[</span>scripts/Makefile.host:9：scripts/kconfig/lexer.lex.c<span class="token punctuation">]</span> 错误 <span class="token number">127</span>
+make: *** <span class="token punctuation">[</span>Makefile:590：menuconfig<span class="token punctuation">]</span> 错误 <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>需要先安装<code>flex</code>和<code>bison</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> flex
+<span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> bison<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>进入菜单，在菜单中选择<code>Kernel hacking -&gt; Compile-time checks and compiler options</code>并且勾选<code>Compile the kernel with debug info</code>，全选<code>Kernel debugging</code>中全部内容</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">☁  linux-5.4.98  <span class="token function">sudo</span> <span class="token function">make</span> menuconfig       <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>开始编译内核</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">make</span> <span class="token parameter variable">-j</span> <span class="token number">4</span>  bzImage<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>其中会遇到一些问题，解决方法：</p>
+<ul>
+<li><p><code>.config</code> 第<code>9868</code>行置空（不删除此行</p>
+<pre class="line-numbers language-none"><code class="language-none">CONFIG_SYSTEM_TRUSTED_KEYS&#x3D;&quot;&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>安装<code>libelf-dev</code>和<code>dwarves</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> libelf-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> dwarves<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ul>
+<p>最后显示如下内容表示编译成功</p>
+<pre class="line-numbers language-none"><code class="language-none">Setup is 18044 bytes (padded to 18432 bytes).
+System is 15045 kB
+CRC 815d9126
+Kernel: arch&#x2F;x86&#x2F;boot&#x2F;bzImage is ready  (#2)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在编译成功后，我们一般主要关注于如下的文件</p>
+<ul>
+<li><code>bzImage</code>：<code>arch/x86/boot/bzImage</code></li>
+<li><code>vmlinux</code>：源码所在的根目录下。</li>
+</ul>
+<p>常见内核文件的介绍:</p>
+<ul>
+<li><strong>bzImage</strong>：目前主流的 <code>kernel</code> 镜像格式，适用于较大的（<code>&gt; 512 KB</code>） <code>Kernel</code>。这个镜像会被加载到内存的高地址(高于 <code>1MB</code>)。<code>bzImage</code> 是用 <code>gzip</code> 压缩的，不能用 <code>gunzip</code> 来解压</li>
+<li><strong>zImage</strong>：比较老的 <code>kernel</code> 镜像格式，适用于较小的<code>Kernel</code>。启动时，这个镜像会被加载到内存的低地址，即内存的前 <code>640 KB</code>。<code>zImage</code> 也不能用 <code>gunzip</code> 来解</li>
+<li><strong>vmlinuz</strong>：<code>vmlinuz</code> 不仅包含了压缩后的 <code>vmlinux</code>，还包含了 <code>gzip</code> 解压缩的代码。实际上就是 <code>zImage</code> 或者 <code>bzImage</code> 文件。该文件是 <code>bootable</code> 的,即它能够把内核加载到内存中。对于 <code>Linux</code> 系统而言，该文件位于 <code>/boot</code> 目录下,该目录包含了启动系统时所需要的文件</li>
+<li><strong>vmlinux</strong>：静态链接的 <code>Linux kernel</code>，以可执行文件的形式存在，尚未经过压缩。该文件往往是在生成 <code>vmlinuz</code> 的过程中产生的。该文件适合调试,但不是 bootable </li>
+<li><strong>vmlinux.bin</strong>：也是静态链接的 <code>Linux kernel</code>，只是以一个可启动的 (<code>bootable</code>) 二进制文件存在。所有的符号信息和重定位信息都被删除了。生成命令为：<code>objcopy -O binary vmlinux vmlinux.bin</code>。</li>
+<li><strong>uImage</strong>：<code>uImage</code> 是 <code>U-boot</code> 专用的镜像文件，它是在 <code>zImage</code> 之前加上了一个长度为 <code>0x40</code> 的 <code>tag</code> 而构成的。这个 <code>tag</code> 说明了这个镜像文件的类型、加载位置、生成时间、大小等信息</li>
+</ul>
+<h3 id="编译内核驱动"><a href="#编译内核驱动" class="headerlink" title="编译内核驱动"></a>编译内核驱动</h3><p><code>c</code>语言源码<code>pwn.c</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/init.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/module.h></span></span>
+<span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">include</span> <span class="token string">&lt;linux/kernel.h></span></span>
+<span class="token function">MODULE_LICENSE</span><span class="token punctuation">(</span><span class="token string">"Dual BSD/GPL"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">static</span> <span class="token keyword">int</span> <span class="token function">ko_test_init</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"This is a test ko!\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">static</span> <span class="token keyword">void</span> <span class="token function">ko_test_exit</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token function">printk</span><span class="token punctuation">(</span><span class="token string">"Bye Bye~\n"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token function">module_init</span><span class="token punctuation">(</span>ko_test_init<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">module_exit</span><span class="token punctuation">(</span>ko_test_exit<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>Makefile</code>文件</p>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile">obj-m <span class="token operator">+=</span> pwn.o
+
+KDIR <span class="token operator">=</span>/home/starrysky/kernel/linux-5.4.98
+
+<span class="token target symbol">all</span><span class="token punctuation">:</span>
+	<span class="token variable">$</span><span class="token punctuation">(</span>MAKE<span class="token punctuation">)</span> -C <span class="token variable">$</span><span class="token punctuation">(</span>KDIR<span class="token punctuation">)</span> M<span class="token operator">=</span><span class="token variable">$</span><span class="token punctuation">(</span>PWD<span class="token punctuation">)</span> modules
+
+<span class="token target symbol">clean</span><span class="token punctuation">:</span>
+	rm -rf *.o *.ko *.mod.* *.symvers *.order<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>其中<code>obj-m</code>指定了要声称的模块，后面接<code>c</code>源码文件名<code>.o</code>，<code>KDIR</code>为内核源码路径</p>
+<pre class="line-numbers language-makefile" data-language="makefile"><code class="language-makefile"><span class="token variable">$</span><span class="token punctuation">(</span>MAKE<span class="token punctuation">)</span> -C <span class="token variable">$</span><span class="token punctuation">(</span>KDIR<span class="token punctuation">)</span> M<span class="token operator">=</span><span class="token variable">$</span><span class="token punctuation">(</span>PWD<span class="token punctuation">)</span> modules<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>-C</code> 表示进入到指定的内核目录</p>
+<p><code>M</code> 指定驱动源码的环境，<code>M</code>并不是 <code>Makefile</code> 的选项，而是内核根目录下 <code>Makefile</code> 中使用的变量。这会使得该 <code>Makefile</code> 在构造模块之前返回到 <code>M</code> 指定的目录，并在指定的目录中生成驱动模块</p>
+<p>最后运行<code>sudo make</code>编译内核驱动</p>
+<pre class="line-numbers language-none"><code class="language-none">☁  pwn  ls
+Makefile  modules.order  Module.symvers  pwn.c  pwn.ko  pwn.mod  pwn.mod.c  pwn.mod.o  pwn.o<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>虽然正常人不会这样但是要注意文件名不要用<code>make</code>（嗯我就是那个非正常人类</p>
+<h2 id="Qemu-模拟环境"><a href="#Qemu-模拟环境" class="headerlink" title="Qemu 模拟环境"></a>Qemu 模拟环境</h2><h3 id="准备"><a href="#准备" class="headerlink" title="准备"></a>准备</h3><p>安装<code>qemu</code>和<code>busybox</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> qemu
+<span class="token function">wget</span> https://busybox.net/downloads/busybox-1.32.1.tar.bz2
+<span class="token function">tar</span> <span class="token parameter variable">-jxf</span> busybox-1.32.1.tar.bz2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>配置<code>busybox</code>,在 <code>Setttings</code> 选中 <code>Build static binary (no shared libs)</code>，将 <code>busybox</code> 编译为静态链接的文件；在 <code>Linux System Utilities</code> 中取消选中 <code>Support mounting NFS file systems on Linux &lt; 2.6.23 (NEW)；</code>在 <code>Networking Utilities</code> 中取消选中 <code>inetd</code>，最后编译</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">make</span> menuconfig
+<span class="token function">make</span> <span class="token parameter variable">-j</span> <span class="token number">8</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="配置文件系统"><a href="#配置文件系统" class="headerlink" title="配置文件系统"></a>配置文件系统</h3><p>使用 <code>make install</code>命令，将生成文件夹<code>_install</code>，该目录将成为 <code>rootfs</code>，在该文件夹下创建文件夹</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">mkdir</span> <span class="token parameter variable">-p</span>  proc sys dev etc/init.d<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>再创建一个<code>init</code>文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"INIT SCRIPT"</span>
+<span class="token function">mkdir</span> /tmp
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> proc none /proc
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> sysfs none /sys
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> devtmpfs none /dev
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> debugfs none /sys/kernel/debug
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> tmpfs none /tmp
+<span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"Boot took <span class="token variable"><span class="token variable">$(</span><span class="token function">cut</span> -d<span class="token string">' '</span> <span class="token parameter variable">-f1</span> /proc/uptime<span class="token variable">)</span></span> seconds"</span>
+setsid /bin/cttyhack setuidgid <span class="token number">0</span> /bin/sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>打包文件系统</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">find</span> <span class="token builtin class-name">.</span> <span class="token operator">|</span> cpio <span class="token parameter variable">-o</span> <span class="token parameter variable">--format</span><span class="token operator">=</span>newc <span class="token operator">></span> <span class="token punctuation">..</span>/rootfs.img
+<span class="token comment"># 解包命令</span>
+<span class="token comment"># cpio -idmv &lt; rootfs.img</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="启动内核"><a href="#启动内核" class="headerlink" title="启动内核"></a>启动内核</h3><p>脚本如下，<code>bzImage</code>就是之前内核里的<code>bzImage</code>,<code>rootfs.img</code>是打包文件系统时（上一步）创建的，<code>nographic</code>关闭了图形界面，<code>console=ttyS0</code>将输出重定向到了终端</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+qemu-system-x86_64 <span class="token punctuation">\</span>
+  <span class="token parameter variable">-nographic</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">-kernel</span> <span class="token punctuation">..</span>/arch/x86/boot/bzImage <span class="token punctuation">\</span>
+  <span class="token parameter variable">-initrd</span> ./rootfs.img <span class="token punctuation">\</span>
+  <span class="token parameter variable">-append</span> <span class="token string">"console=ttyS0 kaslr"</span> <span class="token punctuation">\</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>这样就启动好了</p>
+<pre class="line-numbers language-none"><code class="language-none">INIT SCRIPT
+Boot took 6.24 seconds
+&#x2F; # ls
+bin      etc      linuxrc  root     sys      usr
+dev      init     proc     sbin     tmp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="加载驱动"><a href="#加载驱动" class="headerlink" title="加载驱动"></a>加载驱动</h3><p>将之前写的驱动复制到<code>_install</code>文件夹下，改一下<code>init</code>文件</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+<span class="token builtin class-name">echo</span> <span class="token string">"INIT SCRIPT"</span>
+<span class="token function">mkdir</span> /tmp
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> proc none /proc
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> sysfs none /sys
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> devtmpfs none /dev
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> debugfs none /sys/kernel/debug
+<span class="token function">mount</span> <span class="token parameter variable">-t</span> tmpfs none /tmp
+insmod /1.ko
+<span class="token builtin class-name">echo</span> <span class="token parameter variable">-e</span> <span class="token string">"Boot took <span class="token variable"><span class="token variable">$(</span><span class="token function">cut</span> -d<span class="token string">' '</span> <span class="token parameter variable">-f1</span> /proc/uptime<span class="token variable">)</span></span> seconds"</span>
+setsid /bin/cttyhack setuidgid <span class="token number">0</span> /bin/sh<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>重新打包再运行，可以看到加载成功了，显示了<code>This is a test ko!</code></p>
+<pre class="line-numbers language-none"><code class="language-none">INIT SCRIPT
+[    6.129377] pwn: loading out-of-tree module taints kernel.
+[    6.133147] pwn: module verification failed: signature and&#x2F;or required key missing - tainting kernel
+[    6.147188] This is a test ko!
+Boot took 6.13 seconds<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="调试分析"><a href="#调试分析" class="headerlink" title="调试分析"></a>调试分析</h2><h3 id="基本操作"><a href="#基本操作" class="headerlink" title="基本操作"></a>基本操作</h3><p>查看装载的驱动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">lsmod<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>获取驱动加载的基地址</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">grep</span> target_module_name /proc/modules <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="启动调试"><a href="#启动调试" class="headerlink" title="启动调试"></a>启动调试</h3><p>在启动脚本里加<code>-s</code>，表示<code>-gdb tcp::1234</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/sh</span>
+qemu-system-x86_64 <span class="token punctuation">\</span>
+  <span class="token parameter variable">-nographic</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">-kernel</span> <span class="token punctuation">..</span>/arch/x86/boot/bzImage <span class="token punctuation">\</span>
+  <span class="token parameter variable">-initrd</span> ./rootfs.img <span class="token punctuation">\</span>
+  <span class="token parameter variable">-append</span> <span class="token string">"console=ttyS0 kaslr"</span> <span class="token punctuation">\</span>
+  <span class="token parameter variable">-s</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>启动之后<code>gdb</code>连接上去调试</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gdb <span class="token parameter variable">-q</span> <span class="token parameter variable">-ex</span> <span class="token string">"target remote localhost:1234"</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>连接成功</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">pwndbg: loaded <span class="token number">147</span> pwndbg commands and <span class="token number">47</span> shell commands. Type pwndbg <span class="token punctuation">[</span>--shell <span class="token operator">|</span> --all<span class="token punctuation">]</span> <span class="token punctuation">[</span>filter<span class="token punctuation">]</span> <span class="token keyword">for</span> a list.
+pwndbg: created <span class="token variable">$rebase</span>, <span class="token variable">$ida</span> GDB functions <span class="token punctuation">(</span>can be used with print/break<span class="token punctuation">)</span>
+Remote debugging using localhost:1234
+warning: No executable has been specified and target does not support
+determining executable automatically.  Try using the <span class="token string">"file"</span> command.
+0xffffffffa1dfea1e <span class="token keyword">in</span> ?? <span class="token punctuation">(</span><span class="token punctuation">)</span>
+------- tip of the day <span class="token punctuation">(</span>disable with <span class="token builtin class-name">set</span> show-tips off<span class="token punctuation">)</span> -------
+Use GDB's dprintf <span class="token builtin class-name">command</span> to print all calls to given function. E.g. dprintf malloc, <span class="token string">"malloc(%p)<span class="token entity" title="\n">\n</span>"</span>, <span class="token punctuation">(</span>void*<span class="token punctuation">)</span><span class="token variable">$rdi</span> will print all malloc calls
+Permission error when attempting to parse page tables with gdb-pt-dump.
+Either change the kernel-vmmap setting, re-run GDB as root, or disable <span class="token variable"><span class="token variable">`</span>ptrace_scope<span class="token variable">`</span></span> <span class="token punctuation">(</span><span class="token variable"><span class="token variable">`</span><span class="token builtin class-name">echo</span> <span class="token number">0</span> <span class="token operator">|</span> <span class="token function">sudo</span> <span class="token function">tee</span> /proc/sys/kernel/yama/ptrace_scope<span class="token variable">`</span></span><span class="token punctuation">)</span>
+LEGEND: STACK <span class="token operator">|</span> HEAP <span class="token operator">|</span> CODE <span class="token operator">|</span> DATA <span class="token operator">|</span> RWX <span class="token operator">|</span> RODATA<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h2><p><a target="_blank" rel="noopener" href="https://www.z1r0.top/2021/10/21/%E5%86%85%E6%A0%B8%E4%B8%8B%E8%BD%BD%E4%B8%8E%E7%BC%96%E8%AF%91/#/">https://www.z1r0.top/2021/10/21/%E5%86%85%E6%A0%B8%E4%B8%8B%E8%BD%BD%E4%B8%8E%E7%BC%96%E8%AF%91/#/</a></p>
+<p><a target="_blank" rel="noopener" href="https://ctf-wiki.org/pwn/linux/kernel-mode/environment/readme/#/">https://ctf-wiki.org/pwn/linux/kernel-mode/environment/readme/#/</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/kernel/">
+                                    <span class="chip bg-color">kernel</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2024/03/09/kernel-huan-jing-pei-zhi/kernel-huan-jing-pei-zhi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="kernel环境配置">
+                        
+                        <span class="card-title">kernel环境配置</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            kernel相关环境配置
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-03-09
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/kernel/" class="post-category">
+                                    kernel
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/kernel/">
+                        <span class="chip bg-color">kernel</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/02/27/sictf-round3-2024-pwn/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="SICTF-round3-2024-pwn">
+                        
+                        <span class="card-title">SICTF-round3-2024-pwn</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            2024SICTF-round3 pwn writeup
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-02-27
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/heap/">
+                        <span class="chip bg-color">heap</span>
+                    </a>
+                    
+                    <a href="/tags/pwn/">
+                        <span class="chip bg-color">pwn</span>
+                    </a>
+                    
+                    <a href="/tags/shellcode/">
+                        <span class="chip bg-color">shellcode</span>
+                    </a>
+                    
+                    <a href="/tags/fmt/">
+                        <span class="chip bg-color">fmt</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+<script>
+    $('#articleContent').on('copy', function (e) {
+        // IE8 or earlier browser is 'undefined'
+        if (typeof window.getSelection === 'undefined') return;
+
+        var selection = window.getSelection();
+        // if the selection is short let's not annoy our users.
+        if (('' + selection).length < Number.parseInt('20')) {
+            return;
+        }
+
+        // create a div outside of the visible area and fill it with the selected text.
+        var bodyElement = document.getElementsByTagName('body')[0];
+        var newdiv = document.createElement('div');
+        newdiv.style.position = 'absolute';
+        newdiv.style.left = '-99999px';
+        bodyElement.appendChild(newdiv);
+        newdiv.appendChild(selection.getRangeAt(0).cloneContents());
+
+        // we need a <pre> tag workaround.
+        // otherwise the text inside "pre" loses all the line breaks!
+        if (selection.getRangeAt(0).commonAncestorContainer.nodeName === 'PRE') {
+            newdiv.innerHTML = "<pre>" + newdiv.innerHTML + "</pre>";
+        }
+
+        var url = document.location.href;
+        newdiv.innerHTML += '<br />'
+            + '来源: StarrySky<br />'
+            + '文章作者: StarrySky<br />'
+            + '文章链接: <a href="' + url + '">' + url + '</a><br />'
+            + '本文章著作权归作者所有，任何形式的转载都请注明出处。';
+
+        selection.selectAllChildren(newdiv);
+        window.setTimeout(function () {bodyElement.removeChild(newdiv);}, 200);
+    });
+</script>
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2024</span>
+            
+            <span id="year">2019</span>
+            <a href="/about" target="_blank">StarrySky</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">82.2k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/starrysky1004" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:starrysky1005@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2726736810" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2726736810" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+	
+    
+    <script type="text/javascript" color="0,0,255"
+        pointColor="0,0,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":260,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>

