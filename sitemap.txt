@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/03/12/kernel-ji-chu-zhi-shi/kernel-ji-chu-zhi-shi/
 https://starrysky1004.github.io/2024/03/09/kernel-huan-jing-pei-zhi/kernel-huan-jing-pei-zhi/
 https://starrysky1004.github.io/2023/12/16/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/
 https://starrysky1004.github.io/2024/02/27/sictf-round3-2024-pwn/
