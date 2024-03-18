@@ -742,6 +742,8 @@ boot.sh  bzImage  disk.flag.img  File_system  rootfs.cpio  vmlinux<span aria-hid
 <span class="token builtin class-name">set</span> architecture i386:x86-64
 add-symbol-file vmlinux
 
+./boot.sh
+
 c	<span class="token comment"># 先 continue， 在 insmod 之后手动 Ctrl+C 再设置断点，免得断点处于 pending 状态</span>
 
 add-symbol-file babydriver.ko 0xffffffffc0000000	<span class="token comment">#kernel shell中lsmod</span>
@@ -752,7 +754,9 @@ b babyioctl
 b babyopen
 b babyrelease
 
-c<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+c
+
+./exp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h2 id="远程攻击"><a href="#远程攻击" class="headerlink" title="远程攻击"></a>远程攻击</h2><p>脚本</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> sys
