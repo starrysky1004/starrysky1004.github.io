@@ -386,14 +386,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.1k
+                    961
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    6 分
+                    5 分
                 </div>
                 
 
@@ -463,8 +463,7 @@ r<span class="token punctuation">.</span>sendline<span class="token punctuation"
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="orange-cat-diary"><a href="#orange-cat-diary" class="headerlink" title="orange_cat_diary"></a>orange_cat_diary</h3><p>当申请的大小大于<code>top chunk</code>的时候会发生一些异常，利用溢出修改<code>top chunk</code>的大小之后申请一个大于<code>top chunk</code>大小的堆块，此时会有一个堆直接进入<code>unsorted bin</code>，并且后续再申请的堆块都在这个堆上方，所以不需要考虑堆块合并的问题</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+<h3 id="orange-cat-diary"><a href="#orange-cat-diary" class="headerlink" title="orange_cat_diary"></a>orange_cat_diary</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
 
 context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>  <span class="token comment">#32位arch=‘i386’</span>
 
@@ -938,7 +937,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">104.5k</span>&nbsp;字
+                class="white-color">104.4k</span>&nbsp;字
             
             
             
