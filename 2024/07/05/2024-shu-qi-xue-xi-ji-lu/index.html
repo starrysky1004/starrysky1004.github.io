@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    1.7k
+                    2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    9 分
                 </div>
                 
 
@@ -613,7 +613,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
   <span class="token function">setvbuf</span><span class="token punctuation">(</span><span class="token constant">stdin</span><span class="token punctuation">,</span> <span class="token number">0LL</span><span class="token punctuation">,</span> <span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0LL</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>也可以通过一下方式进行手动刷新缓冲区从而输出缓冲区中的内容：</p>
+<p>也可以通过以下方式进行手动刷新缓冲区从而输出缓冲区中的内容：</p>
 <ul>
 <li>显式调用<code>fflush</code>函数</li>
 <li>流被关闭（调用<code>fclose</code>）</li>
@@ -700,6 +700,42 @@ p <span class="token operator">=</span> <span class="token string">b'a'</span> <
 r<span class="token punctuation">.</span>send<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="7-7"><a href="#7-7" class="headerlink" title="#7.7"></a>#7.7</h2><p>今天有点摆烂了…欸，周末嘛（bushi），主要是前一天睡的有点晚，直接润去姐姐家睡到了下午（）。晚上摸索了一下<code>windbg</code>基本用法</p>
+<h3 id="windbg"><a href="#windbg" class="headerlink" title="windbg"></a>windbg</h3><p>打开文件：文件选项卡中打开exe文件</p>
+<p>设置符号路径  ： <code>.sympath srv*</code></p>
+<p>加载符号： <code>.reload</code></p>
+<p>运行：<code>g</code></p>
+<p>设置断点： <code>bp addr</code>  </p>
+<p>查看堆栈状态：<code>kb</code></p>
+<p>查看反汇编代码：<code>u addr</code></p>
+<p>查看内容内容：双字：<code>dd/dc addr</code></p>
+<p>​    Unicode 字符串 ：<code>du addr</code></p>
+<p>​    十六进制双字：<code>dD addr</code></p>
+<p>​    内存内容的指针：<code>dp addr</code></p>
+<p>​    字：<code>dw addr</code></p>
+<p>​    字节：<code>db addr</code></p>
+<p>​    ASCII字符：<code>da addr</code></p>
+<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">0:000> dc 00400000
+00400000  00405000 00406000 00407000 00408000  <span class="token punctuation">.</span>P<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>p<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+00400010  00409000 0040A000 0040B000 0040C000  <span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+0:000> du 00400000
+00400000  <span class="token string">"Hello, world!"</span>
+00400010  <span class="token string">"This is a test string."</span>
+
+0:000> dd 00400000
+00400000  00405000 00406000 00407000 00408000
+00400010  00409000 0040A000 0040B000 0040C000
+
+0:000> db 00400000
+00400000  48 65 6C 6C 6F 2C 20 77-6F 72 6C 64 21 00 00 00  Hello<span class="token punctuation">,</span> world!<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+00400010  54 68 69 73 20 69 73 20-61 20 74 65 73 74 20 73  This is a test s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>查看寄存器：<code>r</code>	&#x2F;   <code>r register</code></p>
+<p>修改寄存器：<code>r register = value</code></p>
+<p>单步执行：不进入函数：<code>p</code></p>
+<p>​         进入函数：<code>t</code></p>
 
                 
             </div>
@@ -999,7 +1035,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">106.9k</span>&nbsp;字
+                class="white-color">107.2k</span>&nbsp;字
             
             
             
