@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2k
+                    2.4k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    9 分
+                    11 分
                 </div>
                 
 
@@ -736,6 +736,24 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
 <p>修改寄存器：<code>r register = value</code></p>
 <p>单步执行：不进入函数：<code>p</code></p>
 <p>​         进入函数：<code>t</code></p>
+<h2 id="7-8"><a href="#7-8" class="headerlink" title="#7.8"></a>#7.8</h2><p>今天还在捣鼓<code>windbg</code>，有点难绷…</p>
+<h3 id="windbg-1"><a href="#windbg-1" class="headerlink" title="windbg"></a>windbg</h3><p><code>windbg</code>作用和<code>pwndbg</code>类似，还需要结合<code>IDA</code>逆向分析</p>
+<p>显示指定的加载模块:<code>lm</code></p>
+<p>bp、bu 和 bm 命令设置新的断点，但它们具有不同的特征：</p>
+<p>●bp (设置断点) 命令在命令中指定的断点位置的地址处设置新的断点。 如果在设置断点时调试器无法解析断点位置的地址表达式，则 bp 断点将自动转换为 bu 断点。 使用 bp 命令创建在卸载模块时不再处于活动状态的断点</p>
+<p>●bu (设置未解析断点) 命令设置延迟或未解析的断点。 bu 断点是在对命令中指定的断点位置的符号引用上设置的， (不在地址) 上，每当解析具有引用的模块时，就会激活该断点。 有关这些断点的详细信息</p>
+<p>●bm (设置符号断点) 命令在与指定模式匹配的符号上设置新的断点。 此命令可以创建多个断点。 默认情况下，匹配模式后， bm 断点与 bu 断点相同。 也就是说， bm 断点是在符号引用上设置的延迟断点。 但是，bm &#x2F;d 命令会创建一个或多个 bp 断点。 每个断点在匹配位置的地址上设置，不跟踪模块状态</p>
+<p>●.bpcmds&#x2F;bl 查看断点情况</p>
+<pre class="line-numbers language-none"><code class="language-none">0:000&gt; bm myprogram!mem* 
+
+  4: 0040d070 MyProgram!memcpy
+
+  5: 0040c560 MyProgram!memmove
+
+  6: 00408960 MyProgram!memset
+
+0:000&gt; bp MyTest+0xb 7 	#前六次忽略此断点，第七次传递时，执行会停止<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -1035,7 +1053,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">107.2k</span>&nbsp;字
+                class="white-color">107.6k</span>&nbsp;字
             
             
             
