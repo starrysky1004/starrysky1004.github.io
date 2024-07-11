@@ -381,7 +381,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.9k
+                    3.2k
                 </div>
                 
 
@@ -868,6 +868,41 @@ WARNING: Stack unwind information not available. Following frames may be wrong.
 	<span class="token function">__crtTerminateProcess</span><span class="token punctuation">(</span><span class="token number">0xC0000417</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="7-11"><a href="#7-11" class="headerlink" title="#7.11"></a>#7.11</h2><p>今天彻底明白怎么用<code>windbg</code>结合<code>IDA</code>调试啦，不容易，具体内容见另一篇博客吧。对<code>GOM</code>进行了一些逆向，然后又被摇去看论文了嘶，什么时候我能看得懂这个论文在写什么呢（逃</p>
+<h3 id="GOM逆向"><a href="#GOM逆向" class="headerlink" title="GOM逆向"></a>GOM逆向</h3><p><code>kb</code>查看栈回溯找到的第一个函数，是触发<code>crash</code>时的反调试</p>
+<p>再往上追溯两个函数</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __cdecl <span class="token function">_invalid_parameter</span><span class="token punctuation">(</span>
+<span class="token class-name">wchar_t</span> <span class="token operator">*</span>Expression<span class="token punctuation">,</span>
+<span class="token class-name">wchar_t</span> <span class="token operator">*</span>FunctionName<span class="token punctuation">,</span>
+<span class="token class-name">wchar_t</span> <span class="token operator">*</span>FileName<span class="token punctuation">,</span>
+<span class="token keyword">unsigned</span> <span class="token keyword">int</span> LineNo<span class="token punctuation">,</span>
+<span class="token class-name">uintptr_t</span> Reserved<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+<span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span>v5<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// eax</span>
+v5 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token function">DecodePointer</span><span class="token punctuation">(</span>dword_CE8C44<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>v5 <span class="token punctuation">)</span>
+  <span class="token function">_invoke_watson</span><span class="token punctuation">(</span>Expression<span class="token punctuation">,</span> FunctionName<span class="token punctuation">,</span> FileName<span class="token punctuation">,</span> LineNo<span class="token punctuation">,</span> Reserved<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token function">v5</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> __cdecl <span class="token function">_invalid_parameter_noinfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+<span class="token function">_invalid_parameter</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>再往上追溯一个函数就是漏洞点sub_606910中的sub_5CE090(this[61], v14);，漏洞点就在wcscpy_s(Destination, 0x104u, Source);</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __thiscall <span class="token function">sub_606910</span><span class="token punctuation">(</span>_DWORD <span class="token operator">*</span><span class="token operator">*</span>this<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span> v12 <span class="token operator">==</span> <span class="token number">116</span> <span class="token punctuation">)</span>
+	<span class="token keyword">goto</span> LABEL_25<span class="token punctuation">;</span>
+	<span class="token function">sub_44A540</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v12 <span class="token operator">-</span> <span class="token number">116</span> <span class="token operator">+</span> <span class="token number">144</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">LOBYTE</span><span class="token punctuation">(</span>v15<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
+	<span class="token function">wcscpy_s</span><span class="token punctuation">(</span>Destination<span class="token punctuation">,</span> <span class="token number">0x104u</span><span class="token punctuation">,</span> Source<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">sub_5CE090</span><span class="token punctuation">(</span>this<span class="token punctuation">[</span><span class="token number">61</span><span class="token punctuation">]</span><span class="token punctuation">,</span> v14<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
                 
             </div>
             <hr/>
@@ -1168,7 +1203,7 @@ WARNING: Stack unwind information not available. Following frames may be wrong.
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">109.2k</span>&nbsp;字
+                class="white-color">109.4k</span>&nbsp;字
             
             
             
