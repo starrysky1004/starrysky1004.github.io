@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/07/11/windbg-ida-ni-xiang-fen-xi-ji-chu-yong-fa/
 https://starrysky1004.github.io/2024/07/05/2024-shu-qi-xue-xi-ji-lu/
 https://starrysky1004.github.io/2024/06/09/awd-yi-ju-hua-mu-ma-pi-liang-gong-ji-jiao-ben/
 https://starrysky1004.github.io/2024/02/09/2024beginctf-pwn/2024beginctf-pwn/
@@ -68,6 +69,8 @@ https://starrysky1004.github.io/tags/golang/
 https://starrysky1004.github.io/tags/web%E5%89%8D%E7%AB%AF/
 https://starrysky1004.github.io/tags/docker/
 https://starrysky1004.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/
+https://starrysky1004.github.io/tags/reverse/
+https://starrysky1004.github.io/tags/windbg/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
@@ -76,3 +79,4 @@ https://starrysky1004.github.io/categories/web%E5%89%8D%E7%AB%AF/
 https://starrysky1004.github.io/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/
 https://starrysky1004.github.io/categories/heap/
 https://starrysky1004.github.io/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/
+https://starrysky1004.github.io/categories/%E9%80%86%E5%90%91/
