@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.6k
+                    2.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    12 分
+                    14 分
                 </div>
                 
 
@@ -839,6 +839,35 @@ add<span class="token punctuation">(</span><span class="token number">6</span><s
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="7-10"><a href="#7-10" class="headerlink" title="#7.10"></a>#7.10</h2><p>安装<code>FakePDB</code>，发现有<code>release</code>版本，唉前一天白浪费那么多时间去编译啦，但是还是只能生成<code>json</code>，<code>pdb</code>还是没生成的起来。然后被老师摇去看论文啦，一万多字的专业性文章真是考验专注力和耐心，过程中和学长交流才发现，其实<code>kb</code>查看栈回溯里的内容就行</p>
+<h3 id="windbg-2"><a href="#windbg-2" class="headerlink" title="windbg"></a>windbg</h3><p>之前对<code>windbg</code>的误区是它既然不能识别函数那不就不能追溯到经过了哪些函数，昨天学到下断点是<code>module_name+address</code>，今天学长提到<code>kb</code>再去看了一下才发现这里的栈回溯就是<code>module_name+address</code>形式的代替了函数</p>
+<p>例如这里的<code>GOM32Q_vc120_ReleaseQC+0x6371de</code>再去看<code>IDA</code>对应的就是<code>0x400000+0x6371de=0xA371DE</code>，即函数<code>_invoke_watson</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span>:00<span class="token operator"><span class="token file-descriptor important">0</span>></span> kb
+ <span class="token punctuation">\</span># ChildEBP RetAddr      Args to Child              
+WARNING: Stack unwind information not available. Following frames may be wrong.
+00 017eefc0 00e971cc     00000000 00000000 00000000 GOM32Q_vc120_ReleaseQC+0x6371de
+01 017eefe4 00a66a63     017ef0ec 00000104 05989178 GOM32Q_vc120_ReleaseQC+0x6371cc
+02 017ef338 00a4d040     0ada2b98 00000001 00d6723a GOM32Q_vc120_ReleaseQC+0x206a63
+03 017ef3fc 00d682e2     00ffb640 0ada2b98 00010004 GOM32Q_vc120_ReleaseQC+0x1ed040
+04 017ef41c 00d6392f     0000c322 0ada2b98 00010004 GOM32Q_vc120_ReleaseQC+0x5082e2
+05 017ef48c 00d640ea     0ad8e898 000408f4 0000c322 GOM32Q_vc120_ReleaseQC+0x50392f
+06 017ef4ac 771116eb     000408f4 0000c322 0ada2b98 GOM32Q_vc120_ReleaseQC+0x5040ea
+<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>追溯到最后一个函数如下</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> __cdecl __noreturn <span class="token function">_invoke_watson</span><span class="token punctuation">(</span>
+	<span class="token keyword">const</span> <span class="token class-name">wchar_t</span> <span class="token operator">*</span>Expression<span class="token punctuation">,</span>
+	<span class="token keyword">const</span> <span class="token class-name">wchar_t</span> <span class="token operator">*</span>FunctionName<span class="token punctuation">,</span>
+	<span class="token keyword">const</span> <span class="token class-name">wchar_t</span> <span class="token operator">*</span>FileName<span class="token punctuation">,</span>
+	<span class="token keyword">unsigned</span> <span class="token keyword">int</span> LineNo<span class="token punctuation">,</span>
+	<span class="token class-name">uintptr_t</span> Reserved<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">IsProcessorFeaturePresent</span><span class="token punctuation">(</span><span class="token number">0x17u</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+		<span class="token function">__fastfail</span><span class="token punctuation">(</span><span class="token number">5u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">_call_reportfault</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1073740777</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+	<span class="token function">__crtTerminateProcess</span><span class="token punctuation">(</span><span class="token number">0xC0000417</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
                 
             </div>
             <hr/>
@@ -1137,7 +1166,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">107.9k</span>&nbsp;字
+                class="white-color">108.2k</span>&nbsp;字
             
             
             
