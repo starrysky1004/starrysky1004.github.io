@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    3.2k
+                    3.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    14 分
+                    16 分
                 </div>
                 
 
@@ -903,6 +903,21 @@ v5 <span class="token operator">=</span> <span class="token punctuation">(</span
   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="7-12"><a href="#7-12" class="headerlink" title="#7.12"></a>#7.12</h2><p>早上改说明书摘要，下午和代理沟通，逆向一会和妈妈小姨去逛超市吃海底捞，回去又逆向了一会。唉海底捞真的快吃腻啦</p>
+<h3 id="WinRAR逆向"><a href="#WinRAR逆向" class="headerlink" title="WinRAR逆向"></a>WinRAR逆向</h3><h4 id="参考文章"><a href="#参考文章" class="headerlink" title="参考文章"></a>参考文章</h4><p><a target="_blank" rel="noopener" href="https://paper.seebug.org/3036/#/">https://paper.seebug.org/3036/#/</a></p>
+<p><a target="_blank" rel="noopener" href="https://www.cnblogs.com/GoodFish-/p/17715977.html#/">https://www.cnblogs.com/GoodFish-/p/17715977.html#/</a></p>
+<p><a target="_blank" rel="noopener" href="https://mp.weixin.qq.com/s?__biz=MjM5NTc2MDYxMw==&amp;mid=2458544969&amp;idx=1&amp;sn=473822d99738dc8c20cf0c7df866adea&amp;chksm=b18d5bc386fad2d597b3b73e9bbd6d243e83e0191527db7cf84f277ac8c455b590956d5da778&amp;scene=27#/">https://mp.weixin.qq.com/s?__biz=MjM5NTc2MDYxMw==&amp;mid=2458544969&amp;idx=1&amp;sn=473822d99738dc8c20cf0c7df866adea&amp;chksm=b18d5bc386fad2d597b3b73e9bbd6d243e83e0191527db7cf84f277ac8c455b590956d5da778&amp;scene=27#/</a></p>
+<h4 id="实现效果"><a href="#实现效果" class="headerlink" title="实现效果"></a>实现效果</h4><p><code>poc.zip</code>中包含<code>poc.txt</code>和同名的<code>poc.txt</code>文件夹，文件夹中包含一个cmd执行程序名为<code>poc.txt .cmd</code>，用<code>winrar</code>打开<code>poc.zip</code>中的<code>poc.txt</code>文本，<code>poc.txt</code>和<code>poc.txt .cmd</code>都会被释放到临时文件中，而最终打开的是<code>poc.txt .cmd</code>，临时文件目录：<code>C:\Users\Lenovo\AppData\Local\Temp\Rar$DIa30724.35820</code></p>
+<img src="/2024/07/05/2024-shu-qi-xue-xi-ji-lu/%E6%94%BB%E5%87%BB%E6%95%88%E6%9E%9C.png" class>
+
+<h4 id="分析"><a href="#分析" class="headerlink" title="分析"></a>分析</h4><p>用<code>010editor</code>打开<code>poc.zip</code>，需要关注<code>zip</code>结构体中的<code>deFileName</code>，在<code>zip</code>压缩包内，每个文件和文件夹都对应了一个<code>ZIPDIRENTRY</code>数据结构，该数据结构包含一个名为<code>deFileName</code>的成员，用于存储目标文件&#x2F;文件夹的名称</p>
+<img src="/2024/07/05/2024-shu-qi-xue-xi-ji-lu/zip%E6%96%87%E4%BB%B6%E6%A0%BC%E5%BC%8F.png" class>
+
+<p>用<code>bindiff</code>比较存在漏洞的版本和更新的版本之间的差异，确定漏洞点位置在&#96;&#96;sub_1400EF508&#96;</p>
+<img src="/2024/07/05/2024-shu-qi-xue-xi-ji-lu/bindiff%E7%BB%93%E6%9E%9C.png" class>
+
+<h2 id="7-13"><a href="#7-13" class="headerlink" title="#7.13"></a>#7.13</h2><p>今天主要做了一些杂事，写了队规做了宣传海报清理手机电脑内存准备去招新咯。晚上收拾了下行李箱准备明天去上海投奔表哥（</p>
+
                 
             </div>
             <hr/>
@@ -1203,7 +1218,7 @@ v5 <span class="token operator">=</span> <span class="token punctuation">(</span
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">109.4k</span>&nbsp;字
+                class="white-color">109.7k</span>&nbsp;字
             
             
             
