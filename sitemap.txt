@@ -1,4 +1,4 @@
-https://starrysky1004.github.io/2024/07/16/2024wkctf-pwn/
+https://starrysky1004.github.io/2024/07/16/2024wkctf-pwn/2024wkctf-pwn/
 https://starrysky1004.github.io/2024/07/16/yi-gou-pwn-yun-xing-yu-diao-shi/yi-gou-pwn-yun-xing-yu-diao-shi/
 https://starrysky1004.github.io/2024/02/22/2023-xiang-shan-bei-jue-sai-pwn/
 https://starrysky1004.github.io/2024/02/27/sictf-round3-2024-pwn/
@@ -19,7 +19,7 @@ https://starrysky1004.github.io/2023/08/03/2023-ciscn-pwn-fu-xian/2023-ciscn-pwn
 https://starrysky1004.github.io/2024/07/14/2024-chun-qiu-bei-xia-ji-sai/2024-chun-qiu-bei-xia-ji-sai/
 https://starrysky1004.github.io/2024/07/05/2024-shu-qi-xue-xi-ji-lu/
 https://starrysky1004.github.io/2024/07/11/windbg-ida-ni-xiang-fen-xi-ji-chu-yong-fa/
-https://starrysky1004.github.io/2024/06/09/awd-yi-ju-hua-mu-ma-pi-liang-gong-ji-jiao-ben/
+https://starrysky1004.github.io/2024/06/09/awd-yi-ju-hua-mu-ma-pi-liang-gong-ji-jiao-ben/awd-yi-ju-hua-mu-ma-pi-liang-gong-ji-jiao-ben/
 https://starrysky1004.github.io/2024/04/26/awd-pwn/awd-pwn/
 https://starrysky1004.github.io/2024/03/20/kernel-lou-dong-ji-li-yong/
 https://starrysky1004.github.io/2024/03/18/ciscn-babydriver-kernel-pwn-jie-ti-yi-ban-guo-cheng/ciscn-babydriver-kernel-pwn-jie-ti-yi-ban-guo-cheng/
