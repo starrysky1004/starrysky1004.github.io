@@ -502,7 +502,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
   <span class="token keyword">return</span> <span class="token function">__readfsqword</span><span class="token punctuation">(</span><span class="token number">0x28u</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>size<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>没有<code>delete</code>且限制了<code>show</code>的程度为一个地址，首先想到的就是<code>house of orange</code></p>
+<p>没有<code>delete</code>且限制了<code>show</code>的长度为一个地址，首先想到的就是<code>house of orange</code></p>
 <p>伪造<code>top chunk</code>的条件：</p>
 <ul>
 <li>保证原本<code>old top chunk</code>的<code>size</code>大于<code>MINSIZE</code></li>
