@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    6.4k
+                    7.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    30 分
+                    37 分
                 </div>
                 
 
@@ -1323,6 +1323,302 @@ target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><
 context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'aarch64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
 r <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"qemu-aarch64"</span><span class="token punctuation">,</span> <span class="token string">"-g"</span><span class="token punctuation">,</span> <span class="token string">"1234"</span><span class="token punctuation">,</span> <span class="token string">"./pwn"</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="7-17-7-22"><a href="#7-17-7-22" class="headerlink" title="#7-17-#7.22"></a>#7-17-#7.22</h2><p>电脑祭天…之前在干啥我也不记得了，记录一下电脑祭天前逆的<code>WinRar</code>吧</p>
+<h3 id="释放到临时目录"><a href="#释放到临时目录" class="headerlink" title="释放到临时目录"></a>释放到临时目录</h3><p><code>sub_1400EF508</code>函数：</p>
+<ul>
+<li><p><code>result = sub_1400E7F34(L&quot;Rar$DI&quot;, v19, 2048i64, a4);</code> 在Temp目录创建了临时目录<code>Rar$DIa19832.13485</code>（<code>DIa</code>后面的数字随机）</p>
+</li>
+<li><p><code>sub_1400097E8(&amp;unk_1401BA630, &amp;szShortPath, 2048i64);</code> 获取打开的压缩包所在文件路径到<code>szShortPath</code></p>
+</li>
+<li><p><code>sub_140009290(&amp;unk_1401BA630, 0i64, 0i64);</code>将文件释放到临时目录</p>
+</li>
+</ul>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__int64 __fastcall <span class="token function">sub_140009290</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> <span class="token keyword">char</span> a2<span class="token punctuation">,</span> __int64 a3<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+	<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+	<span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>byte_14018A806 <span class="token punctuation">)</span>
+	  <span class="token punctuation">&#123;</span>
+	    <span class="token keyword">if</span> <span class="token punctuation">(</span> byte_1401A25E8 <span class="token punctuation">)</span>
+	      <span class="token function">sub_14000A650</span><span class="token punctuation">(</span>a1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	    <span class="token keyword">else</span>
+	      <span class="token function">sub_14000A5A4</span><span class="token punctuation">(</span>a1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+	  <span class="token punctuation">&#125;</span>
+	  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span>
+sub_1400EF508<span class="token operator">-></span>sub_140009290<span class="token operator">-></span>sub_14000A650
+__int64 __fastcall <span class="token function">sub_14000A650</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  __int64 v1<span class="token punctuation">;</span> <span class="token comment">// rcx</span>
+
+  v1 <span class="token operator">=</span> <span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a1 <span class="token operator">+</span> <span class="token number">8</span>i64 <span class="token operator">*</span> dword_1401A4928 <span class="token operator">+</span> <span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>__int64<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">*</span><span class="token punctuation">(</span>_QWORD <span class="token operator">*</span><span class="token punctuation">)</span>v1 <span class="token operator">+</span> <span class="token number">56</span>i64<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">(</span>v1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>通过<code>return (*(__int64 (__fastcall **)(__int64))(*(_QWORD *)v1 + 56i64))(v1);</code> 跳转到<code>sub_1400D6070</code> 开始遍历<code>szShortPath</code>路径文件下的所有文件</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x1400D6070</span>
+__int64 <span class="token function">cmp</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">set_start_pos</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token number">8</span>i64<span class="token punctuation">;</span>
+  v1 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">call_cmp_name</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>cmp</code>调用<code>set_start_pos()</code> 函数创建一块区域存放压缩包中的所有文件名</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x1400D6478</span>
+__int64 <span class="token function">set_start_pos</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  start_pos <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">)</span><span class="token function">j__malloc_base</span><span class="token punctuation">(</span><span class="token number">0x2004u</span>i64<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>cmp</code>调用<code>call_cmp_name</code> 函数开始遍历文件名到deFileName并且与点击的文件名click_name比较</p>
+<p><code>call_cmp_name</code>函数调用<code>write_filenames</code>函数向<code>start_pos</code>区域中写压缩包中的所有文件，再调用<code>cmp_name_1</code>进一步比较</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x1400D3474</span>
+__int64 <span class="token function">call_cmp_name</span><span class="token punctuation">(</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  v0 <span class="token operator">=</span> <span class="token function">write_filenames</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token function">LODWORD</span><span class="token punctuation">(</span>v1<span class="token punctuation">)</span> <span class="token operator">=</span> <span class="token function">cmp_name_1</span><span class="token punctuation">(</span>v2<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>cmp_name_1</code>循环遍历<code>start_pos</code>区域中的所有文件名并且调用<code>cmp_name_2</code> 继续比较</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x1400CEBF4</span>
+__int64 __fastcall <span class="token function">cmp_name_1</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token operator">!</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int8<span class="token punctuation">)</span><span class="token function">sub_1400AE9EC</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span> v1 <span class="token operator">&lt;</span> <span class="token number">64</span> <span class="token operator">||</span> byte_1401EA658 <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token function">cmp_name_2</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token operator">&amp;</span>dword_14019B530<span class="token punctuation">,</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span>v117<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> v20<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span>i64<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+        <span class="token keyword">goto</span> LABEL_69<span class="token punctuation">;</span>
+      <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> 
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>继续套…<code>cmp_name_2</code> 获取了deFileName和click_name并且调用了<code>compare</code>函数进行最终的比较，其中click_name是在<code>获取点击的文件</code> 部分获取的，放到后面分析</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x140077054</span>
+__int64 __fastcall <span class="token function">cmp_name_2</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> __int64 a2<span class="token punctuation">,</span> bool <span class="token operator">*</span>a3<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> a4<span class="token punctuation">,</span> <span class="token keyword">char</span> a5<span class="token punctuation">,</span> _WORD <span class="token operator">*</span>a6<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> a7<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  deFileName <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">const</span> WCHAR <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a2 <span class="token operator">+</span> <span class="token number">40</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+          click_name <span class="token operator">=</span> <span class="token function">sub_1400AC0CC</span><span class="token punctuation">(</span>v15<span class="token punctuation">)</span><span class="token punctuation">;</span>
+          <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+          <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int8<span class="token punctuation">)</span><span class="token function">compare</span><span class="token punctuation">(</span>click_name<span class="token punctuation">,</span> deFileName<span class="token punctuation">,</span> a4<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+          <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最重要的部分：<code>compare</code>函数，比较的逻辑是<code>click_name</code>与<code>deFileName</code>或<code>deFileName\\\\</code>或<code>deFileName/</code>相同都可以匹配成功，即匹配同名的文件或文件夹，而释放的时候遇到文件夹会将文件夹下的所有文件释放的临时目录，因此点击<code>poc.txt</code> 的时候匹配到<code>poc.txt</code> 和<code>poc.txt \\</code>，从而释放了<code>poc.txt</code> 以及<code>poc.txt \\poc.txt .cmd</code> ，释放的同时会保存文件路径，作为后续执行函数的参数结构体的<code>lpFile</code></p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x140089948</span>
+<span class="token keyword">char</span> __fastcall <span class="token function">compare</span><span class="token punctuation">(</span>WCHAR <span class="token operator">*</span>click_name<span class="token punctuation">,</span> WCHAR <span class="token operator">*</span>deFileName<span class="token punctuation">,</span> <span class="token keyword">int</span> a3<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span>_WORD<span class="token punctuation">)</span>a3 <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    v7 <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>i64<span class="token punctuation">;</span>
+    tName_len <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span>i64<span class="token punctuation">;</span>
+    <span class="token keyword">do</span>
+      <span class="token operator">++</span>tName_len<span class="token punctuation">;</span>
+    <span class="token keyword">while</span> <span class="token punctuation">(</span> click_name<span class="token punctuation">[</span>tName_len<span class="token punctuation">]</span> <span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int16<span class="token punctuation">)</span>a3 <span class="token operator">-</span> <span class="token number">2</span> <span class="token operator">></span> <span class="token number">2</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> a3 <span class="token operator">>=</span> <span class="token number">0</span> <span class="token punctuation">)</span>
+        v9 <span class="token operator">=</span> <span class="token function">sub_1400AF168</span><span class="token punctuation">(</span>click_name<span class="token punctuation">,</span> deFileName<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">else</span>
+        v9 <span class="token operator">=</span> <span class="token function">wcsncmp</span><span class="token punctuation">(</span>click_name<span class="token punctuation">,</span> deFileName<span class="token punctuation">,</span> tName_len<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>v9 <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        tail <span class="token operator">=</span> deFileName<span class="token punctuation">[</span>tName_len<span class="token punctuation">]</span><span class="token punctuation">;</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> tail <span class="token operator">==</span> <span class="token char">'\\\\'</span> <span class="token operator">||</span> tail <span class="token operator">==</span> <span class="token char">'/'</span> <span class="token operator">||</span> <span class="token operator">!</span>tail <span class="token punctuation">)</span>
+          <span class="token keyword">return</span> <span class="token number">1</span><span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> v3 <span class="token operator">==</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token number">0</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="获取点击的文件名"><a href="#获取点击的文件名" class="headerlink" title="获取点击的文件名"></a>获取点击的文件名</h3><p><code>WinMain</code>中循环调用<code>process_message</code>处理消息</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x140102524</span>
+<span class="token keyword">int</span> __stdcall <span class="token function">WinMain</span><span class="token punctuation">(</span>HINSTANCE hInstance<span class="token punctuation">,</span> HINSTANCE hPrevInstance<span class="token punctuation">,</span> LPSTR lpCmdLine<span class="token punctuation">,</span> <span class="token keyword">int</span> nShowCmd<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+                  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int8<span class="token punctuation">)</span><span class="token function">process_message</span><span class="token punctuation">(</span><span class="token number">0</span>i64<span class="token punctuation">,</span> <span class="token number">0</span>i64<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+                    <span class="token punctuation">;</span>
+   <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>process_message</code> 获取消息并且根据不同的消息值进行不同的操作，除了<code>message=0x100/0x205/0xA5/0x203</code>，其他值会跳转到<code>LABEL_63</code>执行<code>DispatchMessageW</code>。当<code>Msg.message==0x201</code>即获取到鼠标左击的消息时通过<code>USER32.dll</code>中的函数进行一系列处理，获取左击的文件，即<code>click_name</code></p>
+<blockquote>
+<p>当光标位于窗口工作区中并且用户按下鼠标左键时发布。 如果未捕获鼠标，则消息将发布到光标下方的窗口。 否则，消息将发布到捕获了鼠标的窗口。<code>#define WM_LBUTTONDOWN    0x0201</code></p>
+</blockquote>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x140101938</span>
+bool __fastcall <span class="token function">process_message</span><span class="token punctuation">(</span>HWND hDlg<span class="token punctuation">,</span> HWND hWnd<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  MessageW <span class="token operator">=</span> <span class="token function">GetMessageW</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Msg<span class="token punctuation">,</span> <span class="token number">0</span>i64<span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> MessageW <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>Msg<span class="token punctuation">.</span>hwnd <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+LABEL_63<span class="token operator">:</span>
+      <span class="token function">TranslateMessage</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token function">DispatchMessageW</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>Msg<span class="token punctuation">)</span><span class="token punctuation">;</span>
+      <span class="token keyword">goto</span> LABEL_64<span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> qword_14018A7E0 <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+          <span class="token keyword">goto</span> LABEL_63<span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="执行"><a href="#执行" class="headerlink" title="执行"></a>执行</h3><p><code>USER32.dll</code> 处理完点击文件消息获取<code>click_name</code> 后继续处理消息，<code>sub_1400FFEF0→sub_140059AC0→process4(sub_140059574 )</code></p>
+<p><code>process4</code>函数调用了<code>call_Release</code>函数进行释放，接着调用<code>sub_140106678</code>进一步调用到执行的函数</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token comment">//0x140059574</span>
+<span class="token keyword">unsigned</span> __int64 __fastcall <span class="token function">process4</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> <span class="token keyword">int</span> a2<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> byte_14018A804 <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int8<span class="token punctuation">)</span><span class="token function">call_Release</span><span class="token punctuation">(</span>v24<span class="token punctuation">,</span> <span class="token number">2048</span>i64<span class="token punctuation">)</span> <span class="token punctuation">)</span>
+        <span class="token keyword">return</span> <span class="token function">sub_14006246C</span><span class="token punctuation">(</span><span class="token number">0</span>i64<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+        <span class="token keyword">if</span> <span class="token punctuation">(</span> a2 <span class="token operator">==</span> <span class="token number">2</span> <span class="token operator">||</span> v4 <span class="token punctuation">)</span>
+        <span class="token punctuation">&#123;</span>
+          <span class="token function">LOBYTE</span><span class="token punctuation">(</span>v16<span class="token punctuation">)</span> <span class="token operator">=</span> v4<span class="token punctuation">;</span>
+          <span class="token function">LOBYTE</span><span class="token punctuation">(</span>v15<span class="token punctuation">)</span> <span class="token operator">=</span> byte_14018A804<span class="token punctuation">;</span>
+          <span class="token function">sub_140106678</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>unk_14018B87C<span class="token punctuation">,</span> v24<span class="token punctuation">,</span> v15<span class="token punctuation">,</span> v16<span class="token punctuation">)</span><span class="token punctuation">;</span>
+        <span class="token punctuation">&#125;</span>
+        <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>经过<code>sub_140106678→sub_140103668→Execute</code> 最终调用到<code>ShellExecuteExW</code> 执行文件，其中结构体<code>SHELLEXECUTEINFOW pExecInfo</code> 的参数<code>lpFile</code>即为要执行的文件路径</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">char</span> __fastcall <span class="token function">Execute</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> <span class="token keyword">const</span> WCHAR <span class="token operator">*</span>a2<span class="token punctuation">,</span> <span class="token keyword">const</span> WCHAR <span class="token operator">*</span>a3<span class="token punctuation">,</span> <span class="token keyword">const</span> WCHAR <span class="token operator">*</span>a4<span class="token punctuation">,</span> <span class="token keyword">char</span> a5<span class="token punctuation">,</span> _QWORD <span class="token operator">*</span>a6<span class="token punctuation">,</span> <span class="token keyword">const</span> WCHAR <span class="token operator">*</span>a7<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+  SHELLEXECUTEINFOW pExecInfo<span class="token punctuation">;</span> <span class="token comment">// [rsp+20h] [rbp-E0h] BYREF</span>
+  <span class="token keyword">char</span> Buffer<span class="token punctuation">[</span><span class="token number">8192</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+90h] [rbp-70h] BYREF</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> pExecInfo<span class="token punctuation">.</span>lpVerb <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      pExecInfo<span class="token punctuation">.</span>lpVerb <span class="token operator">=</span> <span class="token number">0</span>i64<span class="token punctuation">;</span>
+      v12 <span class="token operator">=</span> <span class="token function">ShellExecuteExW</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>pExecInfo<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>可以看到传入的就是<code>poc.txt</code>  ，而最后执行的是<code>poc.txt \\poc.txt .cmd</code> ，需要进一步分析<code>ShellExecuteExW</code>，该函数位于<code>SHELL32.dll</code> ，调试的时候会自动下载调试符号</p>
+<p><code>ShellExecuteExW</code> 执行过程：借个图</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c">__int64 __fastcall <span class="token function">shlwapi_PathFileExistsAndAttributesW</span><span class="token punctuation">(</span>__int64 a1<span class="token punctuation">,</span> _DWORD <span class="token operator">*</span>a2<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v2<span class="token punctuation">;</span> <span class="token comment">// esi</span>
+  <span class="token keyword">unsigned</span> <span class="token keyword">int</span> v5<span class="token punctuation">;</span> <span class="token comment">// ebp</span>
+  <span class="token keyword">int</span> v6<span class="token punctuation">;</span> <span class="token comment">// eax</span>
+  <span class="token keyword">int</span> v8<span class="token punctuation">;</span> <span class="token comment">// eax</span>
+  __int64 v9<span class="token punctuation">;</span> <span class="token comment">// [rsp+20h] [rbp-268h] BYREF</span>
+  __int64 v10<span class="token punctuation">;</span> <span class="token comment">// [rsp+28h] [rbp-260h] BYREF</span>
+  __int128 v11<span class="token punctuation">;</span> <span class="token comment">// [rsp+30h] [rbp-258h]</span>
+  __int64 v12<span class="token punctuation">;</span> <span class="token comment">// [rsp+40h] [rbp-248h]</span>
+  __int128 v13<span class="token punctuation">;</span> <span class="token comment">// [rsp+48h] [rbp-240h]</span>
+  <span class="token keyword">int</span> v14<span class="token punctuation">;</span> <span class="token comment">// [rsp+58h] [rbp-230h] BYREF</span>
+  <span class="token keyword">char</span> v15<span class="token punctuation">[</span><span class="token number">512</span><span class="token punctuation">]</span><span class="token punctuation">;</span> <span class="token comment">// [rsp+60h] [rbp-228h] BYREF</span>
+
+  v2 <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> a2 <span class="token punctuation">)</span>
+    <span class="token operator">*</span>a2 <span class="token operator">=</span> <span class="token operator">-</span><span class="token number">1</span><span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> a1 <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    v5 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>__int64<span class="token punctuation">)</span><span class="token punctuation">)</span>kernelbase_SetErrorMode<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token number">1</span>i64<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    v6 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>__int64<span class="token punctuation">)</span><span class="token punctuation">)</span>kernelbase_GetFileAttributesW<span class="token punctuation">)</span><span class="token punctuation">(</span>a1<span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> a2 <span class="token punctuation">)</span>
+      <span class="token operator">*</span>a2 <span class="token operator">=</span> v6<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> v6 <span class="token operator">!=</span> <span class="token operator">-</span><span class="token number">1</span>
+      <span class="token operator">||</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>__int64<span class="token punctuation">)</span><span class="token punctuation">)</span>kernelbase_PathIsUNCServerW<span class="token punctuation">)</span><span class="token punctuation">(</span>a1<span class="token punctuation">)</span>
+       <span class="token operator">||</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> <span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>__int64<span class="token punctuation">)</span><span class="token punctuation">)</span>kernelbase_PathIsUNCServerShareW<span class="token punctuation">)</span><span class="token punctuation">(</span>a1<span class="token punctuation">)</span><span class="token punctuation">)</span>
+      <span class="token operator">&amp;&amp;</span> <span class="token punctuation">(</span><span class="token punctuation">(</span>v10 <span class="token operator">=</span> <span class="token number">2</span>i64<span class="token punctuation">,</span>
+           v12 <span class="token operator">=</span> a1<span class="token punctuation">,</span>
+           v14 <span class="token operator">=</span> <span class="token number">512</span><span class="token punctuation">,</span>
+           v9 <span class="token operator">=</span> <span class="token number">0</span>i64<span class="token punctuation">,</span>
+           v11 <span class="token operator">=</span> <span class="token number">0</span>i64<span class="token punctuation">,</span>
+           v13 <span class="token operator">=</span> <span class="token number">0</span>i64<span class="token punctuation">,</span>
+           <span class="token punctuation">(</span>v8 <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>__int64 <span class="token operator">*</span><span class="token punctuation">,</span> <span class="token keyword">char</span> <span class="token operator">*</span><span class="token punctuation">,</span> <span class="token keyword">int</span> <span class="token operator">*</span><span class="token punctuation">,</span> __int64 <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">)</span>unk_7FFA77D8B3AD<span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token operator">&amp;</span>v10<span class="token punctuation">,</span> v15<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v14<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v9<span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token operator">==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+       <span class="token operator">||</span> v8 <span class="token operator">==</span> <span class="token number">234</span><span class="token punctuation">)</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      v2 <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token keyword">void</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>_QWORD<span class="token punctuation">)</span><span class="token punctuation">)</span>kernelbase_SetErrorMode<span class="token punctuation">)</span><span class="token punctuation">(</span>v5<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">return</span> v2<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span>__fastcall <span class="token function">kernelbase_PathFindExtensionW</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int64 a1<span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span>v2<span class="token punctuation">;</span> <span class="token comment">// r8</span>
+  <span class="token keyword">unsigned</span> __int64 v3<span class="token punctuation">;</span> <span class="token comment">// rdx</span>
+  <span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span>result<span class="token punctuation">;</span> <span class="token comment">// rax</span>
+  <span class="token keyword">unsigned</span> __int16 v5<span class="token punctuation">;</span> <span class="token comment">// cx</span>
+
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span>a1 <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token number">0</span>i64<span class="token punctuation">;</span>
+  v2 <span class="token operator">=</span> <span class="token number">0</span>i64<span class="token punctuation">;</span>
+  v3 <span class="token operator">=</span> a1 <span class="token operator">+</span> <span class="token number">0x10000</span><span class="token punctuation">;</span>
+  result <span class="token operator">=</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span><span class="token punctuation">)</span>a1<span class="token punctuation">;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> a1 <span class="token operator">>=</span> a1 <span class="token operator">+</span> <span class="token number">0x10000</span> <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a1
+                              <span class="token operator">+</span> <span class="token number">2</span>i64
+                              <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int64<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> __int64<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">)</span>kernelbase_lstrlenW<span class="token punctuation">)</span><span class="token punctuation">(</span>
+                                       a1<span class="token punctuation">,</span>
+                                       v3<span class="token punctuation">,</span>
+                                       v2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">while</span> <span class="token punctuation">(</span> <span class="token number">1</span> <span class="token punctuation">)</span>
+  <span class="token punctuation">&#123;</span>
+    v5 <span class="token operator">=</span> <span class="token operator">*</span>result<span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token operator">!</span><span class="token operator">*</span>result <span class="token punctuation">)</span>
+      <span class="token keyword">break</span><span class="token punctuation">;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> v5 <span class="token operator">&lt;=</span> <span class="token number">0x5Cu</span> <span class="token punctuation">)</span>
+    <span class="token punctuation">&#123;</span>
+      <span class="token keyword">if</span> <span class="token punctuation">(</span> v5 <span class="token operator">==</span> <span class="token number">46</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        v2 <span class="token operator">=</span> result<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+      <span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span> v5 <span class="token operator">==</span> <span class="token char">'\\\\'</span> <span class="token operator">||</span> v5 <span class="token operator">==</span> <span class="token char">' '</span> <span class="token punctuation">)</span>
+      <span class="token punctuation">&#123;</span>
+        v2 <span class="token operator">=</span> <span class="token number">0</span>i64<span class="token punctuation">;</span>
+      <span class="token punctuation">&#125;</span>
+    <span class="token punctuation">&#125;</span>
+    <span class="token keyword">if</span> <span class="token punctuation">(</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int64<span class="token punctuation">)</span><span class="token operator">++</span>result <span class="token operator">>=</span> v3 <span class="token punctuation">)</span>
+      <span class="token keyword">return</span> <span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span>a1
+                                <span class="token operator">+</span> <span class="token number">2</span>i64
+                                <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token keyword">int</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token function">__int64</span> <span class="token punctuation">(</span>__fastcall <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">(</span><span class="token keyword">unsigned</span> __int64<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> __int64<span class="token punctuation">,</span> <span class="token keyword">unsigned</span> __int16 <span class="token operator">*</span><span class="token punctuation">)</span><span class="token punctuation">)</span>kernelbase_lstrlenW<span class="token punctuation">)</span><span class="token punctuation">(</span>
+                                         a1<span class="token punctuation">,</span>
+                                         v3<span class="token punctuation">,</span>
+                                         v2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">if</span> <span class="token punctuation">(</span> v2 <span class="token punctuation">)</span>
+    <span class="token keyword">return</span> v2<span class="token punctuation">;</span>
+  <span class="token keyword">return</span> result<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="7-23"><a href="#7-23" class="headerlink" title="#7.23"></a>#7.23</h2><p>被电脑祭天搞怕了，清理了一天手机电脑，备份之后写了个新生手册准备招新（救命高中语文学了全忘了已经不会措辞了。噢还写了个题但是没写出来呜呜</p>
+<h2 id="7-24"><a href="#7-24" class="headerlink" title="#7.24"></a>#7.24</h2><p>改队规，补之前的日报…做了很多杂事嗯，不一一列举啦，明天开始把winrar分析完然后准备出去旅游啦，旅游的时候有时间继续逆向</p>
 
                 
             </div>
@@ -1624,7 +1920,7 @@ r <span class="token operator">=</span> process<span class="token punctuation">(
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">115.4k</span>&nbsp;字
+                class="white-color">116.9k</span>&nbsp;字
             
             
             
