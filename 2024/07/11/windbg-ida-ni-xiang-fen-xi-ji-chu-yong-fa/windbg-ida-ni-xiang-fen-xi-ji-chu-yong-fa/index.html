@@ -385,7 +385,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    958
+                    984
                 </div>
                 
 
@@ -467,6 +467,8 @@ bp1 0x00300003 ;<span aria-hidden="true" class="line-numbers-rows"><span></span>
   <span class="token number">6</span>: 00408960 MyProgram<span class="token operator">!</span>memset<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><code>bu</code>：设置未解析断点，命令设置延迟或未解析的断点。bu断点是在对命令中指定的断点位置的符号引用上设置的， (不在地址) 上，每当解析具有引用的模块时，就会激活该断点。 </p>
+<p><code>bc</code>:从系统中永久删除先前设置的断点</p>
+<p><code>bc id</code>删除指定<code>id</code>号的断点</p>
 <h2 id="windbg结合IDA逆向分析"><a href="#windbg结合IDA逆向分析" class="headerlink" title="windbg结合IDA逆向分析"></a>windbg结合IDA逆向分析</h2><h3 id="通过IDA中的地址下断点"><a href="#通过IDA中的地址下断点" class="headerlink" title="通过IDA中的地址下断点"></a>通过IDA中的地址下断点</h3><p>地址偏移 &#x3D; <code>IDA中的地址 - IDA中的基址</code></p>
 <p>查看模块名称&#x2F;地址：<code>lm</code> （基址为<code>start</code>一列</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token number">0</span>:00<span class="token operator"><span class="token file-descriptor important">0</span>></span> lm
@@ -793,7 +795,7 @@ WARNING: Stack unwind information not available. Following frames may be wrong.
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">116.9k</span>&nbsp;字
+                class="white-color">117.2k</span>&nbsp;字
             
             
             
