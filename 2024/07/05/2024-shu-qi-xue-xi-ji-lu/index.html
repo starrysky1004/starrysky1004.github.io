@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    9.4k
+                    11k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    44 分
+                    51 分
                 </div>
                 
 
@@ -1849,6 +1849,105 @@ r<span class="token punctuation">.</span>send<span class="token punctuation">(</
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="8-10"><a href="#8-10" class="headerlink" title="#8.10"></a>#8.10</h2><p>重学了一下<code>c++</code>，明天把异常处理和命名空间看完再看看<code>c</code>的套接字编程</p>
+<h3 id="概念"><a href="#概念" class="headerlink" title="概念"></a>概念</h3><p>标准库（<code>standard library</code>）：提供<code>IO</code>机制，包括标准输入<code>cin</code>、标准输出<code>cout</code>、标准错误<code>cerr</code>、一般信息<code>clog</code></p>
+<p><code>std::</code>：标准库的命名空间（<code>namespace</code>），指出名字是定义在<code>std</code>命名空间中的，避免名字冲突，其中<code>::</code>为作用域运算符</p>
+<p><code>iostream</code>库：包含<code>istream</code>（输入流）和<code>ostream</code>（输出流），一个流就是一个字符序列，是从<code>IO</code>设备读出或写入<code>IO</code>设备的，随着时间的推移，字符是顺序生成或消耗的</p>
+<p>操纵符（<code>endl</code>）：结束当前行，并将与设备关联的缓冲区（<code>buffer</code>）中的内容刷到设备中，保证到目前为止程序所产生的所有输出都真正写入输出流中，而不是仅停留在内存中等待写入流</p>
+<p>文件重定向：将标准输入和标准输出与命名文件关联起来：<code>addItems outfile</code> ，加法程序已经编译为名为<code>addItems</code>的可执行文件，则上述命令会从一个名为<code>infile</code>的文件读取销售记录，并将输出结果写入到一个名为<code>outfile</code>的文件中</p>
+<h3 id="语法"><a href="#语法" class="headerlink" title="语法"></a>语法</h3><p>条件运算符：<code>cond?expr1:expr2;</code></p>
+<p>读取数量不定的输入数据：<code>while（std::cin &gt;&gt; value）</code></p>
+<p>类型别名：<code>typedef type1 type2;</code></p>
+<p>显示转换：<code>cast-name&lt;type&gt;(expression);</code></p>
+<p><code>cast-name</code>包括:</p>
+<ul>
+<li><p><code>static_cast</code>：任何具有明确定义的类型转换（除底层<code>const</code>）都可以使用，例如将较大算数类型赋值给较小类型，或找回存在于<code>void*</code>指针中的值</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">void* p &#x3D; &amp;d;
+double *dp &#x3D; static_base&lt;double*&gt;(p);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li><p><code>dynamic_case</code>：支持运行时类型识别</p>
+</li>
+<li><p><code>const_cast</code>：只能改变运算对象的底层<code>const</code>，将常量对象转换成非常量对象，一般称为去<code>const</code>性质,常用于有函数重载的上下文中</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">const char *cp;
+char *q &#x3D; static_case&lt;char*&gt;(cp);<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+</ul>
+<h3 id="try语句块和异常处理"><a href="#try语句块和异常处理" class="headerlink" title="try语句块和异常处理"></a>try语句块和异常处理</h3><p><code>throw</code>：引发异常，表示遇到无法处理的问题</p>
+<p><code>try</code>：处理异常，以<code>try</code>开始并以一个或多个<code>catch</code>（异常处理代码）结束,<code>try</code>内声明的变量在块外部和<code>catch</code>语句中无法访问</p>
+<p><code>runtime_error</code>的<code>what</code>成员返回的是初始化一个具体对象时所用的<code>string</code>对象的副本</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">catch(runtime_error err)&#123;
+	cout &lt;&lt; err.what();
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>如果一段程序没有<code>try</code>语句块且发生了异常或没有匹配的<code>catch</code>子句，系统会调用<code>terminate</code>标准库函数终止当前程序的执行</p>
+<p>标准库定义了一组用于报告标准库函数遇到的问题的异常类，包含在四个头文件中：</p>
+<ul>
+<li><code>exception</code>：定义了最通用的异常类<code>exception</code>，只报告异常的发生不提供额外信息</li>
+<li><code>stdexcept</code>：定义了几种常用的异常类<ul>
+<li><code>runtime_error</code>：只有在运行时才能检测出的问题</li>
+<li><code>range_error</code>：运行时错误：生成结果超出有意义的值域范围</li>
+<li><code>overflow_error</code>：运行时错误：计算上溢</li>
+<li><code>underflow_error</code>：运行时错误：计算下溢</li>
+<li><code>logic_error</code>：程序逻辑错误</li>
+<li><code>domain_error</code>：逻辑错误：参数对应的结果值不存在</li>
+<li><code>invalid_argument</code>：逻辑错误：无效参数</li>
+<li><code>length_error</code>：逻辑错误：试图创建一个超出该类型最大长度的对象</li>
+<li><code>out_of_range</code>：逻辑错误：使用一个超出有效范围的值</li>
+<li><code>exception</code>：最常见的问题</li>
+</ul>
+</li>
+<li><code>new</code>：定义了<code>bad_alloc</code>异常类型</li>
+<li><code>type_info</code>：定义了<code>bad_cast</code>异常类型</li>
+</ul>
+<p>只能以默认初始化的方式初始化<code>exception、bad_alloc、bad_cast</code>对象，不能提供初始值，其他异常类型应该使用<code>string</code>对象或<code>C</code>风格字符串初始化这些类型的对象，初始值含有错误相关的信息</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">throw std::runtime_error(&quot;Runtime error occurred&quot;);<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>每个标准库异常类都只定义了名为<code>what</code>的成员函数，返回值是<code>C</code>风格字符串（即<code>const char＊</code>），提供关于异常的一些文本信息，如果异常类型有一个字符串初始值，<code>what</code>返回该字符串，其他类型由编译器决定</p>
+<h3 id="调试帮助"><a href="#调试帮助" class="headerlink" title="调试帮助"></a>调试帮助</h3><p><code>assert</code>：一种预处理宏，<code>assert(expr);</code>，用于检查不能发生的条件</p>
+<p><code>__func__</code>：输出当前调试的函数的名字</p>
+<p><code>__FILE__</code>：存放文件名的字符串字面值</p>
+<p><code>__LINE__</code>：存放当前行号的整型字面值</p>
+<p><code>__TIME__</code>：存放文件编译时间的字符串字面值</p>
+<p><code>__DATE__</code>：存放文件编译日期的字符串字面值</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">if(word.size() &lt; threshold)
+	cerr &lt;&lt; &quot;Error: &quot; &lt;&lt; __FILE__ &lt;&lt; &quot; : in function &quot; &lt;&lt; __func__
+		 &lt;&lt; &quot; at line &quot; &lt;&lt; __LINE__ &lt;&lt; endl
+		 &lt;&lt; &quot; Compiled on &quot; &lt;&lt; __DATE__ &lt;&lt; &quot; at &quot; 
+		 &lt;&lt; __TIME__ &lt;&lt; endl &lt;&lt; &quot; Word read was \&quot;&quot; &lt;&lt; word
+		 &lt;&lt; &quot;\&quot;:Length too short&quot; &lt;&lt; endl;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">Error:wdebug.cc : in function main at line 27 
+                  Compiled on Ujl 11 2-12 at 20:50:03 
+                  Word read was &quot;foo&quot;:Length too short<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="类"><a href="#类" class="headerlink" title="类"></a>类</h3><h4 id="构造函数"><a href="#构造函数" class="headerlink" title="构造函数"></a>构造函数</h4><p>控制对象的初始化过程，只要类的对象被创建就会执行构造函数。类可以包括多个构造函数，类似重载函数，不同构造函数必须在参数数量或类型上有区别。构造函数不能声明成<code>const</code></p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">struct Sales_data&#123;
+	Sales_data() &#x3D; default;	&#x2F;&#x2F;默认构造函数，const成员必须初始化
+	Sales_data(const std::string &amp;s): bookNo(s) &#123;&#125;
+    &#x2F;&#x2F;等价于Sales_data(const std::string &amp;s): bookNo(s), unite_sold(0), revenue(0)&#123;&#125;
+	Sales_data(const std::string &amp;s, unsigned n, double p):
+		       bookNo(s), units_sold(n), revenue(p*n)&#123;&#125;
+    &#x2F;&#x2F;冒号及冒号与花括号之间的是构造函数初始值列表
+	Sales_data(std::istream &amp;);
+    &#x2F;&#x2F;在类的外部定义构造函数
+    &#x2F;&#x2F;Sales_data::Sales_data(std::istream &amp;is)&#123;
+    &#x2F;&#x2F;	read(is, *this);
+    &#x2F;&#x2F;&#125;
+    &#x2F;&#x2F;Sales_data::Sales_data表示定义Sales_data类成员，名字是Sales_data
+	
+	std::string isbn() const &#123;return bookNo;&#125;
+	Sales_data&amp; combine(const Sales_data&amp;);
+	double avg_price() const;
+	std::string bookNo;
+	unsigned units_sold &#x3D; 0;
+	double revenue &#x3D; 0.0;
+&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="析构函数"><a href="#析构函数" class="headerlink" title="析构函数"></a>析构函数</h4><p>释放对象使用的资源，并销毁对象的非<code>static</code>数据成员，是类的一个成员函数，名字由波浪号接类名构成</p>
+<pre class="line-numbers language-c++" data-language="c++"><code class="language-c++">class Foo&#123;
+public:
+	~Foo();
+	...
+&#125;;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -2150,7 +2249,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">119.2k</span>&nbsp;字
+                class="white-color">120.7k</span>&nbsp;字
             
             
             
