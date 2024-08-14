@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    11k
+                    12.7k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    51 分
+                    58 分
                 </div>
                 
 
@@ -1951,6 +1951,132 @@ public:
 
 <h2 id="8-11"><a href="#8-11" class="headerlink" title="#8.11"></a>#8.11</h2><p>写了道题，看了些<code>c++</code>的异常处理和命名空间，感觉没什么很重要需要记的东西，重在理解吧反正不搞开发（bushi</p>
 <h2 id="8-12"><a href="#8-12" class="headerlink" title="#8.12"></a>#8.12</h2><p>嗯..还在学<code>c++</code>，写了道题，就不记录啦，反正<code>c++</code>就学到这里。明天开始学套接字编程，把编程基础补上，<code>python</code>的基础以后再说。</p>
+<h2 id="8-13"><a href="#8-13" class="headerlink" title="#8.13"></a>#8.13</h2><p>一题写了一天…唉同一个问题反复犯。晚上打开<code>moectf</code>写了俩<code>web</code></p>
+<h3 id="Web渗透测试与审计入门指北"><a href="#Web渗透测试与审计入门指北" class="headerlink" title="Web渗透测试与审计入门指北"></a>Web渗透测试与审计入门指北</h3><p>拿<code>phpstudy</code>搭了个网站拿到<code>flag</code></p>
+<h3 id="弗拉格之地的入口"><a href="#弗拉格之地的入口" class="headerlink" title="弗拉格之地的入口"></a>弗拉格之地的入口</h3><p> <code>dirsearch</code>扫到<code>robots.txt</code>，提示</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"># Robots.txt file for xdsec.org
+
+# only robots can find the entrance of web-tutor
+
+<span class="token header"><span class="token header-name keyword">User-agent</span><span class="token punctuation">:</span> <span class="token header-value">*</span></span>
+
+<span class="token header"><span class="token header-name keyword">Disallow</span><span class="token punctuation">:</span> <span class="token header-value">/webtutorEntry.php</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>访问<code>webtutorEntry.php</code>得到<code>flag</code></p>
+<h2 id="8-14"><a href="#8-14" class="headerlink" title="#8.14"></a>#8.14</h2><h3 id="ez-http"><a href="#ez-http" class="headerlink" title="ez_http"></a>ez_http</h3><ol>
+<li><p>Referer：</p>
+<p>指示一个请求是从哪个页面发起的，参数是一个url</p>
+</li>
+<li><p>User Agent：</p>
+<p>User Agent是一个字符串，用于描述发出HTTP请求的浏览器或客户端类型和版本。</p>
+<p>例如：Mozilla&#x2F;5.0 (Windows NT 10.0; Win64; x64) AppleWebKit&#x2F;537.36 (KHTML, like Gecko) Chrome&#x2F;58.0.3029.110 Safari&#x2F;537.3。</p>
+</li>
+<li><p>Cookies：</p>
+<p>Cookies是服务器发送到客户端浏览器的小型数据片段，用于存储信息，如用户偏好、会话标识等。浏览器会存储这些Cookies，并在随后的请求中自动发送给服务器，以便服务器识别用户并保持状态</p>
+</li>
+<li><p>GET请求</p>
+<p>用途：用于请求服务器发送资源</p>
+<p>数据传输：通过URL传递数据，数据附加在URL后面，形成查询字符串，以访问url?xx&#x3D;xx的形式进行get请求</p>
+<p>缓存：GET请求可以被浏览器缓存,请求的数据会保存在浏览器历史记录中</p>
+<p>安全性：由于数据暴露在URL中，因此GET请求不适合传输敏感信息</p>
+</li>
+<li><p>POST请求</p>
+<p>用途：用于向服务器提交数据进行处理，例如表单提交或上传文件</p>
+<p>数据传输：数据在请求体中发送，不会显示在URL中</p>
+<p>python中用post请求参数是data，post中加get请求用params</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> requests
+ 
+ url <span class="token operator">=</span> <span class="token string">'http://127.0.0.1:60568'</span>
+ 
+ post_data <span class="token operator">=</span> <span class="token punctuation">&#123;</span>
+     <span class="token string">'animateButton'</span><span class="token punctuation">:</span> <span class="token string">'Hit the question setter'</span><span class="token punctuation">,</span>
+     <span class="token string">'imoau'</span><span class="token punctuation">:</span> <span class="token string">'sb'</span><span class="token punctuation">,</span>
+ <span class="token punctuation">&#125;</span>
+ 
+ get_params <span class="token operator">=</span> <span class="token punctuation">&#123;</span><span class="token string">'xt'</span><span class="token punctuation">:</span> <span class="token string">'大帅b'</span><span class="token punctuation">&#125;</span>
+ 
+ response <span class="token operator">=</span> requests<span class="token punctuation">.</span>post<span class="token punctuation">(</span>url<span class="token punctuation">,</span> data<span class="token operator">=</span>post_data<span class="token punctuation">,</span> params<span class="token operator">=</span>get_params<span class="token punctuation">)</span>
+ 
+ <span class="token keyword">print</span><span class="token punctuation">(</span>response<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>bp:提交POST请求, 需要比GET请求多提供几个请求头, 其中最重要的一个是 Content-Type: application&#x2F;x-www-form-urlencoded，post多个参数用&amp;连接，get请求在post后面以&#x2F;?xx&#x3D;xx的形式</p>
+</li>
+</ol>
+<p>其他头：</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http">origin：指示请求从哪个源（origin）发起，参数是url
+//伪造本地ip
+<span class="token header"><span class="token header-name keyword">X-Forwarded-For</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1 </span></span>
+<span class="token header"><span class="token header-name keyword">X-Originating-IP</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1 </span></span>
+<span class="token header"><span class="token header-name keyword">X-Remote-IP</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1 </span></span>
+<span class="token header"><span class="token header-name keyword">X-Remote-Addr</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1 </span></span>
+<span class="token header"><span class="token header-name keyword">X-Client-IP</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>最终请求：</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http">POST /?xt=%e5%a4%a7%e5%b8%85b  HTTP/1.1
+<span class="token header"><span class="token header-name keyword">Host</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1:60568</span></span>
+<span class="token header"><span class="token header-name keyword">sec-ch-ua</span><span class="token punctuation">:</span> <span class="token header-value">"Chromium";v="119", "Not?A_Brand";v="24"</span></span>
+<span class="token header"><span class="token header-name keyword">sec-ch-ua-mobile</span><span class="token punctuation">:</span> <span class="token header-value">?0</span></span>
+<span class="token header"><span class="token header-name keyword">sec-ch-ua-platform</span><span class="token punctuation">:</span> <span class="token header-value">"Windows"</span></span>
+<span class="token header"><span class="token header-name keyword">Upgrade-Insecure-Requests</span><span class="token punctuation">:</span> <span class="token header-value">1</span></span>
+<span class="token header"><span class="token header-name keyword">User-Agent</span><span class="token punctuation">:</span> <span class="token header-value">MoeDedicatedBrowser</span></span>
+<span class="token header"><span class="token header-name keyword">Accept</span><span class="token punctuation">:</span> <span class="token header-value">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span></span>
+<span class="token header"><span class="token header-name keyword">Sec-Fetch-Site</span><span class="token punctuation">:</span> <span class="token header-value">same-origin</span></span>
+<span class="token header"><span class="token header-name keyword">Sec-Fetch-Mode</span><span class="token punctuation">:</span> <span class="token header-value">navigate</span></span>
+<span class="token header"><span class="token header-name keyword">Sec-Fetch-User</span><span class="token punctuation">:</span> <span class="token header-value">?1</span></span>
+<span class="token header"><span class="token header-name keyword">Sec-Fetch-Dest</span><span class="token punctuation">:</span> <span class="token header-value">document</span></span>
+<span class="token header"><span class="token header-name keyword">Referer</span><span class="token punctuation">:</span> <span class="token header-value">https://www.xidian.edu.cn/</span></span>
+<span class="token header"><span class="token header-name keyword">Accept-Encoding</span><span class="token punctuation">:</span> <span class="token header-value">gzip, deflate, br</span></span>
+<span class="token header"><span class="token header-name keyword">Accept-Language</span><span class="token punctuation">:</span> <span class="token header-value">zh-CN,zh;q=0.9</span></span>
+<span class="token header"><span class="token header-name keyword">Cookie</span><span class="token punctuation">:</span> <span class="token header-value">user=admin</span></span>
+<span class="token header"><span class="token header-name keyword">X-Forwarded-For</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1</span></span>
+<span class="token header"><span class="token header-name keyword">Connection</span><span class="token punctuation">:</span> <span class="token header-value">close</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">application/x-www-form-urlencoded</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Length</span><span class="token punctuation">:</span> <span class="token header-value">48</span></span>
+
+imoau=sb&amp;animateButton=Hit the question setter<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="网站结构"><a href="#网站结构" class="headerlink" title="网站结构"></a>网站结构</h3><pre class="line-numbers language-none"><code class="language-none">&#x2F; (根目录)：网站的主目录，通常包含首页文件和其他重要文件。
+&#x2F;assets 或 &#x2F;static：用于存放静态资源，如JavaScript、CSS和图像文件。
+&#x2F;css：专门存放CSS样式表文件。
+&#x2F;js：存放JavaScript脚本文件。
+&#x2F;img 或 &#x2F;images：存放网站使用的图像资源。
+&#x2F;fonts：如果网站使用自定义字体，这个文件夹用于存放字体文件。
+&#x2F;uploads：用户上传的文件通常会被保存在这个目录。
+&#x2F;lib 或 &#x2F;vendor：第三方库或依赖的文件夹，例如jQuery、Bootstrap等。
+&#x2F;plugins：如果网站使用插件系统，这个文件夹用于存放插件文件。
+&#x2F;includes 或 &#x2F;inc：包含一些被多个页面或脚本包含的通用代码片段。
+&#x2F;templates 或 &#x2F;views：如果网站使用模板引擎，这个文件夹存放模板文件。
+&#x2F;partials：存放模板的片段，可以被模板引擎重用。
+&#x2F;content 或 &#x2F;data：存放网站的内容文件，如Markdown或HTML文件。
+&#x2F;admin：后台管理界面的文件夹。
+&#x2F;cache：用于存放缓存文件，以提高网站性能。
+&#x2F;logs：存放日志文件，记录网站的运行情况和错误信息。
+&#x2F;config：存放配置文件，如数据库配置、服务器配置等。
+&#x2F;bin：存放编译或二进制文件。
+&#x2F;tests：如果网站包含自动化测试，测试脚本和测试数据会存放在这个文件夹。
+&#x2F;docs：存放项目文档，如开发文档、用户手册等。
+&#x2F;backups：存放网站的备份文件。
+&#x2F;src 或 &#x2F;source：如果网站使用构建工具，源代码会存放在这个文件夹。
+&#x2F;dist 或 &#x2F;build：存放构建或编译后的文件，这些文件是最终提供给用户访问的。
+&#x2F;.well-known（或在根目录下）：存放一些协议要求的特殊文件，如&#x2F;.well-known&#x2F;acme-challenge用于HTTPS的Let&#39;s Encrypt证书验证。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<pre class="line-numbers language-none"><code class="language-none">index.html：主页文件，通常作为网站的入口点。当用户访问网站时，默认访问的就是这个文件。
+404.html：错误页面，当用户请求的页面不存在时，服务器会显示这个页面。
+robots.txt：用于告诉搜索引擎爬虫哪些页面可以抓取，哪些不可以。
+sitemap.xml：网站地图，列出了网站中所有页面的URL，帮助搜索引擎更好地索引网站。
+favicon.ico：网站的图标，通常显示在浏览器的标签页上。
+CSS文件：层叠样式表（Cascading Style Sheets）文件，用于定义网站的布局和样式。
+JavaScript文件（如 script.js）：用于实现网站的动态功能和交互效果。
+图像文件（如 logo.png、banner.jpg）：网站上使用的图像资源，用于增强视觉效果。
+服务器端脚本（如 index.php、config.py）：用于生成动态内容，处理表单提交等。
+数据库文件（如 database.sql 或通过数据库管理系统存储）：存储网站的数据，如用户信息、文章内容等
+配置文件（如 config.php、settings.ini）：包含网站的配置信息，如数据库连接信息、服务器设置等。
+资源文件夹（如 &#x2F;images、&#x2F;css、&#x2F;js）：用于存放静态资源文件，如图片、样式表、脚本等
+内容管理系统（CMS）文件（如果使用CMS）：如果网站使用CMS，如WordPress、Joomla等，会包含CMS的核心文件和插件。
+插件&#x2F;扩展文件：如果网站使用了插件或扩展，这些文件会提供额外的功能。
+临时文件&#x2F;缓存（如 .tmp、.cache）：用于存储临时数据或缓存，提高网站性能。
+备份文件：网站的备份，用于数据恢复。
+文档和说明文件（如 README.md、LICENSE）：提供关于网站的说明和使用协议。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -2252,7 +2378,7 @@ public:
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">120.8k</span>&nbsp;字
+                class="white-color">122.5k</span>&nbsp;字
             
             
             
