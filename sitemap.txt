@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/08/30/shellcode-shi-jian-mang-zhu/shellcode-shi-jian-mang-zhu/
 https://starrysky1004.github.io/2024/07/05/2024-shu-qi-xue-xi-ji-lu/
 https://starrysky1004.github.io/2024/08/10/2024-ji-ke-shao-nian-pwn/2024-ji-ke-shao-nian-pwn/
 https://starrysky1004.github.io/2024/07/11/windbg-ida-ni-xiang-fen-xi-ji-chu-yong-fa/windbg-ida-ni-xiang-fen-xi-ji-chu-yong-fa/
@@ -77,6 +78,7 @@ https://starrysky1004.github.io/tags/windbg/
 https://starrysky1004.github.io/tags/aarch64/
 https://starrysky1004.github.io/tags/%E5%BC%82%E6%9E%84/
 https://starrysky1004.github.io/tags/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/
+https://starrysky1004.github.io/tags/%E4%BE%A7%E4%BF%A1%E9%81%93/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
