@@ -1,3 +1,5 @@
+https://starrysky1004.github.io/2024/09/26/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/
+https://starrysky1004.github.io/2024/09/26/2024basectf-web-bu-fen-ti-jie/2024basectf-web-bu-fen-ti-jie/
 https://starrysky1004.github.io/2024/07/05/2024-shu-qi-xue-xi-ji-lu/
 https://starrysky1004.github.io/2024/08/30/shellcode-shi-jian-mang-zhu/shellcode-shi-jian-mang-zhu/
 https://starrysky1004.github.io/2024/08/10/2024-ji-ke-shao-nian-pwn/2024-ji-ke-shao-nian-pwn/
@@ -79,6 +81,8 @@ https://starrysky1004.github.io/tags/aarch64/
 https://starrysky1004.github.io/tags/%E5%BC%82%E6%9E%84/
 https://starrysky1004.github.io/tags/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/
 https://starrysky1004.github.io/tags/%E4%BE%A7%E4%BF%A1%E9%81%93/
+https://starrysky1004.github.io/tags/linux/
+https://starrysky1004.github.io/tags/%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
@@ -89,3 +93,4 @@ https://starrysky1004.github.io/categories/heap/
 https://starrysky1004.github.io/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/
 https://starrysky1004.github.io/categories/%E9%80%86%E5%90%91/
 https://starrysky1004.github.io/categories/WP/
+https://starrysky1004.github.io/categories/Linux/
