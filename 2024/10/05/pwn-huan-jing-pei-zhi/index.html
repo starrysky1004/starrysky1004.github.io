@@ -381,7 +381,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    643
+                    634
                 </div>
                 
 
@@ -479,9 +479,6 @@ pip3 <span class="token function">install</span> <span class="token parameter va
 <h3 id="pwndbg-Pwngdb"><a href="#pwndbg-Pwngdb" class="headerlink" title="pwndbg+Pwngdb"></a>pwndbg+Pwngdb</h3><p>这里我直接去<code>github</code>下载运行<code>setup.sh</code>会报错要求升级<code>python3</code>，所以直接把原来虚拟机里的打包复制过来了</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">wget</span> https://starrysky1004.github.io/pwnenv.zip
 <span class="token function">unzip</span> pwnenv.zip
-<span class="token function">cp</span> ~/pwnenv/pwndbg ./
-<span class="token function">cp</span> ~/pwnenv/Pwngdb ./
-<span class="token function">rm</span> <span class="token parameter variable">-r</span> pwnenv
 <span class="token function">rm</span> pwnenv.zip
 
 <span class="token comment">#pwndbg</span>
@@ -497,7 +494,7 @@ pip3 <span class="token function">install</span> <span class="token parameter va
 
 <span class="token function">vim</span> ~/.gdbinit
 <span class="token comment">#注释掉第一行 然后在第二行写入</span>
-<span class="token builtin class-name">source</span> ~/pwndbg/gdbinit.py<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token builtin class-name">source</span> ~/pwndbg/gdbinit.py<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h3 id="patchelf"><a href="#patchelf" class="headerlink" title="patchelf"></a>patchelf</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> patchelf<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
