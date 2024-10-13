@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/10/13/zhi-neng-jie-shou-te-ding-ge-shi-de-msgbot-protobuf-ke-jian-zi-fu-shellcode/
 https://starrysky1004.github.io/2024/10/05/pwn-huan-jing-pei-zhi/
 https://starrysky1004.github.io/2024/09/26/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/
 https://starrysky1004.github.io/2024/09/26/2024basectf-web-bu-fen-ti-jie/2024basectf-web-bu-fen-ti-jie/
@@ -84,6 +85,7 @@ https://starrysky1004.github.io/tags/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/
 https://starrysky1004.github.io/tags/%E4%BE%A7%E4%BF%A1%E9%81%93/
 https://starrysky1004.github.io/tags/linux/
 https://starrysky1004.github.io/tags/%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A/
+https://starrysky1004.github.io/tags/protobuf/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
