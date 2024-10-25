@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/10/25/2024-yuan-lu-bei-pwn-fang-xiang-ti-jie/
 https://starrysky1004.github.io/2024/10/21/2024-qiang-wang-ni-tai-chu-sai-pwn-fang-xiang-wp/
 https://starrysky1004.github.io/2024/10/13/zhi-neng-jie-shou-te-ding-ge-shi-de-msgbot-protobuf-ke-jian-zi-fu-shellcode/zhi-neng-jie-shou-te-ding-ge-shi-de-msgbot-protobuf-ke-jian-zi-fu-shellcode/
 https://starrysky1004.github.io/2024/10/05/pwn-huan-jing-pei-zhi/
