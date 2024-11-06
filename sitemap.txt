@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/11/06/chong-sheng-zhi-wo-zai-yctu-zuo-pwn-shou-xi-lie-shi-pin-bi-ji/
 https://starrysky1004.github.io/2024/10/31/llvm-pass-shi-yong-c-bian-xie-exp/
 https://starrysky1004.github.io/2024/10/05/pwn-huan-jing-pei-zhi/
 https://starrysky1004.github.io/2024/10/25/2024-yuan-lu-bei-pwn-fang-xiang-ti-jie/
@@ -90,6 +91,7 @@ https://starrysky1004.github.io/tags/linux/
 https://starrysky1004.github.io/tags/%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A/
 https://starrysky1004.github.io/tags/protobuf/
 https://starrysky1004.github.io/tags/llvm/
+https://starrysky1004.github.io/tags/%E6%95%99%E7%A8%8B/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
