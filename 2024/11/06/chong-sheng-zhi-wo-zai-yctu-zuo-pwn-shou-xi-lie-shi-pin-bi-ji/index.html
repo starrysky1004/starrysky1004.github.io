@@ -643,7 +643,7 @@ elf <span class="token operator">=</span> ELF<span class="token punctuation">(</
 
 r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="2-ret2libc"><a href="#2-ret2libc" class="headerlink" title="2.ret2libc"></a>2.ret2libc</h2><h3 id="前置基础-1"><a href="#前置基础-1" class="headerlink" title="前置基础"></a>前置基础</h3><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><p><code>gadget</code>：程序本身或者<code>libc</code>中存在的一些汇编指令，每一条指令有其对应的地址，将这些<code>gadget</code>地址部署到栈中可以执行该地址中存放的汇编指令</p>
+<h2 id="3-ret2libc"><a href="#3-ret2libc" class="headerlink" title="3.ret2libc"></a>3.ret2libc</h2><h3 id="前置基础-1"><a href="#前置基础-1" class="headerlink" title="前置基础"></a>前置基础</h3><h4 id="相关概念"><a href="#相关概念" class="headerlink" title="相关概念"></a>相关概念</h4><p><code>gadget</code>：程序本身或者<code>libc</code>中存在的一些汇编指令，每一条指令有其对应的地址，将这些<code>gadget</code>地址部署到栈中可以执行该地址中存放的汇编指令</p>
 <p>​	例如：<code>ret2text</code>就是执行程序本身有的<code>system(&quot;/bin/sh&quot;);</code>指令</p>
 <p><code>ROP</code>：一种利用现有程序中的代码片段（即<code>gadget</code>）来构造攻击的技术，通过构造一系列的<code>gadget</code>来实现攻击目标，也可以控制程序执行好几段不相邻的程序已有的代码</p>
 <p>​	例如：在返回地址处按顺序填上函数<code>func1</code>、<code>func2</code>、<code>func3</code>的地址就会依次执行这三个函数，更多的是利用其中的汇编指令</p>
