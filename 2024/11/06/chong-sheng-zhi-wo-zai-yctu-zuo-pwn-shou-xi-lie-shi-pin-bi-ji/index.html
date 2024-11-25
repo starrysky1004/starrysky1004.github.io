@@ -653,7 +653,7 @@ r<span class="token punctuation">.</span>interactive<span class="token punctuati
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$ROPgadget</span> <span class="token parameter variable">--binary</span> ./pwn <span class="token parameter variable">--only</span> <span class="token string">'pop|ret'</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">'rdi'</span>	<span class="token comment">#控制寄存器的值</span>
 <span class="token variable">$ROPgadget</span> <span class="token parameter variable">--binary</span> ./pwn <span class="token parameter variable">--string</span> <span class="token string">'/bin/sh'</span>	<span class="token comment">#查找字符串</span>
 <span class="token variable">$ROPgadget</span> <span class="token parameter variable">--binary</span> ./libc-2.35.so <span class="token parameter variable">--only</span> <span class="token string">'leave|ret'</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">'leave'</span>	<span class="token comment">#查找leave ret指令地址</span>
-<span class="token variable">$Ropgadget</span> <span class="token parameter variable">--binary</span> ./pwn <span class="token parameter variable">--ropchain</span>	<span class="token comment">#生成现成的rop利用链直接getshell，适用于静态编译的程序</span>
+<span class="token variable">$ROPgadget</span> <span class="token parameter variable">--binary</span> ./pwn <span class="token parameter variable">--ropchain</span>	<span class="token comment">#生成现成的rop利用链直接getshell，适用于静态编译的程序</span>
 <span class="token variable">$ROPgadget</span> <span class="token parameter variable">--binary</span> ./pwn <span class="token parameter variable">--only</span> <span class="token string">'ret'</span>	<span class="token comment">#查找ret指令的地址</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
 <h5 id="string"><a href="#string" class="headerlink" title="string"></a>string</h5><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$strings</span> ./libc.so.6  <span class="token operator">|</span> <span class="token function">grep</span> GNU	<span class="token comment">#获取libc版本</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
@@ -825,7 +825,7 @@ r<span class="token punctuation">.</span>sendline<span class="token punctuation"
 <h4 id="堆栈平衡"><a href="#堆栈平衡" class="headerlink" title="堆栈平衡"></a>堆栈平衡</h4><p>某些指令，如<code>movaps</code>（用于操作<code>XMM</code>寄存器），要求栈指针<code>RSP</code>必须是<code>16</code>字节对齐的，直接从返回地址开始写<code>rop</code>链可能会造成堆栈不平衡，需要在<code>rop</code>链前加上汇编指令<code>ret</code>平衡堆栈</p>
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$ROPgadget</span> <span class="token parameter variable">--binary</span> ./pwn <span class="token parameter variable">--only</span> <span class="token string">'ret'</span>	<span class="token comment">#查找ret指令的地址</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<h4 id="32位程序"><a href="#32位程序" class="headerlink" title="32位程序"></a>32位程序</h4><p>32位和64位的区别就是32位通过栈传参而不通过寄存器传参，所以不像64位需要找<code>pop rdi</code>的值，32位直接将需要调用的函数都放在一起最后放所有的参数，例如</p>
+<h4 id="32位程序"><a href="#32位程序" class="headerlink" title="32位程序"></a>32位程序</h4><p>32位和64位的区别就是32位通过栈传参而不通过寄存器传参，所以不像64位需要找<code>pop rdi</code>的值，32位构造<code>rop</code>链的方式是函数+返回地址+参数列表，例如</p>
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">p <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> ?
 p <span class="token operator">+=</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>buf<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>gets<span class="token punctuation">)</span>	<span class="token comment">#gets(buf)</span>
 p <span class="token operator">+=</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>buf<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>system<span class="token punctuation">)</span>	<span class="token comment">#system(buf)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
@@ -1141,7 +1141,7 @@ p <span class="token operator">+=</span> p64<span class="token punctuation">(</s
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">155.7k</span>&nbsp;字
+                class="white-color">155.6k</span>&nbsp;字
             
             
             
