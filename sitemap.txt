@@ -16,7 +16,7 @@ https://starrysky1004.github.io/2024/07/16/yi-gou-pwn-yun-xing-yu-diao-shi/yi-go
 https://starrysky1004.github.io/2024/02/22/2023-xiang-shan-bei-jue-sai-pwn/
 https://starrysky1004.github.io/2024/02/27/sictf-round3-2024-pwn/
 https://starrysky1004.github.io/2024/05/19/2024ciscn-chu-sai/2024ciscn-chu-sai/
-https://starrysky1004.github.io/2024/03/23/xctf-ggbond-fu-xian/xctf-ggbond-fu-xian/
+https://starrysky1004.github.io/draft/xctf-ggbond%E5%A4%8D%E7%8E%B0/xctf-ggbond%E5%A4%8D%E7%8E%B0.html
 https://starrysky1004.github.io/2024/02/24/hgame-2024-week2-pwn/hgame-2024-week2-pwn/
 https://starrysky1004.github.io/2024/02/08/hgame-2024-week1-pwn/hgame-2024-week1-pwn/
 https://starrysky1004.github.io/2023/01/27/hgame-2023-week3-pwn/hgame-2023-week3-pwn/
@@ -77,8 +77,6 @@ https://starrysky1004.github.io/tags/%E6%A0%BC%E5%BC%8F%E5%8C%96%E5%AD%97%E7%AC%
 https://starrysky1004.github.io/tags/UAF/
 https://starrysky1004.github.io/tags/%E7%AE%97%E6%B3%95/
 https://starrysky1004.github.io/tags/ptmalloc2/
-https://starrysky1004.github.io/tags/grpc/
-https://starrysky1004.github.io/tags/golang/
 https://starrysky1004.github.io/tags/web%E5%89%8D%E7%AB%AF/
 https://starrysky1004.github.io/tags/docker/
 https://starrysky1004.github.io/tags/%E8%AE%A1%E7%AE%97%E6%9C%BA%E7%B3%BB%E7%BB%9F/
