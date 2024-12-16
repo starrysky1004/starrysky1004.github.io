@@ -1,3 +1,6 @@
+https://starrysky1004.github.io/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/
+https://starrysky1004.github.io/2024/12/17/iot-ji-chu-zhi-shi/iot-ji-chu-zhi-shi/
+https://starrysky1004.github.io/2024/12/17/angr-xue-xi-yu-angr-ctf-ti-jie-chi-xu-geng-xin/angr-xue-xi-yu-angr-ctf-ti-jie-chi-xu-geng-xin/
 https://starrysky1004.github.io/2024/10/05/pwn-huan-jing-pei-zhi/pwn-huan-jing-pei-zhi/
 https://starrysky1004.github.io/2024/11/06/chong-sheng-zhi-wo-zai-yctu-zuo-pwn-shou-xi-lie-shi-pin-bi-ji/
 https://starrysky1004.github.io/2024/12/04/2024-wang-ding-bei-cardmaster/2024-wang-ding-bei-cardmaster/
@@ -93,6 +96,8 @@ https://starrysky1004.github.io/tags/%E5%BB%B6%E8%BF%9F%E7%BB%91%E5%AE%9A/
 https://starrysky1004.github.io/tags/protobuf/
 https://starrysky1004.github.io/tags/llvm/
 https://starrysky1004.github.io/tags/%E6%95%99%E7%A8%8B/
+https://starrysky1004.github.io/tags/IoT/
+https://starrysky1004.github.io/tags/angr/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
@@ -104,3 +109,5 @@ https://starrysky1004.github.io/categories/%E5%AD%A6%E4%B9%A0%E8%AE%B0%E5%BD%95/
 https://starrysky1004.github.io/categories/%E9%80%86%E5%90%91/
 https://starrysky1004.github.io/categories/WP/
 https://starrysky1004.github.io/categories/Linux/
+https://starrysky1004.github.io/categories/IoT/
+https://starrysky1004.github.io/categories/angr/

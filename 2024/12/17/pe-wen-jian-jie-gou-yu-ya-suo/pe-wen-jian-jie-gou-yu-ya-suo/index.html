@@ -1,0 +1,1069 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="PE文件结构与压缩, StarrySky">
+    <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>PE文件结构与压缩 | StarrySky</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="StarrySky" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">StarrySky</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>文章</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>个人简介</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">StarrySky</div>
+        <div class="logo-desc">
+            
+            Love rises from the east and descends to the west,romance makes no changes until death.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			文章
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			个人简介
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/Steel%20Gray.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">PE文件结构与压缩</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-12-17
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    2.2k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    8 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="PE文件结构分析"><a href="#PE文件结构分析" class="headerlink" title="PE文件结构分析"></a>PE文件结构分析</h2><p>PE : Portable Executable 可移植的可执行文件，Windows 操作系统下的可执行文件（exe，scr）、动态链接库（dll，oxc，cpl）、驱动程序（sys，vxd）的总称</p>
+<h3 id="DOS头：DOS-Header-DOS-Stub"><a href="#DOS头：DOS-Header-DOS-Stub" class="headerlink" title="DOS头：DOS Header + DOS Stub"></a>DOS头：DOS Header + DOS Stub</h3><p><strong>DOS Header</strong> 结构体（0x40），用于向后兼容早期的 MS-DOS</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_IMAGE_DOS_HEADER</span> <span class="token punctuation">&#123;</span>      <span class="token comment">// DOS .EXE 文件头结构体</span>
+    WORD   e_magic<span class="token punctuation">;</span>                     <span class="token comment">// 标识符，用于确认这是MZ格式的文件，值为0x5A4D</span>
+    WORD   e_cblp<span class="token punctuation">;</span>                      <span class="token comment">// 文件中最后一个扇区的字节数</span>
+    WORD   e_cp<span class="token punctuation">;</span>                        <span class="token comment">// 文件中的扇区总数</span>
+    WORD   e_crlc<span class="token punctuation">;</span>                      <span class="token comment">// 重定位表中的条目数</span>
+    WORD   e_cparhdr<span class="token punctuation">;</span>                   <span class="token comment">// 文件头的大小，以16字节为单位</span>
+    WORD   e_minalloc<span class="token punctuation">;</span>                  <span class="token comment">// 程序加载时所需的最小额外内存段落数</span>
+    WORD   e_maxalloc<span class="token punctuation">;</span>                  <span class="token comment">// 程序加载时所需的最大额外内存段落数</span>
+    WORD   e_ss<span class="token punctuation">;</span>                        <span class="token comment">// 初始堆栈段选择子（段地址）</span>
+    WORD   e_sp<span class="token punctuation">;</span>                        <span class="token comment">// 初始堆栈指针值</span>
+    WORD   e_csum<span class="token punctuation">;</span>                      <span class="token comment">// 校验和，用于检验文件的完整性</span>
+    WORD   e_ip<span class="token punctuation">;</span>                        <span class="token comment">// 初始指令指针（IP值）</span>
+    WORD   e_cs<span class="token punctuation">;</span>                        <span class="token comment">// 初始代码段选择子（段地址）</span>
+    WORD   e_lfarlc<span class="token punctuation">;</span>                    <span class="token comment">// 文件中重定位表的偏移量</span>
+    WORD   e_ovno<span class="token punctuation">;</span>                      <span class="token comment">// 覆盖号，用于实现覆盖功能</span>
+    WORD   e_res<span class="token punctuation">[</span><span class="token number">4</span><span class="token punctuation">]</span><span class="token punctuation">;</span>                    <span class="token comment">// 保留字段，供未来使用</span>
+    WORD   e_oemid<span class="token punctuation">;</span>                     <span class="token comment">// OEM标识符，用于特定于OEM的扩展</span>
+    WORD   e_oeminfo<span class="token punctuation">;</span>                   <span class="token comment">// OEM信息，供OEM使用</span>
+    WORD   e_res2<span class="token punctuation">[</span><span class="token number">10</span><span class="token punctuation">]</span><span class="token punctuation">;</span>                  <span class="token comment">// 保留字段，供未来扩展使用</span>
+    LONG   e_lfanew<span class="token punctuation">;</span>                    <span class="token comment">// 指向新EXE（PE）头的偏移量，从文件开始处计算</span>
+<span class="token punctuation">&#125;</span> IMAGE_DOS_HEADER<span class="token punctuation">,</span> <span class="token operator">*</span>PIMAGE_DOS_HEADER<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>重点关注：</p>
+<ul>
+<li>e_magic：位于文件首，确认是 MZ 格式文件，对应 ascii 的 MZ </li>
+<li>e_lfanew：PE 头偏移地址，e_lfanew &#x3D; 80，对应 0080h 处</li>
+</ul>
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212181546947.png" class>
+
+<p><strong>DOS Stub</strong> 编译器自动生成，由代码和数据混合而成，大小不固定，在不支持 PE 文件格式的操作系统中会显示一个错误提示，在 Windows 中不运行，在 DOS 中会运行</p>
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212181643899.png" class>
+
+<h3 id="PE-头：-NT-头-节表区"><a href="#PE-头：-NT-头-节表区" class="headerlink" title="PE 头： NT 头 + 节表区"></a>PE 头： NT 头 + 节表区</h3><h4 id="NT头"><a href="#NT头" class="headerlink" title="NT头"></a>NT头</h4><p>PE 文件的核心部分，包含关于可执行文件的重要信息。开始位置由 e_lfanew 指定</p>
+<p>32位中 NT 结构体 _IMAGE_NT_HEADERS 如下（0xf8）：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_IMAGE_NT_HEADERS</span> <span class="token punctuation">&#123;</span>
+    DWORD Signature<span class="token punctuation">;</span>  <span class="token comment">// PE签名，0x4字节</span>
+    IMAGE_FILE_HEADER FileHeader<span class="token punctuation">;</span>  <span class="token comment">// PE头，0x14字节</span>
+    IMAGE_OPTIONAL_HEADER32 OptionalHeader<span class="token punctuation">;</span>  <span class="token comment">// PE可选头</span>
+<span class="token punctuation">&#125;</span> IMAGE_NT_HEADERS32<span class="token punctuation">,</span> <span class="token operator">*</span>PIMAGE_NT_HEADERS32<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>PE 头结构体 _IMAGE_FILE_HEADER 如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_IMAGE_FILE_HEADER</span> <span class="token punctuation">&#123;</span>
+    WORD Machine<span class="token punctuation">;</span>  <span class="token comment">// 目标机器的类型码，如x86或ARM</span>
+    WORD NumberOfSections<span class="token punctuation">;</span>  <span class="token comment">// 文件中节(section)的数量</span>
+    DWORD TimeDateStamp<span class="token punctuation">;</span>  <span class="token comment">// 文件创建或最后修改的时间戳</span>
+    DWORD PointerToSymbolTable<span class="token punctuation">;</span>  <span class="token comment">// 指向文件中符号表的偏移地址</span>
+    DWORD NumberOfSymbols<span class="token punctuation">;</span>  <span class="token comment">// 符号表中符号条目的数量</span>
+    WORD SizeOfOptionalHeader<span class="token punctuation">;</span>  <span class="token comment">// 可选头的大小，用于存储扩展的文件信息</span>
+    WORD Characteristics<span class="token punctuation">;</span>  <span class="token comment">// 文件特性标志，指DLL、应用程序、可执行文件等</span>
+<span class="token punctuation">&#125;</span> IMAGE_FILE_HEADER<span class="token punctuation">,</span> <span class="token operator">*</span>PIMAGE_FILE_HEADER<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212182821992.png" class>
+
+<p>PE 可选头结构体 _IMAGE_OPTIONAL_HEADER 如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token macro property"><span class="token directive-hash">#</span><span class="token directive keyword">define</span> <span class="token macro-name">IMAGE_NUMBEROF_DIRECTORY_ENTRIES</span> <span class="token expression"><span class="token number">16</span>  </span><span class="token comment">// 数据目录项数，固定为16</span></span>
+
+<span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_IMAGE_OPTIONAL_HEADER</span> <span class="token punctuation">&#123;</span>
+    <span class="token comment">// 标准域</span>
+    WORD Magic<span class="token punctuation">;</span>  <span class="token comment">// 可选头类型，0x10表示32位，0x20表示64位</span>
+    BYTE MajorLinkerVersion<span class="token punctuation">;</span>  <span class="token comment">// 主链接器的版本号，以字节为单位</span>
+    BYTE MinorLinkerVersion<span class="token punctuation">;</span>  <span class="token comment">// 副链接器的版本号，以字节为单位</span>
+    DWORD SizeOfCode<span class="token punctuation">;</span>  <span class="token comment">// 代码段大小，以字节为单位</span>
+    DWORD SizeOfInitializedData<span class="token punctuation">;</span>  <span class="token comment">// 初始化数据段大小，以字节为单位</span>
+    DWORD SizeOfUninitializedData<span class="token punctuation">;</span>  <span class="token comment">// 未初始化数据段大小，以字节为单位</span>
+    DWORD AddressOfEntryPoint<span class="token punctuation">;</span>  <span class="token comment">// 程序入口点地址，相对于ImageBase</span>
+    DWORD BaseOfCode<span class="token punctuation">;</span>  <span class="token comment">// 代码段起始基址RVA</span>
+    DWORD BaseOfData<span class="token punctuation">;</span>  <span class="token comment">// 数据段起始基址RVA</span>
+
+    <span class="token comment">// NT附加域</span>
+    DWORD ImageBase<span class="token punctuation">;</span>  <span class="token comment">// 镜像基址，即加载到内存的起始地址</span>
+    DWORD SectionAlignment<span class="token punctuation">;</span>  <span class="token comment">// 节在内存中的对齐大小，以字节为单位</span>
+    DWORD FileAlignment<span class="token punctuation">;</span>  <span class="token comment">// 节在文件中的对齐大小，以字节为单位</span>
+    WORD MajorOperatingSystemVersion<span class="token punctuation">;</span>  <span class="token comment">// 主操作系统版本号</span>
+    WORD MinorOperatingSystemVersion<span class="token punctuation">;</span>  <span class="token comment">// 副操作系统版本号</span>
+    WORD MajorImageVersion<span class="token punctuation">;</span>  <span class="token comment">// 主镜像版本号</span>
+    WORD MinorImageVersion<span class="token punctuation">;</span>  <span class="token comment">// 副镜像版本号</span>
+    WORD MajorSubsystemVersion<span class="token punctuation">;</span>  <span class="token comment">// 主子系统版本号</span>
+    WORD MinorSubsystemVersion<span class="token punctuation">;</span>  <span class="token comment">// 副子系统版本号</span>
+    DWORD Win32VersionValue<span class="token punctuation">;</span>  <span class="token comment">// Win32版本值，通常为0</span>
+    DWORD SizeOfImage<span class="token punctuation">;</span>  <span class="token comment">// 镜像在内存中的大小，以字节为单位</span>
+    DWORD SizeOfHeaders<span class="token punctuation">;</span>  <span class="token comment">// PE头物理大小，以字节为单位</span>
+    DWORD CheckSum<span class="token punctuation">;</span>  <span class="token comment">// 校验和，用于验证镜像的完整性</span>
+    WORD Subsystem<span class="token punctuation">;</span>   <span class="token comment">// 子系统类型</span>
+    WORD DllCharacteristics<span class="token punctuation">;</span>  <span class="token comment">// DLL特性标志，指示文件是DLL、应用程序等</span>
+    DWORD SizeOfStackReserve<span class="token punctuation">;</span>  <span class="token comment">// 运行时为每个线程栈保留的内存大小</span>
+    DWORD SizeOfStackCommit<span class="token punctuation">;</span>  <span class="token comment">// 运行时每个线程栈初始占用的内存大小</span>
+    DWORD SizeOfHeapReserve<span class="token punctuation">;</span>  <span class="token comment">// 运行时为进程堆保留的内存大小</span>
+    DWORD SizeOfHeapCommit<span class="token punctuation">;</span>  <span class="token comment">// 运行时进程堆初始占用的内存大小</span>
+    DWORD LoaderFlags<span class="token punctuation">;</span>  <span class="token comment">// 载入器标志，通常为0</span>
+    DWORD NumberOfRvaAndSizes<span class="token punctuation">;</span>  <span class="token comment">// 数据目录的项数，固定为IMAGE_NUMBEROF_DIRECTORY_ENTRIES的值</span>
+    IMAGE_DATA_DIRECTORY DataDirectory<span class="token punctuation">[</span>IMAGE_NUMBEROF_DIRECTORY_ENTRIES<span class="token punctuation">]</span><span class="token punctuation">;</span>  <span class="token comment">// 数据目录数组</span>
+<span class="token punctuation">&#125;</span> IMAGE_OPTIONAL_HEADER32<span class="token punctuation">,</span> <span class="token operator">*</span>PIMAGE_OPTIONAL_HEADER32<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212183412327.png" class>
+
+<h4 id="节表区"><a href="#节表区" class="headerlink" title="节表区"></a>节表区</h4><p>描述 PE 文件各个节的布局和属性，位于 NT 头之后，由一系列 IMAGE_SECTION_HEADER 结构（0x28）构成，每个结构描述一个节，结构排序顺序和描述的节在文件中排序顺序一致。最后以一个空结构结束，所以节表中结构数量为节数量加一</p>
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212184742788.png" class>
+
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212185054943.png" class>
+
+<h3 id="其余特定区域"><a href="#其余特定区域" class="headerlink" title="其余特定区域"></a>其余特定区域</h3><p>text 节、data 节、rsrc 节、数据目录表、导入表、导出表、资源表、重定位表、自定义部分、tls表（线程局部存储表）、加载配置表等</p>
+<p>.relocation 节前 8 字节记录节的 RVA 和<strong>需要进行重定位或修改的条目数量</strong>，每一项都记录了哪些 RVA 地址下的<strong>硬编码寻址</strong>在加载进内存时是需要进行重定位的</p>
+<p>RVA： PE文件的相对虚拟地址（Relative Virual Address）是<strong>PE文件中的数据、模块等运行在内存中的实际地址相对PE文件装载到内存的基址之间的距离</strong></p>
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212185413912.png" class>
+
+<h3 id="导入表-导出表"><a href="#导入表-导出表" class="headerlink" title="导入表 导出表"></a>导入表 导出表</h3><p><strong>导入表</strong>：存在多个导入表记录每个模块，记录自身使用到的其他模块导出的函数，用于确定调用了哪些模块（dll）的哪些函数，以及确定模块加载进内存后具体函数的地址</p>
+<p>导入表结构体（0x14）如下：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_IMAGE_IMPORT_DESCRIPTOR</span> <span class="token punctuation">&#123;</span>
+    <span class="token keyword">union</span> <span class="token punctuation">&#123;</span>
+        DWORD   Characteristics<span class="token punctuation">;</span>            <span class="token comment">// 0 for terminating null import descriptor</span>
+        DWORD   OriginalFirstThunk<span class="token punctuation">;</span>         <span class="token comment">// RVA to original unbound IAT (PIMAGE_THUNK_DATA) 指向IAT结构</span>
+    <span class="token punctuation">&#125;</span> DUMMYUNIONNAME<span class="token punctuation">;</span>
+    DWORD   TimeDateStamp<span class="token punctuation">;</span>                  <span class="token comment">// 时间戳.</span>
+    DWORD   ForwarderChain<span class="token punctuation">;</span>                 <span class="token comment">// -1 if no forwarders</span>
+    DWORD   Name<span class="token punctuation">;</span>　　　　　　　　　　　　　　　<span class="token comment">//指向 DLL 名字的 RVA 地址</span>
+    DWORD   FirstThunk<span class="token punctuation">;</span>                     <span class="token comment">// RVA to IAT (if bound this IAT has actual addresses)</span>
+<span class="token punctuation">&#125;</span> IMAGE_IMPORT_DESCRIPTOR<span class="token punctuation">;</span>
+
+<span class="token keyword">typedef</span> IMAGE_IMPORT_DESCRIPTOR UNALIGNED <span class="token operator">*</span>PIMAGE_IMPORT_DESCRIPTOR<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212185413912.png" class> 
+
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241212190805641.png" class>
+
+<p>结构体成员：</p>
+<ul>
+<li><p>DUMMYUNIONNAME</p>
+<p>用于确定依赖函数的名称，指向 INT （导入名称表）</p>
+</li>
+<li><p>FirstThunk</p>
+<p>指向 IAT 导入地址表，类似 got 表</p>
+<img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/20241208020159-5afedf60-b4c5-1.png" class>
+</li>
+<li><p>Name</p>
+<p>记录一个 RVA 地址，指向依赖的模块的名字</p>
+</li>
+</ul>
+<p><strong>导出表</strong>：只有一个，有子表记录导出符号的地址、名称、序号，需要提供功能的二进制程序（dll）才会有导出表</p>
+<p>包含信息：</p>
+<ul>
+<li>动态链接库提供了什么功能</li>
+<li>向调用者提供输出函数（供使用者调用的函数）在模块中的起始地址</li>
+</ul>
+<p><strong>利用</strong>：通过 dll 名和 dll 导出函数名得到函数地址，也可以通过代码获取：</p>
+<ol>
+<li>通过 Loadlibrary(GetModelHandle) 将 dll 模块映射进内存并返回一个可以被 GetProcAddress 函数使用的句柄</li>
+<li>利用 GetProcAddress 函数获得 dll 的加载地址，然后遍历导出表就可以得到函数地址</li>
+</ol>
+<p>判断导出函数是以序号导出还是以名称导出：</p>
+<p>遍历序号表，判断地址表的下标有没有存在与序号表中，存在就说明是以名称导出，不存在就说明是以序号导出</p>
+<h2 id="PE文件压缩实操总结"><a href="#PE文件压缩实操总结" class="headerlink" title="PE文件压缩实操总结"></a>PE文件压缩实操总结</h2><p>（原理见链接博客</p>
+<p>原程序基址 400000， text 段偏移 1000，rdata 段偏移 2000， data 段偏移 3000</p>
+<h3 id="删除部分"><a href="#删除部分" class="headerlink" title="删除部分"></a>删除部分</h3><p>DOS头从头到 e_lfanew（AddressOfNewExeHeader） 保留其余删除， nt 头到 text 段、text 段到 rdata 段之间多余 \x00 删除，rdata 段末尾保留 4 * \x00 截断字符串，截断字符串到 data 段多余的 \x00 删除</p>
+<p>（删除 nt 头到 text 段的全部 \x00 会报WARNING Line 84: 空结构 和 ERROR Line 1367: 声明中的数组大小无效 的错误但是能运行，不过建议最后熟悉了再删不然影响 010 的 exe模板识别后面节表）</p>
+<h3 id="修改部分"><a href="#修改部分" class="headerlink" title="修改部分"></a>修改部分</h3><p>DosHeader 中 e_lfanew（AddressOfNewExeHeader） 指向 010 中 pe地址</p>
+<p>NtHeader 中的 OptionalHeader：</p>
+<p>​	AddressOfEntryPoint 指向 010 中 text 段地址</p>
+<p>​	SectionAlignment 、 FileAlignment 改成 4（最小对齐长度）</p>
+<p>​	SectionHeaders 中每个节 VirtualAddress 、PointerToRawData 改成 010 中该节地址，SizeOfRawData 改成该节大小</p>
+<h3 id="按偏移修改部分"><a href="#按偏移修改部分" class="headerlink" title="按偏移修改部分"></a>按偏移修改部分</h3><p>NtHeader -&gt; OptionalHeader -&gt; DataDirArray 中的 Import 和 ImportAddressTable</p>
+<p>text 段、rdata 段、data 段中涉及地址的地方（形如402000 &#x2F; 2000的绝对地址或相对地址，具体看原程序在 ida 中哪里是地址）根据 SectionHeaders 中的地址得到偏移再计算修改后的地址</p>
+<p>例如： Import 原值是 2010，所以属于 rdata 段，基址 2000，偏移 10，rdata 段修改后基址 1f0， 所以 Import 需要修改成 1f0 + 10，注意不要算错</p>
+<h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p>还是我ve1宝哒Ovo</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/16622">https://xz.aliyun.com/t/16622</a></p>
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="PE文件结构与压缩">
+                        
+                        <span class="card-title">PE文件结构与压缩</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-12-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-user fa-fw"></i>
+                            StarrySky
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/12/17/iot-ji-chu-zhi-shi/iot-ji-chu-zhi-shi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="IoT基础知识">
+                        
+                        <span class="card-title">IoT基础知识</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            IoT基础知识
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-12-17
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/IoT/" class="post-category">
+                                    IoT
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/IoT/">
+                        <span class="chip bg-color">IoT</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2024</span>
+            
+            <span id="year">2019</span>
+            <a href="/about" target="_blank">StarrySky</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">168.5k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/starrysky1004" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:starrysky20041005@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2726736810" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2726736810" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="https://space.bilibili.com/85923475" class="tooltipped" target="_blank" data-tooltip="关注我的bilibili" data-position="top" data-delay="50">
+        <i class="fas fa-video"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+	
+    
+    <script type="text/javascript" color="0,0,255"
+        pointColor="0,0,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":260,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>

@@ -1,0 +1,1649 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="angr学习与angr_CTF题解（持续更新）, StarrySky">
+    <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>angr学习与angr_CTF题解（持续更新） | StarrySky</title>
+    <link rel="icon" type="image/jpeg" href="/favicon.jpg">
+
+    <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
+    <link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+    <link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+    <link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+    <link rel="stylesheet" type="text/css" href="/css/matery.css">
+    <link rel="stylesheet" type="text/css" href="/css/my.css">
+
+    <script src="/libs/jquery/jquery.min.js"></script>
+
+<meta name="generator" content="Hexo 6.3.0"><link rel="alternate" href="/atom.xml" title="StarrySky" type="application/atom+xml">
+</head>
+
+
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.jpg" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">StarrySky</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>主页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>文章</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>个人简介</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友链</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.jpg" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">StarrySky</div>
+        <div class="logo-desc">
+            
+            Love rises from the east and descends to the west,romance makes no changes until death.
+            
+        </div>
+    </div>
+
+    
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			主页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			文章
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			个人简介
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友链
+		</a>
+          
+        </li>
+        
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/Steel%20Gray.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">angr学习与angr_CTF题解（持续更新）</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+<style>
+    #articleContent h1::before,
+    #articleContent h2::before,
+    #articleContent h3::before,
+    #articleContent h4::before,
+    #articleContent h5::before,
+    #articleContent h6::before {
+        display: block;
+        content: " ";
+        height: 100px;
+        margin-top: -100px;
+        visibility: hidden;
+    }
+
+    #articleContent :focus {
+        outline: none;
+    }
+
+    .toc-fixed {
+        position: fixed;
+        top: 64px;
+    }
+
+    .toc-widget {
+        width: 345px;
+        padding-left: 20px;
+    }
+
+    .toc-widget .toc-title {
+        padding: 35px 0 15px 17px;
+        font-size: 1.5rem;
+        font-weight: bold;
+        line-height: 1.5rem;
+    }
+
+    .toc-widget ol {
+        padding: 0;
+        list-style: none;
+    }
+
+    #toc-content {
+        padding-bottom: 30px;
+        overflow: auto;
+    }
+
+    #toc-content ol {
+        padding-left: 10px;
+    }
+
+    #toc-content ol li {
+        padding-left: 10px;
+    }
+
+    #toc-content .toc-link:hover {
+        color: #42b983;
+        font-weight: 700;
+        text-decoration: underline;
+    }
+
+    #toc-content .toc-link::before {
+        background-color: transparent;
+        max-height: 25px;
+
+        position: absolute;
+        right: 23.5vw;
+        display: block;
+    }
+
+    #toc-content .is-active-link {
+        color: #42b983;
+    }
+
+    #floating-toc-btn {
+        position: fixed;
+        right: 15px;
+        bottom: 76px;
+        padding-top: 15px;
+        margin-bottom: 0;
+        z-index: 998;
+    }
+
+    #floating-toc-btn .btn-floating {
+        width: 48px;
+        height: 48px;
+    }
+
+    #floating-toc-btn .btn-floating i {
+        line-height: 48px;
+        font-size: 1.4rem;
+    }
+</style>
+<div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/angr/">
+                                <span class="chip bg-color">angr</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/angr/" class="post-category">
+                                angr
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2024-12-17
+                </div>
+                
+
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    4.5k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    20 分
+                </div>
+                
+
+                
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <h2 id="angr基础知识"><a href="#angr基础知识" class="headerlink" title="angr基础知识"></a>angr基础知识</h2><h3 id="介绍"><a href="#介绍" class="headerlink" title="介绍"></a>介绍</h3><p>angr 是一个支持多处理架构的用于二进制文件分析的工具包，它提供了动态符号执行的能力以及多种静态分析的能力。它可以被使用者扩展，用于自动化逆向工程、漏洞挖掘等多个方面</p>
+<h3 id="安装"><a href="#安装" class="headerlink" title="安装"></a>安装</h3><ol>
+<li>安装 angr</li>
+</ol>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$sudo</span> pip <span class="token function">install</span> angr<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<ol start="2">
+<li>安装 angr-utils</li>
+</ol>
+  <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$mkdir</span> angr-dev
+<span class="token variable">$cd</span> angr-dev
+<span class="token variable">$git</span> clone https://github.com/axt/bingraphvis
+<span class="token variable">$pip</span> <span class="token function">install</span> <span class="token parameter variable">-e</span> ./bingraphvis
+<span class="token variable">$git</span> clone https://github.com/axt/angr-utils
+<span class="token variable">$pip</span> <span class="token function">install</span> <span class="token parameter variable">-e</span> ./angr-utils<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="用法"><a href="#用法" class="headerlink" title="用法"></a>用法</h3><h4 id="project"><a href="#project" class="headerlink" title="project"></a>project</h4><p>project 类是 angr 的主类，也是angr的开始，通过初始化 project 类加载二进制文件</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+p <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'file_path'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+
+<p>其他可选参数</p>
+<table>
+<thead>
+<tr>
+<th>名称</th>
+<th>描述</th>
+<th>示例</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>auto_load_libs</td>
+<td>是否自动加载程序的依赖（少加载无关结果的库可以提升angr效率）</td>
+<td>auto_load_libs　&#x3D; False</td>
+</tr>
+<tr>
+<td>skip_libs</td>
+<td>希望避免加载的库</td>
+<td>skip_libs &#x3D; 库名</td>
+</tr>
+<tr>
+<td>except_missing_libs</td>
+<td>无法解析库时是否抛出异常</td>
+<td>True &#x2F; False</td>
+</tr>
+<tr>
+<td>force_load_libs</td>
+<td>强制加载的库</td>
+<td>force_load_libs &#x3D; 库名</td>
+</tr>
+<tr>
+<td>ld_path</td>
+<td>共享库的优先搜索路径</td>
+<td>ld_path &#x3D; 路径名</td>
+</tr>
+</tbody></table>
+<p>project 类的方法和属性：</p>
+<ul>
+<li><p>p.arch : 文件架构</p>
+</li>
+<li><p>hex(p.entry) ： 程序入口点</p>
+</li>
+<li><p>p.filename ： 加载的文件名</p>
+</li>
+<li><p>p.arch.bits ： 字长（32位 &#x2F; 64位）</p>
+</li>
+<li><p>p.arch.memory_endness ： 大小端</p>
+</li>
+</ul>
+<h4 id="factory"><a href="#factory" class="headerlink" title="factory"></a>factory</h4><p>project只是加载二进制文件，实际是对simstate对象操作</p>
+<p>simstate对象是程序的状态，包含运行时的一切信息，例如寄存器、内存值、文件系统、<strong>符号变量</strong></p>
+<p>创建状态</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">state <span class="token operator">=</span> p<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>entry_state<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>预设状态：</p>
+<p>前两个比较常用，blank_state用于跳过一些极大降低angr效率的指令，初始时rax的数据类型都是bit vector</p>
+<table>
+<thead>
+<tr>
+<th>预设状态方式</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>entry_state</td>
+<td>初始化状态为程序运行到程序入口点处的状态</td>
+</tr>
+<tr>
+<td>blank_state(addr&#x3D;)</td>
+<td><strong>大多数数据都没有初始化</strong>，状态中下一条指令为addr处的指令</td>
+</tr>
+<tr>
+<td>full_init_state</td>
+<td>共享库和预定义内容已经加载完毕，例如刚加载完共享库</td>
+</tr>
+<tr>
+<td>call_state</td>
+<td>准备调用函数的状态</td>
+</tr>
+</tbody></table>
+<p>factory 类的方法：</p>
+<ul>
+<li>state.regs.rax</li>
+</ul>
+<h4 id="simgr"><a href="#simgr" class="headerlink" title="simgr"></a>simgr</h4><p>simulation manager（SM）模拟管理器，要分析程序就要让它到达下一个状态</p>
+<p>使用 simgr 创建 sm， 需要传入 state 或 state的列表</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">simgr <span class="token operator">=</span> p<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simgr<span class="token punctuation">(</span>state<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>sm 有许多被成为 stash 的列表，保存了处于某种状态的 state</p>
+<p>stash 是一个列表，可以用 python 方式遍历，angr 也提供了获取方式：stash 名字前加上 one_ 得到第一个状态，加上 mp_ 得到一个 mulpyplexed 版本的stash，例如<code>simgr.one_active</code></p>
+<table>
+<thead>
+<tr>
+<th>stash</th>
+<th>描述</th>
+</tr>
+</thead>
+<tbody><tr>
+<td>active （默认值）</td>
+<td>保存接下来可以执行并且将要执行的状态</td>
+</tr>
+<tr>
+<td>deadended</td>
+<td>由于某些原因不能继续执行的状态，例如没有合法指令，或者有非法指针</td>
+</tr>
+<tr>
+<td>pruned</td>
+<td>与 solve 的策略有关，当发现一个不可解的节点后，其后面所有的节点都优化掉放在 pruned 里</td>
+</tr>
+<tr>
+<td>unconstrained</td>
+<td>如果创建 SM 时启用了 save_unconstrained，则被认定为不受约束的 state 会放在这，不受约束的 state 是指由用户数据或符号控制的指令指针（例如eip）</td>
+</tr>
+<tr>
+<td>unsat</td>
+<td>如果创建SM时启用了save_unsat，则被认为不可满足的 state 会放在这里</td>
+</tr>
+</tbody></table>
+<p>simgr 类的方法：</p>
+<ul>
+<li><p>使用 move() 转移state，将 fulter_func 筛选出来的 state 从 from_stash 转移到 to_stash</p>
+<p><code>state.posix.dumps(0)</code>：到达当前状态对应的程序输入</p>
+<p><code>state.posix.dumps(1)</code>：到达当前状态对应的程序输出</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#从 'deadended' 状态堆栈中，筛选出那些标准输出中包含字符串 '100' 的状态，并将这些状态移动到 'more_then_50' 状态堆栈中，匿名函数的参数是 s</span>
+simgr<span class="token punctuation">.</span>move<span class="token punctuation">(</span>from_stash<span class="token operator">=</span><span class="token string">'deadended'</span><span class="token punctuation">,</span> to_stash<span class="token operator">=</span><span class="token string">'more_then_50'</span><span class="token punctuation">,</span> filter_func<span class="token operator">=</span><span class="token keyword">lambda</span> s<span class="token punctuation">:</span> <span class="token string">'100'</span> <span class="token keyword">in</span> s<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+</li>
+<li><p>使用 step() 方法使处于 active 的 state 执行一个基本块，不会改变 state 本身</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">simgr<span class="token punctuation">.</span>step<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre></li>
+</ul>
+<h4 id="explorer"><a href="#explorer" class="headerlink" title="explorer"></a>explorer</h4><p>用于探索模拟状态直到找到特定条件满足的状态的方法，有 <strong>find</strong>（目标指令的地址或地址列表） 和 <strong>avoid</strong>（避免的指令地址或地址列表） 两种参数，找到符合的 find 状态会保存在 <strong>simger.found</strong> 列表中，可遍历元素获取状态</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'path_to_binary'</span><span class="token punctuation">)</span>
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+find_address <span class="token operator">=</span> <span class="token number">0x4017c0</span>
+avoid_address <span class="token operator">=</span> <span class="token number">0x401230</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>find_address<span class="token punctuation">,</span> avoid<span class="token operator">=</span>avoid_address<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+   <span class="token comment">#打印出符号条件的状态的输入    </span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="eval"><a href="#eval" class="headerlink" title="eval"></a>eval</h4><ul>
+<li><code>solver.eval(expression)</code> 将会解出一个可行解</li>
+<li><code>solver.eval_one(expression)</code>将会给出一个表达式的可行解，若有多个可行解，则抛出异常。</li>
+<li><code>solver.eval_upto(expression, n)</code>将会给出最多n个可行解，如果不足n个就给出所有的可行解。</li>
+<li><code>solver.eval_exact(expression, n)</code>将会给出n个可行解，如果解的个数不等于n个，将会抛出异常。</li>
+<li><code>solver.min(expression)</code>将会给出最小可行解</li>
+<li><code>solver.max(expression)</code>将会给出最大可行解</li>
+</ul>
+<h4 id="符号执行"><a href="#符号执行" class="headerlink" title="符号执行"></a>符号执行</h4><p>符号执行就是<u>给程序传递一个符号而不是具体的值</u></p>
+<p>遇到分支时 angr 会保存所有分支以及分支后的所有分支，在分支时保存进入该分支时的判断条件，通常判断条件是对符号的约束</p>
+<p>当 angr 运行到目标状态可以调用求解器对一路上收集到的约束求解，最终得到某个符号能够到达当前状态的值</p>
+<p><img src="/angr%E5%AD%A6%E4%B9%A0%E4%B8%8Eangr-CTF%E9%A2%98%E8%A7%A3%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/3031561-20221129171743462-301356444.png" alt="img"></p>
+<p><img src="/angr%E5%AD%A6%E4%B9%A0%E4%B8%8Eangr-CTF%E9%A2%98%E8%A7%A3%EF%BC%88%E6%8C%81%E7%BB%AD%E6%9B%B4%E6%96%B0%EF%BC%89/3031561-20221128133848616-99279409.png" alt="img"></p>
+<p>angr 的 state 属性都是状态插件，包括 memory 、regs 、 men 、registers 、solver等，用于控制仿真程序看到的环境，包括如何从环境中引入符号数据</p>
+<h5 id="寄存器符号化"><a href="#寄存器符号化" class="headerlink" title="寄存器符号化"></a>寄存器符号化</h5><p>跳过输入定位到输入之后，直接改变寄存器，将 state 传入 simgr，<code>solution_state.solver.eval(arg1)</code>获取得到的值，可控制多个寄存器</p>
+<p>位向量：BVV(value, size)	BVS(name, size)</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'file_path'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>blank_state<span class="token punctuation">(</span>addr<span class="token operator">=</span>start<span class="token punctuation">)</span>
+
+<span class="token comment">#创建位向量</span>
+passwd <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'passwd'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>eax <span class="token operator">=</span> passwd
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="栈中的值符号化"><a href="#栈中的值符号化" class="headerlink" title="栈中的值符号化"></a>栈中的值符号化</h5><p>通过计算构造，例如 arg1 -&gt; <u>ebp - 0xc</u>; arg2 -&gt; <u>ebp - 0x10</u></p>
+<p>则构造esp &#x3D; ebp， esp - 0x8， 两个参数入栈（stack_push）</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">initial_state_regs<span class="token punctuation">.</span>ebp <span class="token operator">=</span> initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>esp
+arg1 <span class="token operator">=</span> charipy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+arg2 <span class="token operator">=</span> charipy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>esp <span class="token operator">-=</span> <span class="token number">8</span>
+initial_state<span class="token punctuation">.</span>stack_push<span class="token punctuation">(</span>arg1<span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>stack_push<span class="token punctuation">(</span>arg2<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="内存符号化"><a href="#内存符号化" class="headerlink" title="内存符号化"></a>内存符号化</h5><pre class="line-numbers language-python" data-language="python"><code class="language-python">initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>passwd0_address<span class="token punctuation">,</span> passwd0<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>以字节类型输出</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<h5 id="动态内存符号化"><a href="#动态内存符号化" class="headerlink" title="动态内存符号化"></a>动态内存符号化</h5><p>由于 angr 并没有真正 运行 二进制文件而只是在模拟运行状态，因此它实际上不需要将内存分配到堆中，实际上可以伪造任何地址，所以将伪造的地址存放到 bss 段的地址中模拟题目的情况即可</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>pointer_to_malloc_memory_address0<span class="token punctuation">,</span> fake_heap_address0<span class="token punctuation">,</span> endness<span class="token operator">=</span>project<span class="token punctuation">.</span>arch<span class="token punctuation">.</span>memory_endness<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>endness 设置端序，可以直接 project.arch.memory_endness 获取程序端序</p>
+<pre class="line-numbers language-none"><code class="language-none">LE – 小端序(little endian, least significant byte is stored at lowest address)
+BE – 大端序(big endian, most significant byte is stored at lowest address)
+ME – 中间序(Middle-endian. Yep.)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="文件内容符号化"><a href="#文件内容符号化" class="headerlink" title="文件内容符号化"></a>文件内容符号化</h5><p>仿真文件系统并插入文件，blank_state 从打开文件部分地址开始</p>
+<p>symbolic_file_size_bytes 是文件中的内容长度，passwd_file 是实际读出的长度</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#形成符号化的文件格式</span>
+passwd_file <span class="token operator">=</span> angr<span class="token punctuation">.</span>storage<span class="token punctuation">.</span>SimFile<span class="token punctuation">(</span>filename<span class="token punctuation">,</span> content<span class="token operator">=</span>passwd0<span class="token punctuation">,</span> size<span class="token operator">=</span>symbolic_file_size_bytes<span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>fs<span class="token punctuation">.</span>insert<span class="token punctuation">(</span>filename<span class="token punctuation">,</span> passwd_file<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h4 id="添加约束条件"><a href="#添加约束条件" class="headerlink" title="添加约束条件"></a>添加约束条件</h4><p>在实际的测试生产中符号执行技术存在约束求解问题和路径爆炸问题，当程序存在循环结构的时候即使是简单逻辑也可能产生规模巨大的执行路径导致路径爆炸，所以需要提供更多的约束控制路径爆炸问题</p>
+<h5 id="约束求解"><a href="#约束求解" class="headerlink" title="约束求解"></a>约束求解</h5><p>用字符串直接比较约束取代循环判断函数， angr 提供加入约束条件的方法 <code>state.solver.add</code> ，将每个符号化的布尔值作为一个关于符号变量合法性的断言</p>
+<p>示例</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span>add<span class="token punctuation">(</span>x <span class="token operator">-</span> y <span class="token operator">>=</span> <span class="token number">4</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span>add<span class="token punctuation">(</span>y <span class="token operator">></span> <span class="token number">0</span><span class="token punctuation">)</span>
+<span class="token operator">>></span><span class="token operator">></span> state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>x<span class="token punctuation">)</span>
+<span class="token number">5</span>
+<span class="token operator">>></span><span class="token operator">></span> state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>y<span class="token punctuation">)</span>
+<span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>用法：expolre 的 find 地址设置为比较函数的地址，load 的 size 设置为字符串长度，不需要 * 8</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token comment">#从地址中加载值</span>
+res <span class="token operator">=</span> solution_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>load<span class="token punctuation">(</span>addr<span class="token punctuation">,</span> size<span class="token punctuation">)</span>
+<span class="token comment">#加入限制：加载值等于固定值</span>
+solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span>add<span class="token punctuation">(</span>res <span class="token operator">==</span> <span class="token string">'AUPDNNPROEZRJWKB'</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="hook"><a href="#hook" class="headerlink" title="hook"></a>hook</h5><p>可以使用 hook 直接改写函数，hook engine 是 angr 使用的引擎 SimEngine 的子类，默认情况下用 SimProcedures 中的符号摘要替换库函数设置 hooking，可以通过 <code>angr.procedures</code> 或 <code>angr.SimProcedures</code> 查看列表</p>
+<p>SimProcedure 就是 hook 机制，可以通过 <code>project.hook(addr, hook)</code> 设置，其中 hook 是一个 SimProcedure 实例，通过 <code>.is_hooked / .unhook / .hook_py</code> 进行管理，将 <code>project.hook(addr)</code> 作为函数装饰器可以编写自己的 hook 函数，还可以通过 <code>project.hook_symbol(name, hook)</code> hook 函数</p>
+<p>用法：一参是需要 hook 的调用函数的地址，二参是调用函数 <code>call func</code> 到下一条指令之间的长度，函数参数是 state</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token operator">>></span><span class="token operator">></span> @project<span class="token punctuation">.</span>hook<span class="token punctuation">(</span><span class="token number">0x1234</span><span class="token punctuation">,</span> length<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span> <span class="token keyword">def</span> <span class="token function">set_rax</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>     state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>rax <span class="token operator">=</span> <span class="token number">1</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<p>返回值用 <code>claripy.BVV(value, size)</code> ，例如：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>eax <span class="token operator">=</span> claripy<span class="token punctuation">.</span>If<span class="token punctuation">(</span>
+            user_input_string <span class="token operator">==</span> check_against_string<span class="token punctuation">,</span> 
+            claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> size<span class="token punctuation">)</span><span class="token punctuation">,</span> 
+            claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> size<span class="token punctuation">)</span>
+        <span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="利用函数名hook"><a href="#利用函数名hook" class="headerlink" title="利用函数名hook"></a>利用函数名hook</h5><p>在函数被多次调用的时候利用函数名 hook 而不需要使用函数调用地址</p>
+<p>每个程序都有一个符号表，angr 可以使用 <code>Project.hook_symbol</code> 解析出每个导入符号的地址，用自己的代码替换函数</p>
+<p>用法：<code>project.hook_symbol</code> 一参是函数名，二参是自定义的类，类参数是 <code>angr.SimProcedure</code>，类中定义 run 函数的一参是 self，其他参数可以直接用参数的参数，例如这里 check_equals_symbol 函数有参数 to_check 和 length，加载内存的 state 用 self.state，最后不需要设置 rax 直接 return 即可</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">ReplacementCheckEquals</span><span class="token punctuation">(</span>angr<span class="token punctuation">.</span>SimProcedure<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> to_check<span class="token punctuation">,</span> length<span class="token punctuation">)</span><span class="token punctuation">:</span>
+            user_input_buffer_address <span class="token operator">=</span> to_check
+            user_input_buffer_length <span class="token operator">=</span> length
+            user_input_string <span class="token operator">=</span> self<span class="token punctuation">.</span>state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>load<span class="token punctuation">(</span>
+                user_input_buffer_address<span class="token punctuation">,</span>
+                user_input_buffer_length
+            <span class="token punctuation">)</span>
+            check_against_string <span class="token operator">=</span> <span class="token string">'ORSDDWXHZURJRBDH'</span>
+            <span class="token keyword">return</span> claripy<span class="token punctuation">.</span>If<span class="token punctuation">(</span>
+                user_input_string <span class="token operator">==</span> check_against_string<span class="token punctuation">,</span> 
+                claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span> 
+                claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+            <span class="token punctuation">)</span>
+    
+    check_equals_symbol <span class="token operator">=</span> <span class="token string">'check_equals_ORSDDWXHZURJRBDH'</span>
+    project<span class="token punctuation">.</span>hook_symbol<span class="token punctuation">(</span>check_equals_symbol<span class="token punctuation">,</span> ReplacementCheckEquals<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h5 id="hook-scanf应对复杂输入"><a href="#hook-scanf应对复杂输入" class="headerlink" title="hook scanf应对复杂输入"></a>hook scanf应对复杂输入</h5><p>用法：调用带有全局状态的 globals 插件，保存对符号值的引用</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">class</span> <span class="token class-name">func</span><span class="token punctuation">(</span>angr<span class="token punctuation">.</span>SimProcedure<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> format_string<span class="token punctuation">,</span> param0<span class="token punctuation">,</span> param1<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+        arg2 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+
+        self<span class="token punctuation">.</span>state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>param0<span class="token punctuation">,</span> arg1<span class="token punctuation">,</span> endness <span class="token operator">=</span> <span class="token string">'LE'</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>param1<span class="token punctuation">,</span> arg2<span class="token punctuation">,</span> endness <span class="token operator">=</span> <span class="token string">'LE'</span><span class="token punctuation">)</span>
+
+        self<span class="token punctuation">.</span>state<span class="token punctuation">.</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'solutions'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+
+project<span class="token punctuation">.</span>hook_symbol<span class="token punctuation">(</span><span class="token string">'__isoc99_scanf'</span><span class="token punctuation">,</span> func<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token punctuation">.</span><span class="token punctuation">.</span><span class="token punctuation">.</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    stored_solutions <span class="token operator">=</span> solution_state<span class="token punctuation">.</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'solutions'</span><span class="token punctuation">]</span>
+    scanf0_solution <span class="token operator">=</span> solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>stored_solutions<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    scanf1_solution <span class="token operator">=</span> solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>stored_solutions<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>scanf0_solution<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>scanf1_solution<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="angr-ctf-题解"><a href="#angr-ctf-题解" class="headerlink" title="angr_ctf 题解"></a>angr_ctf 题解</h2><p>项目地址：<a target="_blank" rel="noopener" href="https://github.com/jakespringer/angr_ctf">https://github.com/jakespringer/angr_ctf</a></p>
+<h3 id="00-angr-find"><a href="#00-angr-find" class="headerlink" title="00_angr_find"></a>00_angr_find</h3><p>目标地址是输出good job，输出能够到达目标地址的第一个输入</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./00_angr_find'</span><span class="token punctuation">)</span>
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+find_address <span class="token operator">=</span> <span class="token number">0x8048675</span>
+avoid_address <span class="token operator">=</span> <span class="token number">0x8048666</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>find_address<span class="token punctuation">,</span> avoid<span class="token operator">=</span>avoid_address<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#JXWVXRKX</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="01-angr-avoid"><a href="#01-angr-avoid" class="headerlink" title="01_angr_avoid"></a>01_angr_avoid</h3><p>有很多分支会调用 avoid_me 函数，放到 avoid 参数里</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./01_angr_avoid'</span><span class="token punctuation">)</span>
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+find_address <span class="token operator">=</span> <span class="token number">0x80485E0</span>
+avoid_address <span class="token operator">=</span> <span class="token number">0x80485A8</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>find_address<span class="token punctuation">,</span> avoid<span class="token operator">=</span>avoid_address<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#HUJOZMYS</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="02-angr-find-condition"><a href="#02-angr-find-condition" class="headerlink" title="02_angr_find_condition"></a>02_angr_find_condition</h3><p>程序中出现多次 Try again 和 Good job，避免记录所有的 Good job地址，将对两种情况的判断写成函数作为 find 和 avoid 的参数</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./02_angr_find_condition'</span><span class="token punctuation">)</span>
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    
+<span class="token comment">#HETOBRCU</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="03-angr-symbolic-registers"><a href="#03-angr-symbolic-registers" class="headerlink" title="03_angr_symbolic_registers"></a>03_angr_symbolic_registers</h3><p>本题使用 scanf 输入了三个十六进制数，angr 对 scanf 的复杂输入处理的不是很好，</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">__isoc99_scanf</span><span class="token punctuation">(</span><span class="token string">"%x %x %x"</span><span class="token punctuation">,</span> <span class="token operator">&amp;</span>v1<span class="token punctuation">,</span> <span class="token operator">&amp;</span>v2<span class="token punctuation">,</span> v3<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>而输入后的参数会传递给寄存器 eax ebx edx</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">.text:08048937                 mov     ecx, [ebp+var_18]
+.text:0804893A                 mov     eax, ecx
+.text:0804893C                 mov     ecx, [ebp+var_14]
+.text:0804893F                 mov     ebx, ecx
+.text:08048941                 mov     ecx, [ebp+var_10]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>输入函数返回后通过这三个寄存器传递给栈</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">.text:0804897B                 call    get_user_input
+.text:08048980                 mov     [ebp+var_14], eax
+.text:08048983                 mov     [ebp+var_10], ebx
+.text:08048986                 mov     [ebp+var_C], edx<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>所以可以将三个寄存器符号化注入，从传递寄存器参数给栈的位置开始执行，避开 scanf 输入</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./03_angr_symbolic_registers'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>blank_state<span class="token punctuation">(</span>addr<span class="token operator">=</span><span class="token number">0x8048980</span><span class="token punctuation">)</span>
+
+arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+arg2 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+arg3 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg3'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+
+initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>eax <span class="token operator">=</span> arg1
+initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>ebx <span class="token operator">=</span> arg2
+initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>edx <span class="token operator">=</span> arg3
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+<span class="token comment">#simgr = project.factory.simgr(initial_state)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg2<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span><span class="token builtin">hex</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg3<span class="token punctuation">)</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#0xb9ffd04e</span>
+<span class="token comment">#0xccf63fe8</span>
+<span class="token comment">#0x8fd4d959</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="04-angr-symbolic-stack"><a href="#04-angr-symbolic-stack" class="headerlink" title="04_angr_symbolic_stack"></a>04_angr_symbolic_stack</h3><p>栈符号化，不能直接使用regs，通过计算构造esp和ebp在合适的位置 stack_push 入栈</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./04_angr_symbolic_stack'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>blank_state<span class="token punctuation">(</span>addr<span class="token operator">=</span><span class="token number">0x8048697</span><span class="token punctuation">)</span>
+
+arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+arg2 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+
+initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>esp <span class="token operator">=</span> initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>ebp
+initial_state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>esp <span class="token operator">-=</span> <span class="token number">8</span>
+
+initial_state<span class="token punctuation">.</span>stack_push<span class="token punctuation">(</span>arg1<span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>stack_push<span class="token punctuation">(</span>arg2<span class="token punctuation">)</span>
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg2<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    
+<span class="token comment">#1704280884</span>
+<span class="token comment">#2382341151</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="05-angr-symbolic-memory"><a href="#05-angr-symbolic-memory" class="headerlink" title="05_angr_symbolic_memory"></a>05_angr_symbolic_memory</h3><p>主要是用到<code>initial_state.memory.store(addr, arg)</code>，将指定位置的变量符号化</p>
+<p><code>%8s</code> -&gt; 8 字符，一个字符 8 字节，所以长度是 64</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./05_angr_symbolic_memory'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>blank_state<span class="token punctuation">(</span>addr<span class="token operator">=</span><span class="token number">0x8048601</span><span class="token punctuation">)</span>
+
+arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+arg2 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+arg3 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg3'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+arg4 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg4'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+addr <span class="token operator">=</span> <span class="token number">0xA1BA1C0</span>
+
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>addr<span class="token punctuation">,</span> arg1<span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>addr <span class="token operator">+</span> <span class="token number">0x8</span><span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>addr <span class="token operator">+</span> <span class="token number">0x10</span><span class="token punctuation">,</span> arg3<span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>addr <span class="token operator">+</span> <span class="token number">0x18</span><span class="token punctuation">,</span> arg4<span class="token punctuation">)</span>
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg2<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg3<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg4<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#b'NAXTHGNR'</span>
+<span class="token comment">#b'JVSFTPWE'</span>
+<span class="token comment">#b'LMGAUHWC'</span>
+<span class="token comment">#b'XMDCPALU'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="06-angr-symbolic-dynamic-memory"><a href="#06-angr-symbolic-dynamic-memory" class="headerlink" title="06_angr_symbolic_dynamic_memory"></a>06_angr_symbolic_dynamic_memory</h3><p>动态内存符号化， malloc 创建的地址未知，直接随便设置一个地址作为堆地址即可，堆地址存储在 bss 段的一个地址中，所以给 bss 段的变量一个自定义地址，往自定义地址里写输入位向量</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./06_angr_symbolic_dynamic_memory'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>blank_state<span class="token punctuation">(</span>addr<span class="token operator">=</span><span class="token number">0x8048699</span><span class="token punctuation">)</span>
+
+arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+arg2 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> <span class="token number">64</span><span class="token punctuation">)</span>
+addr1 <span class="token operator">=</span> <span class="token number">0xABCC8A4</span>
+addr2 <span class="token operator">=</span> <span class="token number">0xABCC8AC</span>
+heap_ptr1 <span class="token operator">=</span> <span class="token number">0x12340</span>
+heap_ptr2 <span class="token operator">=</span> <span class="token number">0x12350</span>
+
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>addr1<span class="token punctuation">,</span> heap_ptr1<span class="token punctuation">,</span> endness <span class="token operator">=</span> <span class="token string">'LE'</span><span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>addr2<span class="token punctuation">,</span> heap_ptr2<span class="token punctuation">,</span> endness <span class="token operator">=</span> <span class="token string">'LE'</span><span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>heap_ptr1<span class="token punctuation">,</span> arg1<span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>heap_ptr2<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg2<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#b'UBDKLMBV'</span>
+<span class="token comment">#b'UNOERNYS'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="07-angr-symbolic-file"><a href="#07-angr-symbolic-file" class="headerlink" title="07_angr_symbolic_file"></a>07_angr_symbolic_file</h3><p><code>%64s</code> 64字符，每个字符 8 字节，长度是 8 * 64</p>
+<p>从文件中读字符串进行对比，需要将文件内容符号化进行仿真文件系统，并且插入这个文件</p>
+<p>blank_state 的起始地址是从 open 开始</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./07_angr_symbolic_file'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>blank_state<span class="token punctuation">(</span>addr<span class="token operator">=</span><span class="token number">0x80488ED</span><span class="token punctuation">)</span>
+
+arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">64</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+passwd_file <span class="token operator">=</span> angr<span class="token punctuation">.</span>storage<span class="token punctuation">.</span>SimFile<span class="token punctuation">(</span><span class="token string">'OJKSQYDP.txt'</span><span class="token punctuation">,</span> content<span class="token operator">=</span>arg1<span class="token punctuation">,</span> size<span class="token operator">=</span><span class="token number">64</span><span class="token punctuation">)</span>
+initial_state<span class="token punctuation">.</span>fs<span class="token punctuation">.</span>insert<span class="token punctuation">(</span><span class="token string">'OJKSQYDP.txt'</span><span class="token punctuation">,</span> passwd_file<span class="token punctuation">)</span>
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#b'AZOMMMZM\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x00\x80\x00\x00\x04\x80\x08\x00\x00\x00\x00\x01\x00\x00\x00\x10\x01\x00\x00\x00\x04@\x01\x01\x01\x08\x80 \x00\x00\x10\x00\x00\x04\x01\x00\x00\x00\x00'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="08-angr-constraints"><a href="#08-angr-constraints" class="headerlink" title="08_angr_constraints"></a>08_angr_constraints</h3><p>比较函数使用了循环造成路径爆炸，直接 explore 运行到比较函数，通过添加约束来模拟比较过程而不实际执行比较过程</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./08_angr_constraints'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>blank_state<span class="token punctuation">(</span>addr<span class="token operator">=</span><span class="token number">0x8048625</span><span class="token punctuation">)</span>
+
+arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">16</span> <span class="token operator">*</span> <span class="token number">8</span><span class="token punctuation">)</span>
+
+initial_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span><span class="token number">0x804A050</span><span class="token punctuation">,</span> arg1<span class="token punctuation">)</span>
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span><span class="token number">0x8048565</span><span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+
+    res <span class="token operator">=</span> solution_state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token number">0x804A050</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+    solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span>add<span class="token punctuation">(</span>res <span class="token operator">==</span> <span class="token string">'AUPDNNPROEZRJWKB'</span><span class="token punctuation">)</span>
+
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> cast_to<span class="token operator">=</span><span class="token builtin">bytes</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#b'LGCRCDGJHYUNGUJB'</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="09-angr-hooks"><a href="#09-angr-hooks" class="headerlink" title="09_angr_hooks"></a>09_angr_hooks</h3><p>写 hook 函数，程序的 scanf 不复杂，直接从头开始，hook 函数中获取输入值与固定值进行比较，程序中比较函数的逻辑是比较成功就返回 1 失败返回 0 ，这里也是同理成功就用位向量 BVV 表示返回 1，hook 的起始是 call 比较函数的地址，长度是 call 指令与下一条指令的距离</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./09_angr_hooks'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>entry_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token decorator annotation punctuation">@project<span class="token punctuation">.</span>hook</span><span class="token punctuation">(</span><span class="token number">0x80486B3</span><span class="token punctuation">,</span> length<span class="token operator">=</span><span class="token number">5</span><span class="token punctuation">)</span>
+<span class="token keyword">def</span> <span class="token function">func</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    res <span class="token operator">=</span> state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>load<span class="token punctuation">(</span><span class="token number">0x804A054</span><span class="token punctuation">,</span> <span class="token number">16</span><span class="token punctuation">)</span>
+    state<span class="token punctuation">.</span>regs<span class="token punctuation">.</span>eax <span class="token operator">=</span> claripy<span class="token punctuation">.</span>If<span class="token punctuation">(</span>res <span class="token operator">==</span> <span class="token string">'XYMKBKUHNIQYNQXE'</span><span class="token punctuation">,</span> claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span> claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#ZXIDRXEORJOTFFJNWUFAOUBLOGLQCCGK</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="10-angr-simprocedures"><a href="#10-angr-simprocedures" class="headerlink" title="10_angr_simprocedures"></a>10_angr_simprocedures</h3><p>判断函数调用了很多次，所以不能直接通过设置地址来 hook，而需要通过函数名来 hook，也就是使用 <code>hook_symbol</code> 通过函数名 hook 到类中的 run 函数，run 一参是 self，其他参数可以直接用判断函数的参数，加载地址也需要用 self.state</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./10_angr_simprocedures'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>entry_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">class</span> <span class="token class-name">func</span><span class="token punctuation">(</span>angr<span class="token punctuation">.</span>SimProcedure<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> a1<span class="token punctuation">,</span> a2<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        res <span class="token operator">=</span> self<span class="token punctuation">.</span>state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>load<span class="token punctuation">(</span>a1<span class="token punctuation">,</span> a2<span class="token punctuation">)</span>
+        <span class="token keyword">return</span> claripy<span class="token punctuation">.</span>If<span class="token punctuation">(</span>res <span class="token operator">==</span> <span class="token string">'ORSDDWXHZURJRBDH'</span><span class="token punctuation">,</span> claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">,</span> claripy<span class="token punctuation">.</span>BVV<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+project<span class="token punctuation">.</span>hook_symbol<span class="token punctuation">(</span><span class="token string">'check_equals_ORSDDWXHZURJRBDH'</span><span class="token punctuation">,</span> func<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>solution_state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+<span class="token comment">#MSWKNJNAVTTOZMRY</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="11-angr-sim-scanf"><a href="#11-angr-sim-scanf" class="headerlink" title="11_angr_sim_scanf"></a>11_angr_sim_scanf</h3><p>hook scanf函数来应对复杂格式的输入，向scanf的参数中存入内容，并且将值存到 globals 全局变量插件中</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">import</span> angr
+<span class="token keyword">import</span> sys
+<span class="token keyword">import</span> claripy
+
+project <span class="token operator">=</span> angr<span class="token punctuation">.</span>Project<span class="token punctuation">(</span><span class="token string">'./11_angr_sim_scanf'</span><span class="token punctuation">)</span>
+initial_state <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>entry_state<span class="token punctuation">(</span><span class="token punctuation">)</span>
+
+<span class="token keyword">class</span> <span class="token class-name">func</span><span class="token punctuation">(</span>angr<span class="token punctuation">.</span>SimProcedure<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">def</span> <span class="token function">run</span><span class="token punctuation">(</span>self<span class="token punctuation">,</span> format_string<span class="token punctuation">,</span> param0<span class="token punctuation">,</span> param1<span class="token punctuation">)</span><span class="token punctuation">:</span>
+        arg1 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg1'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+        arg2 <span class="token operator">=</span> claripy<span class="token punctuation">.</span>BVS<span class="token punctuation">(</span><span class="token string">'arg2'</span><span class="token punctuation">,</span> <span class="token number">32</span><span class="token punctuation">)</span>
+
+        self<span class="token punctuation">.</span>state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>param0<span class="token punctuation">,</span> arg1<span class="token punctuation">,</span> endness <span class="token operator">=</span> <span class="token string">'LE'</span><span class="token punctuation">)</span>
+        self<span class="token punctuation">.</span>state<span class="token punctuation">.</span>memory<span class="token punctuation">.</span>store<span class="token punctuation">(</span>param1<span class="token punctuation">,</span> arg2<span class="token punctuation">,</span> endness <span class="token operator">=</span> <span class="token string">'LE'</span><span class="token punctuation">)</span>
+
+        self<span class="token punctuation">.</span>state<span class="token punctuation">.</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'solutions'</span><span class="token punctuation">]</span> <span class="token operator">=</span> <span class="token punctuation">(</span>arg1<span class="token punctuation">,</span> arg2<span class="token punctuation">)</span>
+
+project<span class="token punctuation">.</span>hook_symbol<span class="token punctuation">(</span><span class="token string">'__isoc99_scanf'</span><span class="token punctuation">,</span> func<span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+simgr <span class="token operator">=</span> project<span class="token punctuation">.</span>factory<span class="token punctuation">.</span>simulation_manager<span class="token punctuation">(</span>initial_state<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">right</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Good'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+<span class="token keyword">def</span> <span class="token function">wrong</span><span class="token punctuation">(</span>state<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    <span class="token keyword">if</span> <span class="token string">b'Try'</span> <span class="token keyword">in</span> state<span class="token punctuation">.</span>posix<span class="token punctuation">.</span>dumps<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">True</span>
+    <span class="token keyword">else</span><span class="token punctuation">:</span>
+        <span class="token keyword">return</span> <span class="token boolean">False</span>
+
+simgr<span class="token punctuation">.</span>explore<span class="token punctuation">(</span>find<span class="token operator">=</span>right<span class="token punctuation">,</span> avoid<span class="token operator">=</span>wrong<span class="token punctuation">)</span>
+
+<span class="token keyword">if</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">:</span>
+    solution_state <span class="token operator">=</span> simgr<span class="token punctuation">.</span>found<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span>
+    stored_solutions <span class="token operator">=</span> solution_state<span class="token punctuation">.</span><span class="token builtin">globals</span><span class="token punctuation">[</span><span class="token string">'solutions'</span><span class="token punctuation">]</span>
+    scanf0_solution <span class="token operator">=</span> solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>stored_solutions<span class="token punctuation">[</span><span class="token number">0</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    scanf1_solution <span class="token operator">=</span> solution_state<span class="token punctuation">.</span>solver<span class="token punctuation">.</span><span class="token builtin">eval</span><span class="token punctuation">(</span>stored_solutions<span class="token punctuation">[</span><span class="token number">1</span><span class="token punctuation">]</span><span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>scanf0_solution<span class="token punctuation">)</span>
+    <span class="token keyword">print</span><span class="token punctuation">(</span>scanf1_solution<span class="token punctuation">)</span>
+<span class="token comment">#1448564819</span>
+<span class="token comment">#1398294103</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
+                
+            </div>
+            <hr/>
+
+            
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/angr/">
+                                    <span class="chip bg-color">angr</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+            <div class="card">
+                <a href="/2024/12/17/iot-ji-chu-zhi-shi/iot-ji-chu-zhi-shi/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="IoT基础知识">
+                        
+                        <span class="card-title">IoT基础知识</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            IoT基础知识
+                        
+                    </div>
+                    <div class="publish-info">
+                        <span class="publish-date">
+                            <i class="far fa-clock fa-fw icon-date"></i>2024-12-17
+                        </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/IoT/" class="post-category">
+                                    IoT
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/IoT/">
+                        <span class="chip bg-color">IoT</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2024/12/04/2024-wang-ding-bei-cardmaster/2024-wang-ding-bei-cardmaster/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="2024网鼎杯cardmaster">
+                        
+                        <span class="card-title">2024网鼎杯cardmaster</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            2024网鼎杯cardmaster
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2024-12-04
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/WP/" class="post-category">
+                                    WP
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/pwn/">
+                        <span class="chip bg-color">pwn</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // modify the toc link href to support Chinese.
+        let i = 0;
+        let tocHeading = 'toc-heading-';
+        $('#toc-content a').each(function () {
+            $(this).attr('href', '#' + tocHeading + (++i));
+        });
+
+        // modify the heading title id to support Chinese.
+        i = 0;
+        $('#articleContent').children('h2, h3, h4').each(function () {
+            $(this).attr('id', tocHeading + (++i));
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+
+
+    <footer class="page-footer bg-color">
+    
+    <div class="container row center-align" style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2019-2024</span>
+            
+            <span id="year">2019</span>
+            <a href="/about" target="_blank">StarrySky</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            <br>
+            
+            &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                class="white-color">168.5k</span>&nbsp;字
+            
+            
+            
+            
+            
+            
+            <span id="busuanzi_container_site_pv">
+                |&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;<span id="busuanzi_value_site_pv"
+                    class="white-color"></span>&nbsp;次
+            </span>
+            
+            
+            <span id="busuanzi_container_site_uv">
+                |&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;<span id="busuanzi_value_site_uv"
+                    class="white-color"></span>&nbsp;人
+            </span>
+            
+            <br>
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/starrysky1004" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:starrysky20041005@gmail.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=2726736810" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 2726736810" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+
+
+    <a href="https://space.bilibili.com/85923475" class="tooltipped" target="_blank" data-tooltip="关注我的bilibili" data-position="top" data-delay="50">
+        <i class="fas fa-video"></i>
+    </a>
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+	
+    
+    <script type="text/javascript" color="0,0,255"
+        pointColor="0,0,255" opacity='0.7'
+        zIndex="-1" count="99"
+        src="/libs/background/canvas-nest.js"></script>
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+<script src="/live2dw/lib/L2Dwidget.min.js?094cbace49a39548bed64abff5988b05"></script><script>L2Dwidget.init({"pluginRootPath":"live2dw/","pluginJsPath":"lib/","pluginModelPath":"assets/","tagMode":false,"debug":false,"model":{"jsonPath":"/live2dw/assets/hijiki.model.json"},"display":{"position":"right","width":260,"height":300},"mobile":{"show":true},"log":false});</script></body>
+
+</html>
