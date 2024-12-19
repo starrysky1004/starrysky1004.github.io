@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="PE文件结构与压缩, StarrySky">
+    <meta name="keywords" content="PE文件结构与压缩注入, StarrySky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>PE文件结构与压缩 | StarrySky</title>
+    <title>PE文件结构与压缩注入 | StarrySky</title>
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -231,7 +231,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">PE文件结构与压缩</h1>
+                    <h1 class="description center-align post-title">PE文件结构与压缩注入</h1>
                 </div>
             </div>
         </div>
@@ -345,12 +345,25 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                          <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
-                          </div>
+                    <div class="article-tag">
+                        
+                            <a href="/tags/PE/">
+                                <span class="chip bg-color">PE</span>
+                            </a>
+                        
+                    </div>
                     
                 </div>
                 <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/PE/" class="post-category">
+                                PE
+                            </a>
+                        
+                    </div>
                     
                 </div>
             </div>
@@ -368,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    2.2k
+                    3.2k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    8 分
+                    12 分
                 </div>
                 
 
@@ -393,7 +406,8 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="PE文件结构分析"><a href="#PE文件结构分析" class="headerlink" title="PE文件结构分析"></a>PE文件结构分析</h2><p>PE : Portable Executable 可移植的可执行文件，Windows 操作系统下的可执行文件（exe，scr）、动态链接库（dll，oxc，cpl）、驱动程序（sys，vxd）的总称</p>
+                <p>[TOC]</p>
+<h2 id="PE文件结构"><a href="#PE文件结构" class="headerlink" title="PE文件结构"></a>PE文件结构</h2><p>PE : Portable Executable 可移植的可执行文件，Windows 操作系统下的可执行文件（exe，scr）、动态链接库（dll，oxc，cpl）、驱动程序（sys，vxd）的总称</p>
 <h3 id="DOS头：DOS-Header-DOS-Stub"><a href="#DOS头：DOS-Header-DOS-Stub" class="headerlink" title="DOS头：DOS Header + DOS Stub"></a>DOS头：DOS Header + DOS Stub</h3><p><strong>DOS Header</strong> 结构体（0x40），用于向后兼容早期的 MS-DOS</p>
 <pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">typedef</span> <span class="token keyword">struct</span> <span class="token class-name">_IMAGE_DOS_HEADER</span> <span class="token punctuation">&#123;</span>      <span class="token comment">// DOS .EXE 文件头结构体</span>
     WORD   e_magic<span class="token punctuation">;</span>                     <span class="token comment">// 标识符，用于确认这是MZ格式的文件，值为0x5A4D</span>
@@ -557,7 +571,55 @@
 <h3 id="按偏移修改部分"><a href="#按偏移修改部分" class="headerlink" title="按偏移修改部分"></a>按偏移修改部分</h3><p>NtHeader -&gt; OptionalHeader -&gt; DataDirArray 中的 Import 和 ImportAddressTable</p>
 <p>text 段、rdata 段、data 段中涉及地址的地方（形如402000 &#x2F; 2000的绝对地址或相对地址，具体看原程序在 ida 中哪里是地址）根据 SectionHeaders 中的地址得到偏移再计算修改后的地址</p>
 <p>例如： Import 原值是 2010，所以属于 rdata 段，基址 2000，偏移 10，rdata 段修改后基址 1f0， 所以 Import 需要修改成 1f0 + 10，注意不要算错</p>
+<h2 id="PE文件注入"><a href="#PE文件注入" class="headerlink" title="PE文件注入"></a>PE文件注入</h2><p>*改之前记得先备份一份</p>
+<h3 id="总体思路"><a href="#总体思路" class="headerlink" title="总体思路"></a>总体思路</h3><p>弹出窗口用到了<code>MessageBoxA</code>函数，用法如下</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token keyword">int</span> __stdcall <span class="token function">MessageBoxA</span><span class="token punctuation">(</span>HWND hWnd<span class="token punctuation">,</span> LPCSTR lpText<span class="token punctuation">,</span> LPCSTR lpCaption<span class="token punctuation">,</span> UINT uType<span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>该函数的二参是弹窗内容，三参是弹窗标题，本文最终目标就是构造出：</p>
+<pre class="line-numbers language-c" data-language="c"><code class="language-c"><span class="token function">MessageBoxA</span><span class="token punctuation">(</span><span class="token number">0LL</span><span class="token punctuation">,</span> <span class="token string">"You are injected!"</span><span class="token punctuation">,</span> <span class="token string">"PE injected"</span><span class="token punctuation">,</span> <span class="token number">0x1040u</span><span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>弹出标题为 PE injected 内容为 You are injected！，所以总体思路就是先写入标题和内容的字符串，再将参数传递给对应寄存器，最后调用 MessageBoxA 函数</p>
+<h3 id="写入字符串"><a href="#写入字符串" class="headerlink" title="写入字符串"></a>写入字符串</h3><p>向 rdata 段末尾写入 PE injected 和 You are injected!，这里直接用 ida 修改可能会无法保存，需要用 010 editor 写入字符串：先在 ida 中找到 rdata 末尾位置，在 010 editor 中直接搜索字符串 InitializeSListHead 定位到 rdata 段末尾，在后面添加 PE injected 和 You are injected!，再用 ida 打开就能在 rdata 段末尾看到写入的字符串</p>
+<h3 id="确定字符串偏移"><a href="#确定字符串偏移" class="headerlink" title="确定字符串偏移"></a>确定字符串偏移</h3><p>由于程序开了地址随机化，所以不能直接根据地址获取字符串的位置，这里可以参考原程序中字符串是如何获取地址的，例如 19 行的 xmmword_140005820 就是 rdata 段的一个变量</p>
+<p>程序中获取地址的相关代码：</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">movdqa xmm0, cs:xmmword_140005820<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>直接看<code>movdqa  xmm0, cs:xmmword_140005820</code>对应的字节码是<code>66 0F 6F 05 DE 40 00 00</code>，反编译结果如下，也就是使用 rip 加偏移获取的相对地址</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">movdqa xmm0, xmmword ptr [rip+0x40de]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>而这里的 xmmword_140005820 在 ida 中的地址是 0x140005820，上面 010 editor 写入的字符串地址是 0x140006D00，但是由于指令位置不同，同一个变量对应于 rip 的偏移也不同，所以需要结合指令地址去计算字符串的地址，或者直接填一个 rdata 段的地址再根据得到的位置多减少补</p>
+<h3 id="添加-MessageBoxA-函数"><a href="#添加-MessageBoxA-函数" class="headerlink" title="添加 MessageBoxA 函数"></a>添加 MessageBoxA 函数</h3><p>程序中原本是没有 MessageBoxA 函数的，但是在 idata 段有 MessageBoxA 外部函数，所以不能直接通过<code>call MessageBoxA</code>去调用这个函数，需要手动添加<code>MessageBoxA</code>函数，添加内容可以参考<code>exit</code>函数，函数的功能是跳转到 idata 段的对应函数</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">jmp cs:__imp_exit<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>对应字节码：<code>FF 25 C8 0D 00 00</code>，同样也是通过 rip 进行相对寻址</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">jmp qword ptr [rip + 0xdc8]<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>所以添加 MessageBoxA 函数的方式也类似，需要向 text 段末尾添加跳转函数，这里和添加字符串一样，直接用 ida 添加可能会保存失败，需要先用 010 editor写入一段跳转代码的字节码，添加完成后再用 ida 修改是可以正常保存的，所以偏移不确定可以先随机添加一个地址（参考其他函数中使用的地址确保添加的地址位于 idata 段的范围方便后续计算调试），再用 ida 根据添加的函数地址和 MessageBoxA 的相对位置用 Change Byte 去调整具体地址即可</p>
+<p>最终构造如下函数：</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">jmp cs:__imp_MessageBoxA<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>这样就可以直接<code>call MessageBoxA</code>调用该函数</p>
+<h3 id="注入代码"><a href="#注入代码" class="headerlink" title="注入代码"></a>注入代码</h3><p>将代码写到开栈操作<code>sub     rsp, 0E0h</code>的后面，否则会堆栈不平衡</p>
+<ul>
+<li><p>将汇编翻译成字节码，这里字符串的相对地址是根据上述方式大致确定的地址，将字节码通过 Change Byte 修改(用 ida 的 assembly 修改会报 Invalid operand</p>
+<pre class="line-numbers language-assembly" data-language="assembly"><code class="language-assembly">mov     r9, 1040h
+lea     r8, [rip + 0x5662]
+lea     rdx, [rip + 0x5663]
+mov     rcx, 0<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<p>得到字节码：<code>49 c7 c1 40 10 00 00 4c 8d 05 62 56 00 00 48 8d 15 63 56 00 00 48 c7 c1 00 00 00 00 </code></p>
+</li>
+<li><p>根据得到的字符串位置和实际写入的字符串位置在 ida 中使用 Change Byte 对地址进行微调直到找到正确地址</p>
+</li>
+<li><p>在添加的汇编代码最后使用 ida 的 assemble 添加<code>call MessageBoxA</code></p>
+</li>
+<li><p>按 tab 确认反编译结果是不是<code>MessageBoxA(0LL, &quot;You are injected!&quot;, &quot;PE injected&quot;, 0x1040u);</code></p>
+</li>
+</ul>
+<h3 id="最终效果"><a href="#最终效果" class="headerlink" title="最终效果"></a>最终效果</h3><img src="/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/image-20241218212918944.png" class>
+
 <h2 id="相关链接"><a href="#相关链接" class="headerlink" title="相关链接"></a>相关链接</h2><p>还是我ve1宝哒Ovo</p>
+<p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/16622">https://xz.aliyun.com/t/16622</a></p>
 <p><a target="_blank" rel="noopener" href="https://xz.aliyun.com/t/16622">https://xz.aliyun.com/t/16622</a></p>
 
                 
@@ -572,7 +634,11 @@
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            <span class="chip bg-color">无标签</span>
+                            
+                                <a href="/tags/PE/">
+                                    <span class="chip bg-color">PE</span>
+                                </a>
+                            
                         </div>
                     
                 </div>
@@ -620,15 +686,15 @@
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="PE文件结构与压缩">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="PE文件结构与压缩注入">
                         
-                        <span class="card-title">PE文件结构与压缩</span>
+                        <span class="card-title">PE文件结构与压缩注入</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            
+                            PE文件结构分析、手工压缩、文件注入
                         
                     </div>
                     <div class="publish-info">
@@ -637,13 +703,25 @@
                             </span>
                         <span class="publish-author">
                             
-                            <i class="fas fa-user fa-fw"></i>
-                            StarrySky
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/PE/" class="post-category">
+                                    PE
+                                </a>
+                            
                             
                         </span>
                     </div>
                 </div>
 
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/PE/">
+                        <span class="chip bg-color">PE</span>
+                    </a>
+                    
+                </div>
                 
             </div>
         </div>
@@ -838,7 +916,7 @@
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">168.5k</span>&nbsp;字
+                class="white-color">169.5k</span>&nbsp;字
             
             
             

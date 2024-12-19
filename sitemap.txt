@@ -98,6 +98,7 @@ https://starrysky1004.github.io/tags/llvm/
 https://starrysky1004.github.io/tags/%E6%95%99%E7%A8%8B/
 https://starrysky1004.github.io/tags/IoT/
 https://starrysky1004.github.io/tags/angr/
+https://starrysky1004.github.io/tags/PE/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
@@ -111,3 +112,4 @@ https://starrysky1004.github.io/categories/WP/
 https://starrysky1004.github.io/categories/Linux/
 https://starrysky1004.github.io/categories/IoT/
 https://starrysky1004.github.io/categories/angr/
+https://starrysky1004.github.io/categories/PE/
