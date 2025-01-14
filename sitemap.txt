@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2024/10/13/zhi-neng-jie-shou-te-ding-ge-shi-de-msgbot-protobuf-ke-jian-zi-fu-shellcode/zhi-neng-jie-shou-te-ding-ge-shi-de-msgbot-protobuf-ke-jian-zi-fu-shellcode/
 https://starrysky1004.github.io/2025/01/02/2024-nian-zhong-zong-jie/
 https://starrysky1004.github.io/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/
 https://starrysky1004.github.io/2024/12/17/iot-ji-chu-zhi-shi/iot-ji-chu-zhi-shi/
@@ -8,7 +9,6 @@ https://starrysky1004.github.io/2024/12/04/2024-wang-ding-bei-cardmaster/2024-wa
 https://starrysky1004.github.io/2024/10/31/llvm-pass-shi-yong-c-bian-xie-exp/llvm-pass-shi-yong-c-bian-xie-exp/
 https://starrysky1004.github.io/2024/10/25/2024-yuan-lu-bei-pwn-fang-xiang-ti-jie/2024-yuan-lu-bei-pwn-fang-xiang-ti-jie/
 https://starrysky1004.github.io/2024/10/21/2024-qiang-wang-ni-tai-chu-sai-pwn-fang-xiang-wp/2024-qiang-wang-ni-tai-chu-sai-pwn-fang-xiang-wp/
-https://starrysky1004.github.io/2024/10/13/zhi-neng-jie-shou-te-ding-ge-shi-de-msgbot-protobuf-ke-jian-zi-fu-shellcode/zhi-neng-jie-shou-te-ding-ge-shi-de-msgbot-protobuf-ke-jian-zi-fu-shellcode/
 https://starrysky1004.github.io/2024/09/26/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/linux-yan-chi-bang-ding-ji-zhi-guo-cheng/
 https://starrysky1004.github.io/2024/09/26/2024basectf-web-bu-fen-ti-jie/2024basectf-web-bu-fen-ti-jie/
 https://starrysky1004.github.io/2024/07/05/2024-shu-qi-xue-xi-ji-lu/
