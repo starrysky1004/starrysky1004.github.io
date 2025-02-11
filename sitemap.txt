@@ -1,4 +1,4 @@
-https://starrysky1004.github.io/2025/02/11/gzctf-da-jian-pwn-rong-qi-chuang-jian/gzctf-da-jian-pwn-rong-qi-chuang-jian/
+https://starrysky1004.github.io/draft/GZCTF%E6%90%AD%E5%BB%BA-PWN-%E5%AE%B9%E5%99%A8%E5%88%9B%E5%BB%BA/GZCTF%E6%90%AD%E5%BB%BA-PWN-%E5%AE%B9%E5%99%A8%E5%88%9B%E5%BB%BA.html
 https://starrysky1004.github.io/2025/02/10/yi-gou-pwn-yun-xing-yu-diao-shi/yi-gou-pwn-yun-xing-yu-diao-shi/
 https://starrysky1004.github.io/2025/01/23/2025-chun-qiu-bei-dong-ji-sai-pwn-fang-xiang-ti-jie/2025-chun-qiu-bei-dong-ji-sai-pwn-fang-xiang-ti-jie/
 https://starrysky1004.github.io/2025/01/18/2025-xi-hu-lun-jian-pwn/2025-xi-hu-lun-jian-pwn/
