@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="异构pwn运行与调试, starrysky">
+    <meta name="keywords" content="GZCTF搭建 &amp; PWN 容器创建, starrysky">
     <meta name="description" content="Love rises from the east and descends to the west,romance makes no changes until death.">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>异构pwn运行与调试 | starrysky</title>
+    <title>GZCTF搭建 &amp; PWN 容器创建 | starrysky</title>
     <link rel="icon" type="image/jpeg" href="/favicon.jpg">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -231,7 +231,7 @@
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">异构pwn运行与调试</h1>
+                    <h1 class="description center-align post-title">GZCTF搭建 &amp; PWN 容器创建</h1>
                 </div>
             </div>
         </div>
@@ -345,29 +345,12 @@
             <div class="row tag-cate">
                 <div class="col s7">
                     
-                    <div class="article-tag">
-                        
-                            <a href="/tags/pwn/">
-                                <span class="chip bg-color">pwn</span>
-                            </a>
-                        
-                            <a href="/tags/%E5%BC%82%E6%9E%84/">
-                                <span class="chip bg-color">异构</span>
-                            </a>
-                        
-                    </div>
+                          <div class="article-tag">
+                            <span class="chip bg-color">无标签</span>
+                          </div>
                     
                 </div>
                 <div class="col s5 right-align">
-                    
-                    <div class="post-cate">
-                        <i class="fas fa-bookmark fa-fw icon-category"></i>
-                        
-                            <a href="/categories/pwn/" class="post-category">
-                                pwn
-                            </a>
-                        
-                    </div>
                     
                 </div>
             </div>
@@ -376,7 +359,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2025-02-10
+                    2025-02-11
                 </div>
                 
 
@@ -385,14 +368,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    665
+                    573
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    3 分
+                    2 分
                 </div>
                 
 
@@ -410,113 +393,126 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="qemu安装"><a href="#qemu安装" class="headerlink" title="qemu安装"></a>qemu安装</h2><p>安装<code>qemu qemu-user qemu-user-static</code></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> qemu qemu-user qemu-user-static<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+                <h2 id="前置环境配置"><a href="#前置环境配置" class="headerlink" title="前置环境配置"></a>前置环境配置</h2><p>安装 docker：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> update
+<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> docker.io <span class="token function">docker-compose</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>安装<code>qemu-system</code></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> qemu-system uml-utilities bridge-utils<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>换源：</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">vim</span> /etc/docker/daemon.json<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<p>运行的时候不一定要 -L 指定动态链接库</p>
-<ul>
-<li><p>qemu-usr ：指定动态链接库运行</p>
-<ul>
-<li><p>安装动态链接库</p>
-<pre class="line-numbers language-python" data-language="python"><code class="language-python">$ apt search <span class="token string">"libc6-"</span> <span class="token operator">|</span> grep <span class="token string">"powerpc"</span>
-$ sudo apt<span class="token operator">-</span>get install libc6<span class="token operator">-</span>powerpc<span class="token operator">-</span>cross<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre></li>
+<p>写入内容：</p>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+	 <span class="token property">"registry-mirrors"</span><span class="token operator">:</span> <span class="token punctuation">[</span> <span class="token string">"https://a0f4d5484dea442caf5d1193f09abdd4.mirror.swr.myhuaweicloud.com"</span> <span class="token punctuation">]</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="GZ-CTF搭建"><a href="#GZ-CTF搭建" class="headerlink" title="GZ::CTF搭建"></a>GZ::CTF搭建</h2><ul>
+<li><p>在根目录创建 GZCTF 文件夹，下载 <a target="_blank" rel="noopener" href="https://github.com/GZTimeWalker/GZCTF">GZCTF</a> 并且存到根目录的 GZCTF 文件夹</p>
+</li>
+<li><p>在 GZCTF 文件夹下创建 appsettings.json</p>
+<blockquote>
+<p><Your postgres_password>：数据库密码</Your></p>
+<p><Your xor_key>：任意字符串</Your></p>
+<p><Your public_entry>：服务器外部访问 ip</Your></p>
+<p>CaptchaConfig：用于设置验证码，<a target="_blank" rel="noopener" href="https://dash.cloudflare.com/">CloudflareTurnstile</a> 网站中 add widget 后得到 SITE_KEY 、SECRET_KEY（None就不用填）</p>
+</blockquote>
+<pre class="line-numbers language-json" data-language="json"><code class="language-json"><span class="token punctuation">&#123;</span>
+  <span class="token property">"AllowedHosts"</span><span class="token operator">:</span> <span class="token string">"*"</span><span class="token punctuation">,</span>
+  <span class="token property">"ConnectionStrings"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"Database"</span><span class="token operator">:</span> <span class="token string">"Host=db:5432;Database=gzctf;Username=postgres;Password=&lt;Your POSTGRES_PASSWORD>"</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"EmailConfig"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"SendMailAddress"</span><span class="token operator">:</span> <span class="token string">"a@a.com"</span><span class="token punctuation">,</span>
+    <span class="token property">"UserName"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token property">"Password"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token property">"Smtp"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"Host"</span><span class="token operator">:</span> <span class="token string">"localhost"</span><span class="token punctuation">,</span>
+      <span class="token property">"Port"</span><span class="token operator">:</span> <span class="token number">587</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"XorKey"</span><span class="token operator">:</span> <span class="token string">"&lt;Your XOR_KEY>"</span><span class="token punctuation">,</span>
+  <span class="token property">"ContainerProvider"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"Type"</span><span class="token operator">:</span> <span class="token string">"Docker"</span><span class="token punctuation">,</span> <span class="token comment">// or "Kubernetes"</span>
+    <span class="token property">"PortMappingType"</span><span class="token operator">:</span> <span class="token string">"Default"</span><span class="token punctuation">,</span> <span class="token comment">// or "PlatformProxy"</span>
+    <span class="token property">"EnableTrafficCapture"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+    <span class="token property">"PublicEntry"</span><span class="token operator">:</span> <span class="token string">"&lt;Your PUBLIC_ENTRY>"</span><span class="token punctuation">,</span> <span class="token comment">// or "xxx.xxx.xxx.xxx"</span>
+    <span class="token comment">// optional</span>
+    <span class="token property">"DockerConfig"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"SwarmMode"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+      <span class="token property">"Uri"</span><span class="token operator">:</span> <span class="token string">"unix:///var/run/docker.sock"</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"RequestLogging"</span><span class="token operator">:</span> <span class="token boolean">false</span><span class="token punctuation">,</span>
+  <span class="token property">"DisableRateLimit"</span><span class="token operator">:</span> <span class="token boolean">true</span><span class="token punctuation">,</span>
+  <span class="token property">"RegistryConfig"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"UserName"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token property">"Password"</span><span class="token operator">:</span> <span class="token string">""</span><span class="token punctuation">,</span>
+    <span class="token property">"ServerAddress"</span><span class="token operator">:</span> <span class="token string">""</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"CaptchaConfig"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"Provider"</span><span class="token operator">:</span> <span class="token string">"None"</span><span class="token punctuation">,</span> <span class="token comment">// or "CloudflareTurnstile" or "GoogleRecaptcha"</span>
+    <span class="token property">"SiteKey"</span><span class="token operator">:</span> <span class="token string">"&lt;Your SITE_KEY>"</span><span class="token punctuation">,</span>
+    <span class="token property">"SecretKey"</span><span class="token operator">:</span> <span class="token string">"&lt;Your SECRET_KEY>"</span><span class="token punctuation">,</span>
+    <span class="token comment">// optional</span>
+    <span class="token property">"GoogleRecaptcha"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+      <span class="token property">"VerifyAPIAddress"</span><span class="token operator">:</span> <span class="token string">"https://www.recaptcha.net/recaptcha/api/siteverify"</span><span class="token punctuation">,</span>
+      <span class="token property">"RecaptchaThreshold"</span><span class="token operator">:</span> <span class="token string">"0.5"</span>
+    <span class="token punctuation">&#125;</span>
+  <span class="token punctuation">&#125;</span><span class="token punctuation">,</span>
+  <span class="token property">"ForwardedOptions"</span><span class="token operator">:</span> <span class="token punctuation">&#123;</span>
+    <span class="token property">"ForwardedHeaders"</span><span class="token operator">:</span> <span class="token number">5</span><span class="token punctuation">,</span>
+    <span class="token property">"ForwardLimit"</span><span class="token operator">:</span> <span class="token number">1</span><span class="token punctuation">,</span>
+    <span class="token property">"TrustedNetworks"</span><span class="token operator">:</span> <span class="token punctuation">[</span><span class="token string">"192.168.12.0/8"</span><span class="token punctuation">]</span>
+  <span class="token punctuation">&#125;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>在 GZCTF 文件夹下创建 docker-compose.yml</p>
+<blockquote>
+<p><Your postgres_password>：和 appsettings.json 中一样的数据库密码</Your></p>
+<p><Your gzctf_admin_password>：初始管理员用户密码</Your></p>
+</blockquote>
+<pre class="line-numbers language-yaml" data-language="yaml"><code class="language-yaml"><span class="token key atrule">version</span><span class="token punctuation">:</span> <span class="token string">"3.0"</span>
+<span class="token key atrule">services</span><span class="token punctuation">:</span>
+  <span class="token key atrule">gzctf</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> registry.cn<span class="token punctuation">-</span>shanghai.aliyuncs.com/gztime/gzctf<span class="token punctuation">:</span>develop
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"GZCTF_ADMIN_PASSWORD=&lt;Your GZCTF_ADMIN_PASSWORD>"</span>
+      <span class="token comment"># choose your backend language `en_US` / `zh_CN` / `ja_JP`</span>
+      <span class="token punctuation">-</span> <span class="token string">"LC_ALL=zh_CN.UTF-8"</span>
+    <span class="token key atrule">ports</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"80:8080"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"./data/files:/app/files"</span>
+      <span class="token punctuation">-</span> <span class="token string">"./appsettings.json:/app/appsettings.json:ro"</span>
+      <span class="token comment"># - "./kube-config.yaml:/app/kube-config.yaml:ro" # this is required for k8s deployment</span>
+      <span class="token punctuation">-</span> <span class="token string">"/var/run/docker.sock:/var/run/docker.sock"</span> <span class="token comment"># this is required for docker deployment</span>
+    <span class="token key atrule">depends_on</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> db
+
+  <span class="token key atrule">db</span><span class="token punctuation">:</span>
+    <span class="token key atrule">image</span><span class="token punctuation">:</span> postgres<span class="token punctuation">:</span>alpine
+    <span class="token key atrule">restart</span><span class="token punctuation">:</span> always
+    <span class="token key atrule">environment</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"POSTGRES_PASSWORD=&lt;Your POSTGRES_PASSWORD>"</span>
+    <span class="token key atrule">volumes</span><span class="token punctuation">:</span>
+      <span class="token punctuation">-</span> <span class="token string">"./data/db:/var/lib/postgresql/data"</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+</li>
+<li><p>启动</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker-compose</span> up <span class="token parameter variable">-d</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>关闭</p>
+<pre class="line-numbers language-none"><code class="language-none">docker-compose down<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>访问服务器 ip，可以看到 GZ::CTF 平台</p>
+</li>
 </ul>
-</li>
-<li><p>qemu-user-static ：包含了所有必需的库和二进制文件，运行静态链接的程序</p>
-</li>
-<li><p>qemu-system ： 模拟整个计算机系统的跨平台运行</p>
-</li>
-</ul>
-<h2 id="arm"><a href="#arm" class="headerlink" title="arm"></a>arm</h2><h3 id="arm32"><a href="#arm32" class="headerlink" title="arm32"></a>arm32</h3><h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">qemu-arm <span class="token parameter variable">-L</span> /usr/arm-linux-gnueabi ./pwn<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h2 id="创建管理员用户"><a href="#创建管理员用户" class="headerlink" title="创建管理员用户"></a>创建管理员用户</h2><p>进入之后可能是没有管理员用户的，就需要先注册一个账户再设置为管理员用户</p>
+<p>设置管理员：username 替换为用户名</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">docker</span> compose <span class="token builtin class-name">exec</span> db psql <span class="token parameter variable">-U</span> postgres
+<span class="token punctuation">\</span>c gzctf
+UPDATE <span class="token string">"AspNetUsers"</span> SET <span class="token string">"Role"</span><span class="token operator">=</span><span class="token number">3</span> WHERE <span class="token string">"UserName"</span><span class="token operator">=</span><span class="token string">'username'</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
 
-<h4 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python">context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'arm'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
-process<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"qemu-arm"</span><span class="token punctuation">,</span><span class="token string">"-g"</span><span class="token punctuation">,</span><span class="token string">"1234"</span><span class="token punctuation">,</span><span class="token string">"-L"</span><span class="token punctuation">,</span> <span class="token string">"/usr/arm-linux-gnueabi"</span><span class="token punctuation">,</span> fileName<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h4 id="调试"><a href="#调试" class="headerlink" title="调试"></a>调试</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gdb filename
-<span class="token builtin class-name">set</span> architecture arm
-add-symbol-file/set solib-search-path ./libc.so.6
-attach pid<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="aarch64"><a href="#aarch64" class="headerlink" title="aarch64"></a>aarch64</h3><h4 id="环境构建"><a href="#环境构建" class="headerlink" title="环境构建"></a>环境构建</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> gcc-aarch64-linux-gnu g++-aarch64-linux-gnu<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h4 id="运行-1"><a href="#运行-1" class="headerlink" title="运行"></a>运行</h4><p><code>-g</code>指定端口，<code>-L</code>指定动态链接库，静态链接的程序无需该参数</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">qemu-aarch64 <span class="token parameter variable">-L</span> /usr/aarch64-linux-gnu/ ./pwn<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>指定 libc 文件运行：文件结构 .&#x2F;libc&#x2F;lib&#x2F; 下存放 ld 和 libc，-L 指定 .&#x2F;libc</p>
-<h4 id="调试-1"><a href="#调试-1" class="headerlink" title="调试"></a>调试</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gdb-multiarch <span class="token parameter variable">-q</span> ./pwn
-<span class="token builtin class-name">set</span> architecture aarch64
-<span class="token builtin class-name">set</span> endian little
-add-symbol-file ./libc-2.21.so
-target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h4 id="exp-1"><a href="#exp-1" class="headerlink" title="exp"></a>exp</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
-context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'aarch64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
-r <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"qemu-aarch64"</span><span class="token punctuation">,</span> <span class="token string">"-g"</span><span class="token punctuation">,</span> <span class="token string">"1234"</span><span class="token punctuation">,</span> <span class="token string">"-L"</span><span class="token punctuation">,</span> <span class="token string">"/usr/aarch64-linux-gnu/"</span><span class="token punctuation">,</span> file_name<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="powerpc"><a href="#powerpc" class="headerlink" title="powerpc"></a>powerpc</h2><h3 id="环境安装"><a href="#环境安装" class="headerlink" title="环境安装"></a>环境安装</h3><p>安装<code>powerpc</code>交叉编译工具</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gcc-powerpc-linux-gnu binutils-powerpc-linux-gnu<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<p>安装动态链接库</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ <span class="token function">apt</span> search <span class="token string">"libc6-"</span> <span class="token operator">|</span> <span class="token function">grep</span> <span class="token string">"powerpc"</span>
-$ <span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> libc6-powerpc-cross<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="运行-2"><a href="#运行-2" class="headerlink" title="运行"></a>运行</h3><p>运行<code>powerpc</code> <strong>64 位是 ppc64，64位小端序是 qemu-ppc64le</strong></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$qemu</span>-ppc <span class="token parameter variable">-L</span> /usr/powerpc-linux-gnu ./hello<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$qemu</span>-ppc-static ./pwn<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="exp-2"><a href="#exp-2" class="headerlink" title="exp"></a>exp</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python">context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'powerpc'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">,</span> endian <span class="token operator">=</span> <span class="token string">'big'</span><span class="token punctuation">)</span>
-process<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"qemu-ppc"</span><span class="token punctuation">,</span><span class="token string">"-g"</span><span class="token punctuation">,</span><span class="token string">"1234"</span><span class="token punctuation">,</span><span class="token string">"-L"</span><span class="token punctuation">,</span> <span class="token string">"/usr/powerpc-linux-gnu"</span><span class="token punctuation">,</span> file_name<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="调试-2"><a href="#调试-2" class="headerlink" title="调试"></a>调试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">$ gdb-multiarch <span class="token parameter variable">-q</span> <span class="token parameter variable">-ex</span> <span class="token string">"set architecture powerpc:common"</span> ./filename
-<span class="token builtin class-name">set</span> endian big / little
-target remote :1234<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="编译"><a href="#编译" class="headerlink" title="编译"></a>编译</h3><p>编译<code>powerpc</code></p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$powerpc</span>-linux-gnu-gcc ./test.c <span class="token parameter variable">-o</span> hello<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="mips"><a href="#mips" class="headerlink" title="mips"></a>mips</h2><h3 id="环境安装-1"><a href="#环境安装-1" class="headerlink" title="环境安装"></a>环境安装</h3><p>mips 和 mips64 大端序：</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> gcc-mips-linux-gnu g++-mips-linux-gnu libc6-dbg-mips-cross
-<span class="token variable">$sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> gcc-mips64-linux-gnuabi64 g++-mips64-linux-gnuabi64 libc6-dbg-mips64-cross<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<p>小端序：<strong>qemu-mipsel</strong> &#x2F; qemu-mips64el</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$sudo</span> <span class="token function">apt</span> <span class="token function">install</span> libc6-mipsel-cross<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="运行-3"><a href="#运行-3" class="headerlink" title="运行"></a>运行</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">qemu-mipsel <span class="token parameter variable">-L</span> /usr/mipsel-linux-gnu ./SuperCgi<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="exp-3"><a href="#exp-3" class="headerlink" title="exp"></a>exp</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python">context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'mips'</span><span class="token punctuation">,</span>os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span>endian<span class="token operator">=</span><span class="token string">'little'</span><span class="token punctuation">,</span>log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
-r <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"qemu-mipsel"</span><span class="token punctuation">,</span><span class="token string">"-g"</span><span class="token punctuation">,</span><span class="token string">"1234"</span><span class="token punctuation">,</span> file_name<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="调试-3"><a href="#调试-3" class="headerlink" title="调试"></a>调试</h3><pre class="line-numbers language-none"><code class="language-none">gdb-multiarch -q .&#x2F;pwn
-set architecture mips
-set endian little
-target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h3 id="编译-1"><a href="#编译-1" class="headerlink" title="编译"></a>编译</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">mipsel-linux-gnu-gcc test.c <span class="token parameter variable">-o</span> <span class="token builtin class-name">test</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h2 id="riscv"><a href="#riscv" class="headerlink" title="riscv"></a>riscv</h2><h3 id="riscv64环境配置"><a href="#riscv64环境配置" class="headerlink" title="riscv64环境配置"></a>riscv64环境配置</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt-get</span> <span class="token function">install</span> gcc-riscv64-linux-gnu g++-riscv64-linux-gnu libc6-dbg-riscv64-cross
-<span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> <span class="token parameter variable">-y</span> libc6-riscv64-cross binutils-riscv64-linux-gnu gcc-riscv64-linux-gnu<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="运行-4"><a href="#运行-4" class="headerlink" title="运行"></a>运行</h3><p>在22的机器上</p>
-<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$qemu</span>-riscv64 <span class="token parameter variable">-L</span> /usr/riscv64-linux-gnu pwn<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="exp-4"><a href="#exp-4" class="headerlink" title="exp"></a>exp</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python">context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'riscv'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
-r <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">"qemu-riscv64"</span><span class="token punctuation">,</span> <span class="token string">"-L"</span><span class="token punctuation">,</span> <span class="token string">"/usr/riscv64-linux-gnu"</span><span class="token punctuation">,</span> <span class="token string">"-g"</span><span class="token punctuation">,</span><span class="token string">"1234"</span><span class="token punctuation">,</span> file_name<span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="调试-4"><a href="#调试-4" class="headerlink" title="调试"></a>调试</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">gdb-multiarch <span class="token parameter variable">-q</span> ./pwn
-<span class="token builtin class-name">set</span> architecture riscv
-<span class="token builtin class-name">set</span> endian little
-target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-
-<h2 id="hexagon"><a href="#hexagon" class="headerlink" title="hexagon"></a>hexagon</h2><h3 id="运行-5"><a href="#运行-5" class="headerlink" title="运行"></a>运行</h3><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token variable">$qemu</span>-hexagon ./chall<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
-
-<h3 id="调试-5"><a href="#调试-5" class="headerlink" title="调试"></a>调试</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python">r <span class="token operator">=</span> process<span class="token punctuation">(</span><span class="token punctuation">[</span><span class="token string">'qemu-hexagon'</span><span class="token punctuation">,</span> <span class="token string">'-L'</span><span class="token punctuation">,</span> <span class="token string">'libc'</span><span class="token punctuation">,</span> <span class="token string">'-d'</span><span class="token punctuation">,</span> <span class="token string">'in_asm,exec,cpu,nochain'</span><span class="token punctuation">,</span> <span class="token string">'-singlestep'</span><span class="token punctuation">,</span>
-            <span class="token string">'-dfilter'</span><span class="token punctuation">,</span> <span class="token string">'0x20400+0xc0'</span><span class="token punctuation">,</span> <span class="token string">'-strace'</span><span class="token punctuation">,</span> <span class="token string">'-D'</span><span class="token punctuation">,</span> <span class="token string">'./log'</span><span class="token punctuation">,</span> <span class="token string">'./chall'</span><span class="token punctuation">]</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
-
-<h3 id="反编译"><a href="#反编译" class="headerlink" title="反编译"></a>反编译</h3><p>下载 hexagon.dll 插件使用 8.3 的 ida.exe 打开 32 位的 QUALCOMM DSP6 程序</p>
+<h2 id="pwn容器创建"><a href="#pwn容器创建" class="headerlink" title="pwn容器创建"></a>pwn容器创建</h2><p>可以直接使用 docker <a target="_blank" rel="noopener" href="https://github.com/CTF-Archives/ctf-docker-template">模板</a> 换个 src 下的可执行文件（文件名改成 attachment）即可使用，将 docker 文件放到服务器中，在 docker 文件夹中执行 <code>docker build t docker_name .</code>（docker_name自定义）生成镜像，在创建 pwn 题的时候容器镜像填自定义的 docker_name，服务端口填 9999 （模板默认 expose 端口 9999）即可创建测试容器</p>
 
                 
             </div>
@@ -530,15 +526,7 @@ target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><
                 <div class="post-meta__tag-list" style="display: inline-block;">
                     
                         <div class="article-tag">
-                            
-                                <a href="/tags/pwn/">
-                                    <span class="chip bg-color">pwn</span>
-                                </a>
-                            
-                                <a href="/tags/%E5%BC%82%E6%9E%84/">
-                                    <span class="chip bg-color">异构</span>
-                                </a>
-                            
+                            <span class="chip bg-color">无标签</span>
                         </div>
                     
                 </div>
@@ -577,9 +565,10 @@ target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
                 <a href="/2025/02/11/gzctf-da-jian-pwn-rong-qi-chuang-jian/gzctf-da-jian-pwn-rong-qi-chuang-jian/">
                     <div class="card-image">
@@ -597,9 +586,9 @@ target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2025-02-11
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-02-11
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-user fa-fw"></i>
@@ -608,6 +597,7 @@ target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><
                         </span>
                     </div>
                 </div>
+
                 
             </div>
         </div>
@@ -618,31 +608,31 @@ target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><
                 下一篇&nbsp;<i class="fas fa-chevron-right"></i>
             </div>
             <div class="card">
-                <a href="/2025/01/23/2025-chun-qiu-bei-dong-ji-sai-pwn-fang-xiang-ti-jie/2025-chun-qiu-bei-dong-ji-sai-pwn-fang-xiang-ti-jie/">
+                <a href="/2025/02/10/yi-gou-pwn-yun-xing-yu-diao-shi/yi-gou-pwn-yun-xing-yu-diao-shi/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="2025春秋杯冬季赛pwn方向题解">
+                        <img src="/medias/featureimages/Steel%20Gray.jpg" class="responsive-img" alt="异构pwn运行与调试">
                         
-                        <span class="card-title">2025春秋杯冬季赛pwn方向题解</span>
+                        <span class="card-title">异构pwn运行与调试</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
                     <div class="summary block-with-text">
                         
-                            2025春秋杯冬季赛pwn方向day1和day3题解
+                            异构pwn运行于调试
                         
                     </div>
                     <div class="publish-info">
                             <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2025-01-23
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-02-10
                             </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/WP/" class="post-category">
-                                    WP
+                            <a href="/categories/pwn/" class="post-category">
+                                    pwn
                                 </a>
                             
                             
@@ -654,6 +644,10 @@ target remote localhost:1234<span aria-hidden="true" class="line-numbers-rows"><
                     
                     <a href="/tags/pwn/">
                         <span class="chip bg-color">pwn</span>
+                    </a>
+                    
+                    <a href="/tags/%E5%BC%82%E6%9E%84/">
+                        <span class="chip bg-color">异构</span>
                     </a>
                     
                 </div>
