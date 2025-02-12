@@ -385,7 +385,7 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    665
+                    688
                 </div>
                 
 
@@ -430,6 +430,9 @@ $ sudo apt<span class="token operator">-</span>get install libc6<span class="tok
 <li><p>qemu-system ： 模拟整个计算机系统的跨平台运行</p>
 </li>
 </ul>
+<h2 id="调试工具安装"><a href="#调试工具安装" class="headerlink" title="调试工具安装"></a>调试工具安装</h2><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"><span class="token function">sudo</span> <span class="token function">apt</span> <span class="token function">install</span> gdb-multiarch<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+
+<p>动态链接库冲突：<code>set sysroot lib路径</code></p>
 <h2 id="arm"><a href="#arm" class="headerlink" title="arm"></a>arm</h2><h3 id="arm32"><a href="#arm32" class="headerlink" title="arm32"></a>arm32</h3><h4 id="运行"><a href="#运行" class="headerlink" title="运行"></a>运行</h4><pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">qemu-arm <span class="token parameter variable">-L</span> /usr/arm-linux-gnueabi ./pwn<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
 <h4 id="exp"><a href="#exp" class="headerlink" title="exp"></a>exp</h4><pre class="line-numbers language-python" data-language="python"><code class="language-python">context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'arm'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
