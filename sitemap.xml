@@ -2,6 +2,15 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   
   <url>
+    <loc>https://starrysky1004.github.io/2025/02/24/afl-yuan-ma-fen-xi-yi/afl-yuan-ma-fen-xi-yi/</loc>
+    
+    <lastmod>2025-02-24</lastmod>
+    
+    <changefreq>monthly</changefreq>
+    <priority>0.6</priority>
+  </url>
+  
+  <url>
     <loc>https://starrysky1004.github.io/2023/06/20/ge-shi-hua-zi-fu-chuan/ge-shi-hua-zi-fu-chuan/</loc>
     
     <lastmod>2025-02-24</lastmod>
@@ -858,6 +867,20 @@
     <priority>0.2</priority>
   </url>
   
+  <url>
+    <loc>https://starrysky1004.github.io/tags/fuzz/</loc>
+    <lastmod>2025-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/tags/AFL/</loc>
+    <lastmod>2025-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
 
   
   <url>
@@ -953,6 +976,13 @@
   
   <url>
     <loc>https://starrysky1004.github.io/categories/PE/</loc>
+    <lastmod>2025-02-24</lastmod>
+    <changefreq>weekly</changefreq>
+    <priority>0.2</priority>
+  </url>
+  
+  <url>
+    <loc>https://starrysky1004.github.io/categories/fuzz/</loc>
     <lastmod>2025-02-24</lastmod>
     <changefreq>weekly</changefreq>
     <priority>0.2</priority>

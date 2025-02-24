@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2025/02/24/afl-yuan-ma-fen-xi-yi/afl-yuan-ma-fen-xi-yi/
 https://starrysky1004.github.io/2023/06/20/ge-shi-hua-zi-fu-chuan/ge-shi-hua-zi-fu-chuan/
 https://starrysky1004.github.io/2025/02/10/yi-gou-pwn-yun-xing-yu-diao-shi/yi-gou-pwn-yun-xing-yu-diao-shi/
 https://starrysky1004.github.io/draft/GZCTF%E6%90%AD%E5%BB%BA-PWN-%E5%AE%B9%E5%99%A8%E5%88%9B%E5%BB%BA/GZCTF%E6%90%AD%E5%BB%BA-PWN-%E5%AE%B9%E5%99%A8%E5%88%9B%E5%BB%BA.html
@@ -103,6 +104,8 @@ https://starrysky1004.github.io/tags/%E6%95%99%E7%A8%8B/
 https://starrysky1004.github.io/tags/IoT/
 https://starrysky1004.github.io/tags/angr/
 https://starrysky1004.github.io/tags/PE/
+https://starrysky1004.github.io/tags/fuzz/
+https://starrysky1004.github.io/tags/AFL/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
@@ -117,3 +120,4 @@ https://starrysky1004.github.io/categories/Linux/
 https://starrysky1004.github.io/categories/IoT/
 https://starrysky1004.github.io/categories/angr/
 https://starrysky1004.github.io/categories/PE/
+https://starrysky1004.github.io/categories/fuzz/
