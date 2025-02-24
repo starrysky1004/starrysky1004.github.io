@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2023/06/20/ge-shi-hua-zi-fu-chuan/ge-shi-hua-zi-fu-chuan/
 https://starrysky1004.github.io/2025/02/10/yi-gou-pwn-yun-xing-yu-diao-shi/yi-gou-pwn-yun-xing-yu-diao-shi/
 https://starrysky1004.github.io/draft/GZCTF%E6%90%AD%E5%BB%BA-PWN-%E5%AE%B9%E5%99%A8%E5%88%9B%E5%BB%BA/GZCTF%E6%90%AD%E5%BB%BA-PWN-%E5%AE%B9%E5%99%A8%E5%88%9B%E5%BB%BA.html
 https://starrysky1004.github.io/2025/01/23/2025-chun-qiu-bei-dong-ji-sai-pwn-fang-xiang-ti-jie/2025-chun-qiu-bei-dong-ji-sai-pwn-fang-xiang-ti-jie/
@@ -7,7 +8,7 @@ https://starrysky1004.github.io/2025/01/02/2024-nian-zhong-zong-jie/
 https://starrysky1004.github.io/2024/12/17/pe-wen-jian-jie-gou-yu-ya-suo/pe-wen-jian-jie-gou-yu-ya-suo/
 https://starrysky1004.github.io/2024/12/17/iot-ji-chu-zhi-shi/iot-ji-chu-zhi-shi/
 https://starrysky1004.github.io/2024/12/17/angr-xue-xi-yu-angr-ctf-ti-jie-chi-xu-geng-xin/angr-xue-xi-yu-angr-ctf-ti-jie-chi-xu-geng-xin/
-https://starrysky1004.github.io/2024/10/05/pwn-huan-jing-pei-zhi/pwn-huan-jing-pei-zhi/
+https://starrysky1004.github.io/2024/10/05/pwn-huan-jing-pei-zhi/
 https://starrysky1004.github.io/2024/11/06/chong-sheng-zhi-wo-zai-yctu-zuo-pwn-shou-xi-lie-shi-pin-bi-ji/
 https://starrysky1004.github.io/2024/12/04/2024-wang-ding-bei-cardmaster/2024-wang-ding-bei-cardmaster/
 https://starrysky1004.github.io/2024/10/31/llvm-pass-shi-yong-c-bian-xie-exp/llvm-pass-shi-yong-c-bian-xie-exp/
@@ -51,7 +52,6 @@ https://starrysky1004.github.io/2023/09/24/how2heap/how2heap-chi-xu-geng-xin-ing
 https://starrysky1004.github.io/2023/08/12/io-file/io-file/
 https://starrysky1004.github.io/2023/04/22/glibc-yuan-ma-fen-xi-malloc-free/glibc-yuan-ma-fen-xi-malloc-free/
 https://starrysky1004.github.io/2023/05/04/cs-app-yue-du-bi-ji-chi-xu-geng-xin/cs-app-yue-du-bi-ji-chi-xu-geng-xin/
-https://starrysky1004.github.io/2023/06/20/ge-shi-hua-zi-fu-chuan/ge-shi-hua-zi-fu-chuan/
 https://starrysky1004.github.io/2023/03/13/pwnhub-sh-v1-1/pwnhub-sh-v1-1/
 https://starrysky1004.github.io/about/index.html
 https://starrysky1004.github.io/categories/index.html
