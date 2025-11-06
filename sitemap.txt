@@ -1,3 +1,4 @@
+https://starrysky1004.github.io/2025/11/06/cwe-checker-yuan-ma-fen-xi-geng-xin-zhong/
 https://starrysky1004.github.io/2023/12/16/buuctf-shua-ti-chi-xu-geng-xin/buuctf-shua-ti-chi-xu-geng-xin/
 https://starrysky1004.github.io/2025/04/06/awdp-sai-zhi-liu-cheng-yu-ji-qiao/
 https://starrysky1004.github.io/2025/03/10/afl-yuan-ma-fen-xi-er/afl-yuan-ma-fen-xi-er/
@@ -109,6 +110,8 @@ https://starrysky1004.github.io/tags/PE/
 https://starrysky1004.github.io/tags/fuzz/
 https://starrysky1004.github.io/tags/AFL/
 https://starrysky1004.github.io/tags/AWDP/
+https://starrysky1004.github.io/tags/cwe-checker/
+https://starrysky1004.github.io/tags/%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90/
 https://starrysky1004.github.io/categories/pwn/
 https://starrysky1004.github.io/categories/web/
 https://starrysky1004.github.io/categories/kernel/
@@ -125,3 +128,4 @@ https://starrysky1004.github.io/categories/angr/
 https://starrysky1004.github.io/categories/PE/
 https://starrysky1004.github.io/categories/fuzz/
 https://starrysky1004.github.io/categories/AWDP/
+https://starrysky1004.github.io/categories/%E9%9D%99%E6%80%81%E5%88%86%E6%9E%90/
